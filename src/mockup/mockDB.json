@@ -1,16 +1,14 @@
-{
-"_id": "00001", "name": "Joe Welsh",
-"_id" : "00002", "name": "John Smith",
-"_id": "00003", "name": "Mojo Jojo",
-"_id": "00004", "name": "John Slattery",
-"_id": "00005", "name": "Mr. Miyagi",
-"_id": "00006", "name" : "Tom Cruise",
-"_id": "00007", "name": "Samwell Tully",
-"_id": "00008", "name": "Mahatma Ghandi",
-"_id": "00009", "name": "Brad Pitt",
-"_id": "00010", "name": "Jason Borne",
-"_id": "00011", "name": "LL Cool-j",
+{ "_id" : "00001", "name" : "Joe Welsh"}
+{ "_id" : "00002", "name" : "John Smith"}
+{ "_id" : "00003", "name" : "Mojo Jojo"}
+{ "_id" : "00004", "name" : "John Slattery"}
+{ "_id" : "00005", "name" : "Mr. Miyagi"}
+{ "_id" : "00006", "name" : "Tom Cruise"}
+{ "_id" : "00007", "name" : "Samwell Tully"}
+{ "_id" : "00008", "name" : "Mahatma Ghandi"}
+{ "_id" : "00009", "name" : "Brad Pitt"}
+{ "_id" : "00010", "name" : "Jason Borne"}
+{ "_id" : "00011", "name" : "LL Cool-j"}
+{ "_id" : "00012", "name" : "Harvey Birdman"}
+{ "_id" : "00013", "name" : "Bobafett"}
 
-"_id" : "00012", "name": "Harvey Birdman",
-"_id": "00013", "name": "Bobafett"
-}

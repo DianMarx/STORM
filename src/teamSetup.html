@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
+<script src="APIs/jquery-2.1.4.min.js"></script>
 <head lang="en">
     <meta charset="UTF-8">
     <title>Project Mockup</title>
-    <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
-    <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
     <link rel="stylesheet" href="style/css.css">
 
     <style>
@@ -19,6 +20,42 @@
 	</style>
 
     <script>
+
+        $(document).ready(function(e) {
+            
+			
+			
+			$('#randomize').click(function(e) {
+				var max = 5;
+                //var i = $('.names').children().length;
+				//alert("yooo");
+				$('.names').children().each(function(index, element) {
+                    var randm = Math.floor(Math.random() * (4-1) + 1);
+					//alert(randm);
+					var done = false;
+					while(done != true){
+					switch(randm){
+					case 1:if($('.first').children().length < max){
+					 $(element).appendTo(".first"); done = true; 
+					 if($('.first').children().length == max) max = 4;
+					 break;} else max = 4;
+					case 2: if($('.second').children().length < max){
+					 $(element).appendTo(".second"); done = true; 
+					 if($('.second').children().length == max) max = 4;
+					 break;}else  max = 4; 
+					case 3: if($('.third').children().length < max){
+					 $(element).appendTo(".third");done = true;
+					 if($('.third').children().length == max) max = 4;
+					  break;}else max = 4;
+					  }
+					  randm = Math.floor(Math.random() * (4-1) + 1);
+					}
+                });
+				
+				
+            });
+        });
+	
         function allowDrop(ev) {
             ev.preventDefault();
         }
@@ -36,7 +73,7 @@
         $( "#dialog-link" ).click(function( event ) {
             $( "#dialog" ).dialog( "open" );
         });
-
+	
     </script>
 </head>
 <body>
@@ -51,6 +88,16 @@
                     <div class="subject" id="1" draggable="true" ondragstart="drag(event)">Joe Welsh</div>
                     <div class="subject" id="2" draggable="true" ondragstart="drag(event)">Barney Stinson</div>
                     <div class="subject" id="3" draggable="true" ondragstart="drag(event)">Robin Stinson</div>
+                    <div class="subject" id="4" draggable="true" ondragstart="drag(event)">Mojo Jojo</div>
+                    <div class="subject" id="5" draggable="true" ondragstart="drag(event)">Zoltan</div>
+                    <div class="subject" id="6" draggable="true" ondragstart="drag(event)">Joe Biden</div>
+                    <div class="subject" id="7" draggable="true" ondragstart="drag(event)">Kimi Rikenin</div>
+                    <div class="subject" id="8" draggable="true" ondragstart="drag(event)">Frans Ferdinand</div>
+                    <div class="subject" id="9" draggable="true" ondragstart="drag(event)">Robocop</div>
+                    <div class="subject" id="10" draggable="true" ondragstart="drag(event)">Jan Guns</div>
+                    <div class="subject" id="11" draggable="true" ondragstart="drag(event)">Gilfried Goyle</div>
+                    <div class="subject" id="12" draggable="true" ondragstart="drag(event)">Urlich Bachman</div>
+                    <div class="subject" id="13" draggable="true" ondragstart="drag(event)">French Stewart</div>
                 </div>
                 <a href="#" id="dialog-link" class="ui-state-default ui-corner-all openDialog"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a>
             </div>
@@ -61,5 +108,7 @@
             </div>
         </div>
     </div>
+    <br>
+    <button name="Randomize" id="randomize">Randomize</button>
 </body>
 </html>
