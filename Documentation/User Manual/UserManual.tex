@@ -1,0 +1,66 @@
+\documentclass[hidelinks, 12pt, oneside]{article}
+\usepackage{graphicx}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+
+
+%\graphicspath{{}}
+\begin{document}
+ 
+%titlepage
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}{0.75\linewidth}
+    \centering
+%University logo
+    \includegraphics[width=13cm]{./graphics/universityLogo.jpg}
+    \rule{0\linewidth}{0.15\linewidth}\par
+
+%Thesis title
+    {\uppercase{\Large Project Storm \par}}
+   	{\uppercase{\Large Team NAME \par}}
+    \vspace{1cm}
+%Author's name
+    {\normalsize Renaldo van Dyk 12204359\par}
+    {\normalsize Andreas du Preez 12207871\par}
+    {\normalsize Sean Hill 12221458\par}
+    {\normalsize Shaun Meintjes 133310896\par}
+    {\normalsize Johann Dian Marx 12105202\par}
+    
+    \vspace{1cm}
+    
+    \href{https://github.com/DianMarx/STORM}{GitHub link}
+    \vspace{1cm}
+	
+\end{minipage}
+\end{center}
+\clearpage
+
+\tableofcontents
+\newpage
+\section{External Interface Requirements}
+\subsection{User Interfaces}
+STORM is to be viewed and used through a web browser. The interface is designed to reflect this. The UI makes extensive use of AJAX calls to minimize web traffic and create the impression of an actual application being used rather than just a website with dynamic content. At this stage only an interface for a desktop browser is necessary, but the nature of
+STORM’s design makes other interfaces (mobile etc) possible during future expansion.
+
+\subsection{Hardware Interfaces}
+STORM is to run on commodity PC hardware, so no special hardware or hardware interfaces
+are required.
+
+\subsection{Software Interfaces}
+The newest stable release of MongoDB should be used as the persistence component. A Java Database Connector should be used to interact with the persistence component. STORM should function on a Linux flavour which is easy to install and maintain.
+
+\subsection{Communications Interfaces}
+Users of STORM are required to use web browsers to view the contents of the frontend. HTTP will be used as the communication standard for the browsers. All common browsers (Chrome, Firefox, Internet Explorer, Safari, Opera) are supported. TCP/IP will be used as the communication standard for intermachine communication. All intermachine communication must be secured using SSL encryption.
+
+\section{Operating Environment}
+\subsection{System Requirements}
+The following operating environment requirements is suggested:
+\begin{itemize}
+\item[$\bullet$]The system operates on an average desktop computer, with a specified 4 Gigabyte memory, Intel i3 2.4 Ghz processor and 500GB harddisk.
+\item[$\bullet$]To keep the cost down, a Linux flavor operating system can be installed that is easily maintained and can support the persistence backend, which will be the newest stable MongoDB release. Java 1.7 JVM should be installed to support the system.
+\end{itemize}
+
+\end{document}
