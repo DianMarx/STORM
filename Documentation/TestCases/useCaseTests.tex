@@ -160,8 +160,57 @@ Scenario 2 - Username unavailable & Basic Flow & A1  \\[1ex]
 \subsubsection{Randomize}
 \begin{enumerate}
 \item Scenarios
-\item Test Cases
+
+\begin{center}
+ \begin{tabu}to 0.8\textwidth{|X[l]| X|X|} 
+ \hline
+ Scenario Name & Starting Flow & Alternate \\ [1ex]
+ \hline
+ Scenario 1 - \newline Successful randomisation & Basic Flow &\\ [1ex]
+ \hline
+ Scenario 2 - \newline No subjects to randomise & Basic Flow & A1  \\[1ex]
+ \hline
+ Scenario 3 - \newline No groups created to randomise to & Basic Flow & A2  \\[1ex]
+ \hline
+ Scenario 4 - \newline No groups created or subjects to randomise & Basic Flow & A2  \\[1ex]
+ \hline
+\end{tabu}
+\end{center}
+
+\item Test Cases\\
+\\V - Valid\\ I - Invalid\\ n/a - not applicable
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Subjects & Groups & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1\newline Successful randomisation & V & V & Show randomised teams\\ [0.1ex]
+ \hline
+  RC 2 & Scenario2\newline No subjects to randomise & I&V&Error;\newline No input subjects \\[0.1ex]
+ \hline
+  RC 3 & Scenario3\newline No groups created to randomise to & V&I&Error;\newline No groups created\\[0.1ex]
+ \hline
+  RC 4 & Scenario4\newline No groups created to randomise to & I&I&Error;\newline No input subjects or groups\\[0.1ex]
+ \hline
+
+\end{tabu}
+\end{center}
 \item Data Values
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Subjects & Groups & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1\newline Successful randomisation & Mojo Jojo;\newline Joe Welsch;\newline Zoltan & Group 1;\newline Group 2;\newline Group3 & Show randomised teams\\ [0.1ex]
+ \hline
+  RC 2 & Scenario2\newline No subjects to randomise & & Group 1;\newline Group 2;\newline Group3 &Error;\newline No input subjects \\[0.1ex]
+ \hline
+  RC 3 & Scenario3\newline No groups created to randomise to & Mojo Jojo;\newline Joe Welsch; \newline Zoltan & &Error;\newline No groups created\\[0.1ex]
+ \hline
+  RC 4 & Scenario4\newline No groups created to randomise to & & &Error;\newline No input subjects or groups\\[0.1ex]
+ \hline
+\end{tabu}
+\end{center}
 \end{enumerate}
 
 
