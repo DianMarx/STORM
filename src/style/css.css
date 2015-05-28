@@ -174,22 +174,18 @@ BODY:last-child .signin {
     height: 300px;
     display: inline-block;
 	vertical-align:top;
-	
 }
 
 .first {
     background:#666;
-
 }
 
 .second {
     background:#CCC;
-
 }
 
 .third {
     background:#FFC;
-	
 }
 #randomize
 {
