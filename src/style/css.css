@@ -144,12 +144,14 @@ BODY:last-child .signin {
     height: 300px;
     display: inline-block;
     width: 100%;
+	vertical-align:top;
 }
 
 .members,.teams{
     text-align: left;
     height: 300px;
     display: inline-block;
+	vertical-align:top;
 }
 
 .names{
@@ -171,18 +173,23 @@ BODY:last-child .signin {
     width: 200px;
     height: 300px;
     display: inline-block;
+	vertical-align:top;
+	
 }
 
 .first {
     background:#666;
+
 }
 
 .second {
     background:#CCC;
+
 }
 
 .third {
     background:#FFC;
+	
 }
 
 
