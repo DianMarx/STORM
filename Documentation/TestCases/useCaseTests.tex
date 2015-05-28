@@ -82,6 +82,29 @@ Scenario 2 - Username unavailable & Basic Flow & A1  \\[1ex]
 
 
 \item Data Values
+
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Username & Password & Confirm Password & Email & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1 Successful sign up & Ronnie & abcdeF1 & abcdeF1 & r@up.co.za & Project setup screan displayed\\ [0.1ex]
+ \hline
+ RC 2 & Scenario2 Username unavailable & Vreda&abcdeF1&abcdeF1&v@up.co.za&Error; Username taken \\[0.1ex]
+ \hline
+  RC 3 & Scenario3 Email already registered &Ronnie&abcdeF1&abcdeF1&r@up.co.za&Error; Email already registered\\[0.1ex]
+ \hline
+\end{tabu}
+
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|X|X|} 
+ \hline
+ RC 4 &  Scenario5 Password incorrect format & Ronnie&12&12&r@up.co.za&Error; Password incorrect format\\[0.1ex]
+ \hline
+ RC 5 &  Scenario 6 Passwords don't match & Ronnie&abcdeF1&abcdeF2&r@up.ac.za&Error; Passwords don't match  \\ [0.1ex]
+ \hline
+\end{tabu}
+\end{center}
+
 \end{enumerate}
 \subsubsection{Login}
 \begin{enumerate}
