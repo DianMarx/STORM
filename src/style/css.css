@@ -138,3 +138,52 @@ BODY:last-child .signin {
     text-align:center;
     font-size:16pt;
 }
+
+.teamSetup{
+    text-align: center;
+    height: 300px;
+    display: inline-block;
+    width: 100%;
+}
+
+.members,.teams{
+    text-align: left;
+    height: 300px;
+    display: inline-block;
+}
+
+.names{
+    height:250px;
+    width:100%;
+    text-align: left;
+}
+
+.members{
+    width:200px;
+    height:300px;
+    float:left;
+    margin-left:10%;
+    border: solid 1pt;
+    text-align: center;
+}
+
+.teamTables{
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+}
+
+.first {
+    background:#666;
+}
+
+.second {
+    background:#CCC;
+}
+
+.third {
+    background:#FFC;
+}
+
+
+

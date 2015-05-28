@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Project Mockup</title>
+    <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="style/css.css">
+
+    <style>
+	section {
+    width: 80%;
+    height: 500px;
+    background:#333;
+    margin: auto;
+    padding: 10px;
+}
+	</style>
+
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            ev.target.appendChild(document.getElementById(data));
+        }
+
+        $( "#dialog-link" ).click(function( event ) {
+            $( "#dialog" ).dialog( "open" );
+        });
+
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h2 class="headerMessages">Welcome to STORM</h2>
+        <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
+    </div>
+    <div class="main">
+        <div class="teamSetup">
+            <div class="members">
+                <div class="names">
+                    <div class="subject" id="1" draggable="true" ondragstart="drag(event)">Joe Welsh</div>
+                    <div class="subject" id="2" draggable="true" ondragstart="drag(event)">Barney Stinson</div>
+                    <div class="subject" id="3" draggable="true" ondragstart="drag(event)">Robin Stinson</div>
+                </div>
+                <a href="#" id="dialog-link" class="ui-state-default ui-corner-all openDialog"><span class="ui-icon ui-icon-newwin"></span>Open Dialog</a>
+            </div>
+            <div class="teams">
+                <div class="teamTables first" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="teamTables second" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="teamTables third" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
