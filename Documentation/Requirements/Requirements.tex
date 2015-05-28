@@ -1,0 +1,68 @@
+\documentclass[hidelinks, 12pt, oneside]{article}
+\usepackage{graphicx}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+
+
+%\graphicspath{{}}
+\begin{document}
+ 
+%titlepage
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}{0.75\linewidth}
+    \centering
+%University logo
+    \includegraphics[width=13cm]{./graphics/universityLogo.jpg}
+    \rule{0\linewidth}{0.15\linewidth}\par
+
+%Thesis title
+    {\uppercase{\Large Project Storm \par}}
+   	{\uppercase{\Large Team NAME \par}}
+    \vspace{1cm}
+%Author's name
+    {\normalsize Renaldo van Dyk 12204359\par}
+    {\normalsize Andreas du Preez 12207871\par}
+    {\normalsize Sean Hill 12221458\par}
+    {\normalsize Shaun Meintjes 133310896\par}
+    {\normalsize Johann Dian Marx 12105202\par}
+    
+    \vspace{1cm}
+    
+    \href{https://github.com/DianMarx/STORM}{GitHub link}
+    \vspace{1cm}
+	
+\end{minipage}
+\end{center}
+\clearpage
+
+\tableofcontents
+\newpage
+\section{Vision and Scope}
+\input{./subsections/visionAndScope.tex}
+
+\section{Application requirements and design}
+\subsection{Modular Design}
+\input{./subsections/modularDesign.tex}
+\subsection{User Access Module}
+\input{./subsections/userAccess.tex}
+\subsection{Project Module}
+\input{./subsections/project.tex}
+\subsection{Database Interaction Module}
+\input{./subsections/dbAccess.tex}
+\subsection{Algorithm Module}
+\input{./subsections/algorithm.tex}
+\subsection{Reporting Module}
+\input{./subsections/reporting.tex}
+\section{Architectural Requirements}
+\subsection{Access and Integration Requirements}
+\input{./subsections/accessAndIntegrationRequirements.tex}
+\subsection{Quality Requirements}
+\input{./subsections/qualityRequirements.tex}
+\subsection{Architectural Responsibilities}
+\input{./subsections/architecturalResponsibilities.tex}
+\subsection{Architecture Constraints}
+\input{./subsections/architectureConstraints.tex}
+\end{document}
