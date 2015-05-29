@@ -145,6 +145,7 @@ BODY:last-child .signin {
     display: inline-block;
     width: 100%;
 	vertical-align:top;
+    margin-top:70px;
 }
 
 .members,.teams{
