@@ -71,6 +71,10 @@
         $( "#dialog-link" ).click(function( event ) {
             $( "#dialog" ).dialog( "open" );
         });
+
+        $(function() {
+            $( "input[type=submit], a, button" ).button();
+        });
 	
     </script>
 </head>
