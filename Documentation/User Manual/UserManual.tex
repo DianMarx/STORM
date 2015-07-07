@@ -20,8 +20,10 @@
 
 %Thesis title
     {\uppercase{\Large Project Storm \par}}
-   	{\uppercase{\Large Team NAME \par}}
-    \vspace{1cm}
+   	
+	\vspace{0.5cm}
+	{\Large Team NAME \par}
+	\vspace{0.5cm}
 %Author's name
     {\normalsize Renaldo van Dyk 12204359\par}
     {\normalsize Andreas du Preez 12207871\par}
@@ -31,7 +33,7 @@
     
     \vspace{1cm}
     
-    \href{https://github.com/DianMarx/STORM}{GitHub link}
+    \href{https://github.com/DianMarx/STORM}{Click here to go to our GitHub}
     \vspace{1cm}
 	
 \end{minipage}
@@ -40,27 +42,22 @@
 
 \tableofcontents
 \newpage
-\section{External Interface Requirements}
-\subsection{User Interfaces}
-STORM is to be viewed and used through a web browser. The interface is designed to reflect this. The UI makes extensive use of AJAX calls to minimize web traffic and create the impression of an actual application being used rather than just a website with dynamic content. At this stage only an interface for a desktop browser is necessary, but the nature of
-STORM’s design makes other interfaces (mobile etc) possible during future expansion.
+\section{General Information}
+\subsection{System Overview}
+The complete system should enable users to build teams, from a list of students, by selecting a set of criteria. This will aid the users in such a way that the users do not have to build the teams manually, which may require a lot of time. The users can spend their time rather on analysing the results of each ?Rocking the Boat? round to change the criteria for the next round more effectively.
 
-\subsection{Hardware Interfaces}
-STORM is to run on commodity PC hardware, so no special hardware or hardware interfaces
-are required.
+\subsection{System Configuration}
 
-\subsection{Software Interfaces}
-The newest stable release of MongoDB should be used as the persistence component. A Java Database Connector should be used to interact with the persistence component. STORM should function on a Linux flavour which is easy to install and maintain.
+\subsection{Installation}
 
-\subsection{Communications Interfaces}
-Users of STORM are required to use web browsers to view the contents of the frontend. HTTP will be used as the communication standard for the browsers. All common browsers (Chrome, Firefox, Internet Explorer, Safari, Opera) are supported. TCP/IP will be used as the communication standard for intermachine communication. All intermachine communication must be secured using SSL encryption.
+\newpage
+\section{Getting Started}
 
-\section{Operating Environment}
-\subsection{System Requirements}
-The following operating environment requirements is suggested:
-\begin{itemize}
-\item[$\bullet$]The system operates on an average desktop computer, with a specified 4 Gigabyte memory, Intel i3 2.4 Ghz processor and 500GB harddisk.
-\item[$\bullet$]To keep the cost down, a Linux flavor operating system can be installed that is easily maintained and can support the persistence backend, which will be the newest stable MongoDB release. Java 1.7 JVM should be installed to support the system.
-\end{itemize}
+\newpage
+\section{Using the system}
+
+\newpage
+\section{Troubleshooting}
 
 \end{document}
+
