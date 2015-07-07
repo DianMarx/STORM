@@ -1,0 +1,41 @@
+{
+  "private": true,
+  "main": "storm.js",
+  "name": "Storm",
+  "description": "The back-end engine for our STORM project",
+  "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DianMarx/STORM"
+  },
+  "bugs": {
+    "url": "https://github.com/DianMarx/STORM/issues"
+  },
+  "homepage": "https://github.com/DianMarx/STORM",
+  "contributors": [
+    {
+      "name": "Johann Marx",
+      "email": "u12105202@tuks.co.za"
+    },
+    {
+      "name": "Shaun Meintjes",
+      "email": "shaunmeintjes@hotmail.com"
+    },
+    {
+      "name": "Andreas du Preez",
+      "email": "u12207871@tuks.co.za"
+    },
+    {
+      "name": "Renaldo van Dyk",
+      "email": "u12204359@tuks.co.za"
+    },
+    {
+      "name": "Sean Hill",
+      "email": "u12221458@tuks.co.za"
+    }
+  ],
+  "dependencies": {
+    "debug": "~2.1.1",
+	"mongoose": "^4.0.1"
+  }
+}
