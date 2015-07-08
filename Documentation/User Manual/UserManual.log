@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.8)  8 JUL 2015 14:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.7.8)  8 JUL 2015 15:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -283,23 +283,45 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 [1
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./graph
-ics/universityLogo.jpg>]
-
-Package hyperref Warning: old toc file detected, not used; run LaTeX again.
-
+ics/universityLogo.jpg>] (./UserManual.toc)
 \tf@toc=\write3
 \openout3 = `UserManual.toc'.
 
-[2
+ [2
 
-] (./GeneralInformation/SystemOverview.tex)
+]
+(./GeneralInformation/SystemOverview.tex)
 (./GeneralInformation/SystemConfiguration.tex)
 (./GeneralInformation/Installation.tex) [3]
 (./GettingStarted/GettingStarted.tex (./GettingStarted/BackEnd.tex)
-(./GettingStarted/FrontEnd.tex)) [4] (./UsingTheSystem/UsingTheSystem.tex)
-[5] (./Troubleshooting/Troubleshooting.tex)
+(./GettingStarted/FrontEnd.tex
+<./graphics/StormUMSU1.jpg, id=40, 963.6pt x 489.9906pt>
+File: ./graphics/StormUMSU1.jpg Graphic file (type jpg)
+
+<use ./graphics/StormUMSU1.jpg>
+Package pdftex.def Info: ./graphics/StormUMSU1.jpg used on input line 9.
+(pdftex.def)             Requested size: 369.88582pt x 188.08247pt.
+
+Overfull \hbox (9.26051pt too wide) in paragraph at lines 9--11
+[][]
+ []
+
+[4 <./graphics/StormUMSU1.jpg>]
+<./graphics/StormUMSU2.jpg, id=47, 963.6pt x 489.83pt>
+File: ./graphics/StormUMSU2.jpg Graphic file (type jpg)
+
+<use ./graphics/StormUMSU2.jpg>
+Package pdftex.def Info: ./graphics/StormUMSU2.jpg used on input line 13.
+(pdftex.def)             Requested size: 369.88582pt x 188.02083pt.
+
+Overfull \hbox (9.26051pt too wide) in paragraph at lines 13--15
+[][]
+ []
+
+)) [5 <./graphics/StormUMSU2.jpg>] (./UsingTheSystem/UsingTheSystem.tex)
+[6] (./Troubleshooting/Troubleshooting.tex)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 67.
- [6]
+ [7]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 67.
  (./UserManual.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 67.
@@ -307,20 +329,20 @@ Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 67.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 67.
  ) 
 Here is how much of TeX's memory you used:
- 5418 strings out of 493089
- 82033 string characters out of 6134843
- 162880 words of memory out of 5000000
- 8821 multiletter control sequences out of 15000+600000
+ 5431 strings out of 493089
+ 82335 string characters out of 6134843
+ 162984 words of memory out of 5000000
+ 8829 multiletter control sequences out of 15000+600000
  7894 words of font info for 28 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 35i,6n,30p,448b,319s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 35i,6n,30p,448b,388s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><
 /usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on UserManual.pdf (6 pages, 341601 bytes).
+Output written on UserManual.pdf (7 pages, 526615 bytes).
 PDF statistics:
- 87 PDF objects out of 1000 (max. 8388607)
- 74 compressed objects within 1 object stream
- 17 named destinations out of 1000 (max. 500000)
- 78 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 106 PDF objects out of 1000 (max. 8388607)
+ 89 compressed objects within 1 object stream
+ 18 named destinations out of 1000 (max. 500000)
+ 88 words of extra memory for PDF output out of 10000 (max. 10000000)
 
