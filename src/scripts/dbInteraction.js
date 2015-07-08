@@ -13,12 +13,13 @@ db.once('open', function (callback) {
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
 
-
+module.exports = {
 //Get an array from collection colName
-function getCollection(colName,callback)
+
+    getCollection: function(colName, callback)
 {
     mySchema.set('collection', colName);
-    col = mongoose.model(colName,mySchema);
+    col = mongoose.model(colName, mySchema);
     var data;
 
     col.find(function (err, docs) {
@@ -27,11 +28,14 @@ function getCollection(colName,callback)
     });
 
 }
+}
 //how to call
+/**
 getCollection('testCol', function(data){
     console.log(data);
     //here you use 'data'. just replace console.log(data) with implementation
 });
+ **/
 
 
 
