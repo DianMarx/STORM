@@ -156,9 +156,12 @@ BODY:last-child .signin {
 }
 
 .names{
-    height:250px;
+    height:300px;
     width:100%;
     text-align: left;
+    display: inline-block;
+    overflow:auto;
+    border: solid 1pt;
 }
 
 .members{
@@ -166,7 +169,7 @@ BODY:last-child .signin {
     height:300px;
     float:left;
     margin-left:10%;
-    border: solid 1pt;
+
     text-align: center;
 }
 
@@ -193,5 +196,9 @@ BODY:last-child .signin {
 	margin-left: 25px;
 }
 
+.ui-widget
+{
+    font-size:14px;
+}
 
 

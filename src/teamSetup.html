@@ -3,13 +3,14 @@
 <script src="APIs/jquery-2.1.4.min.js"></script>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>Project Mockup</title>
-    
-    <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
-    <script src="APIs/jquery-2.1.4.min.js"></script>
-    <script src="scripts/dbInteraction.js"></script>
+    <title>Team Setup</title>
+
     <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="style/css.css">
+
+    <script src="scripts/dbInteraction.js"></script>
 
     <style>
 	section {
@@ -24,8 +25,6 @@
     <script>
 
         $(document).ready(function(e) {
-
-
 
 			$('#randomize').click(function(e) {
 				var max = 5;
@@ -70,25 +69,42 @@
             ev.target.appendChild(document.getElementById(data));
         }
 
-        $( "#dialog-link" ).click(function( event ) {
-            $( "#dialog" ).dialog( "open" );
+        $(function() {
+            $( "input[type=submit], a, button, input[type=file]" ).button();
+
+            $( "#dialog" ).dialog({
+                autoOpen: false,
+                width: 400,
+                buttons: [
+                    {
+                        text: "Ok",
+                        click: function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                ]
+            });;
         });
 
-        $(function() {
-            $( "input[type=submit], a, button" ).button();
-        });
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            // Great success! All the File APIs are supported.
+        } else {
+            alert('The File APIs are not fully supported in this browser.');
+        }
+
+
 	
     </script>
 </head>
 <body>
     <div class="header">
-        <h2 class="headerMessages">Welcome to STORM</h2>
+        <h2 class="headerMessages">Team Setup</h2>
         <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
     </div>
     <div class="main">
         <div class="teamSetup">
             <div class="members">
-                <div class="names" ondrop="drop(event)" ondragover="allowDrop(event)">
+                <div id="subjects" class="names" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <div class="subject" id="1" draggable="true" ondragstart="drag(event)">Joe Welsh</div>
                     <div class="subject" id="2" draggable="true" ondragstart="drag(event)">Barney Stinson</div>
                     <div class="subject" id="3" draggable="true" ondragstart="drag(event)">Robin Stinson</div>
@@ -103,7 +119,10 @@
                     <div class="subject" id="12" draggable="true" ondragstart="drag(event)">Urlich Bachman</div>
                     <div class="subject" id="13" draggable="true" ondragstart="drag(event)">French Stewart</div>
                 </div>
+                Input from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
             </div>
+
+
             <button name="Randomize" id="randomize">Randomize</button>
             <div class="teams">
                 <div class="teamTables first" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
@@ -112,7 +131,15 @@
             </div>
         </div>
     </div>
+
+    <div id="dialog" title="Basic dialog">
+        <div id="dialogText"></div>
+    </div>
+
     <br>
 
 </body>
+<script src="scripts/inputCSV.js"></script>
+<script>
+</script>
 </html>
