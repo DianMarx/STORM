@@ -13,21 +13,28 @@ db.once('open', function (callback) {
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
 
-function collectionToArray(colName)
-{
 
-    var data;
+//Get an array from collection colName
+function getCollection(colName,callback)
+{
     mySchema.set('collection', colName);
     col = mongoose.model(colName,mySchema);
+    var data;
+
     col.find(function (err, docs) {
         data = docs;
-
+        callback(data);
     });
-    return data;
 
 }
-arr = collectionToArray('testCol');
-console.log(arr);
+//how to call
+getCollection('testCol', function(data){
+    console.log(data);
+    //here you use 'data'. just replace console.log(data) with implementation
+});
+
+
+
 
 
 
