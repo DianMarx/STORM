@@ -7,14 +7,22 @@ After a project has been created a database collection is created and accociated
 \begin{enumerate}
 \item createDB\par
 Priority: Critical.\par
-
-
+Pre-condition: The databse should not exist yet.\par
+Pre-condition: Client must have a STORM profile.\par
+Post-condition: The database is created.\par
 
 \item accessDB\par
 Priority: Critical.\par
+Pre-condition: The database should exist.\par
+Pre-condition: The user should have a STORM profile.\par
+Pre-condition: The user should be authorized to access the database.\par
+Post-condition: The database is accessed and queried.\par
 
 \item updateDB\par
 Priority: Critical.\par
-
+Pre-condition: The database should exist.\par
+Pre-condition: The user should have a STORM profile.\par
+Pre-condition: The user should be authorized to update the database.\par
+Post-condition: The database is updated.\par
 
 \end{enumerate}
