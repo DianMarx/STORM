@@ -12,6 +12,20 @@ module.exports=function(app) {
 
 
     });
+    app.get('/about', function (req, res) {
+
+        res.render('aboutUs.html');
+        //here you use 'data'. just replace console.log(data) with implementation
+
+
+    });
+    app.get('/contact', function (req, res) {
+
+        res.render('contactUs.html');
+        //here you use 'data'. just replace console.log(data) with implementation
+
+
+    });
     app.get('/demo', function (req, res) {
         db.getCollection('testCol', function (data) {
             res.render('teamSetup', {subjects: data});
