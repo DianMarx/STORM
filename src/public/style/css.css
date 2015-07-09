@@ -201,4 +201,108 @@ BODY:last-child .signin {
     font-size:14px;
 }
 
+/* .AboutUs
+{
 
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    background-color: #b0c4de;
+    font-size:14px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: OpenSans;
+    src: url(../fonts/OpenSans-Regular.ttf);
+}
+*/
+footer
+{
+    background-color: #eee;
+    height: auto;
+    bottom: 0;
+    margin:0;
+    padding:5px;
+    vertical-align:middle;
+    border-top: 1px solid #e6e6e6;
+    text-align: center;
+}
+
+.AboutUsText
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: auto;
+    vertical-align:middle;
+    font-size: 11px;
+    bottom: 0;
+}
+
+.PlaceHolder
+{
+    height: 100px;
+}
+
+.background {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 15%;
+    width: auto;
+    height: auto;
+    opacity: 0.15;
+}
+
+table#tableMenu {
+    color: #333;
+    font-family: Helvetica, Arial, sans-serif;
+    width: 640px;
+    border-collapse:
+    collapse; border-spacing: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td#tableMenu {
+    background: #FAFAFA;
+    text-align: center;
+}
+
+#homeButton {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+#aboutButton {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+#contactButton {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+
+#aboutButton:active {
+    border: none;
+}
+#aboutButton:hover {
+     border: none;
+     cursor: pointer;
+     color: red;
+ }
+#homeButton:hover {
+    border: none;
+    cursor: pointer;
+    color: red;
+}
+#contactButton:hover {
+    border: none;
+    cursor: pointer;
+    color: red;
+}
+#demoDiv {
+    text-align: left;
+}

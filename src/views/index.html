@@ -25,9 +25,16 @@
         <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
 
     </div>
-    <input id="demoButton" type="submit" value="See how it works"
-           onclick="window.location='/demo';" />
+
     <div class="main">
+
+        <div class="background">
+        <img src="../Images/Storm.png" style="width: 100%;top:auto;">
+        </div>
+        <div id="demoDiv">
+        <input id="demoButton" type="submit" value="See how it works"
+               onclick="window.location='/demo';" />
+        </div>
         <div class="sign">
             <div class="signin">
                 <p class="signHeadings">Sign in</p>
@@ -43,7 +50,7 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td class="submits"><input class="submitButtons" type="submit" value="Submit"/></td>
+                            <td class="submits"><input class="submitButtons" type="submit" value="Sign In"/></td>
                         </tr>
                     </table>
                 </form>
@@ -70,14 +77,32 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td class="submits"><input class="submitButtons" type="submit" value="Submit"/></td>
+                            <td class="submits"><input class="submitButtons" type="submit" value="Sign Up"/></td>
                         </tr>
                     </table>
                 </form>
             </div>
         </div>
-    </div>
 
+
+
+    <div class="PlaceHolder">
+
+    </div>
+    <footer class="footer">
+    <div class="footerMenu">
+        <table id="tableMenu">
+            <tr id="tableMenu">
+                <th id="tableMenu"><input id="homeButton" type="text" value="Home"
+                                          onclick="window.location='/';" /></th>
+                <th id="tableMenu"><input id="aboutButton" type="text" value="About"
+                                          onclick="window.location='/about';" /></th>
+                <th id="tableMenu"><input id="contactButton" type="text" value="Contact Us"
+                                          onclick="window.location='/constact';" /></th>
+            </tr>
+        </table>
+    </div>
+    </footer>
 
 
 </body>
