@@ -18,15 +18,11 @@ module.exports=function(app) {
         });
     });
 
-    app.get('/test', function (req, res) {
-        db.getCollection('testCol', function(data){
-        res.render('test', {
-            users: data,
-            title: "EJS example",
-            header: "Some users"
+    app.get('/teamSetup', function (req, res) {
+        db.getCollection('testCol', function (data) {
+            res.render('teamSetup', {subjects: data});
+        });
 
-        });
-        });
 
     });
 }

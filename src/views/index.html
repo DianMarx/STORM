@@ -11,7 +11,7 @@
     <script>
         $.ajax({
             url: '/index', complete: function(data){
-                alert(data);
+                //alert(data);
             }
         });
         $(function() {
@@ -23,8 +23,10 @@
     <div class="header">
         <h2 class="headerMessages">Welcome to STORM</h2>
         <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
-    </div>
 
+    </div>
+    <input id="demoButton" type="submit" value="See how it works"
+           onclick="window.location='/demo';" />
     <div class="main">
         <div class="sign">
             <div class="signin">
