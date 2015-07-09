@@ -148,11 +148,18 @@ BODY:last-child .signin {
     margin-top:70px;
 }
 
-.members,.teams{
+.members{
     text-align: left;
     height: 300px;
     display: inline-block;
 	vertical-align:top;
+}
+
+.teams{
+    text-align: left;
+    display: inline-block;
+    vertical-align:top;
+    margin-left:50px;
 }
 
 .names{
@@ -169,7 +176,6 @@ BODY:last-child .signin {
     height:300px;
     float:left;
     margin-left:10%;
-
     text-align: center;
 }
 
@@ -178,22 +184,36 @@ BODY:last-child .signin {
     height: 300px;
     display: inline-block;
 	vertical-align:top;
+    background:#EAF2FE;
+    border: solid 1pt;
 }
 
-.first {
-    background:#666;
+.teamAdd{
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+    vertical-align:top;
+
+    color:#000;
+    -webkit-transition: background 0.5s linear;
+    -moz-transition: background 0.5s linear;
+    -ms-transition: background 0.5s linear;
+    -o-transition: background 0.5s linear;
+    transition: background 0.5s linear;
 }
 
-.second {
-    background:#CCC;
+.teamAdd:hover{
+    background-color: #EAF2FE;
 }
 
-.third {
-    background:#FFC;
+#plusButton{
+    margin-left:40%;
+    margin-top:62%;
 }
+
 #randomize
 {
-	margin-left: 25px;
+	margin-left: 0px;
 }
 
 .ui-widget

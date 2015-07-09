@@ -24,6 +24,8 @@
 
     <script>
 
+        var numTeamGroups = 3; //Including add div, so technically numTeamGroups-1 droppable groups.
+
         $(document).ready(function(e) {
 
 			$('#randomize').click(function(e) {
@@ -53,6 +55,19 @@
 					}
                 });
             });
+
+            $("#plusButton").click(function(e){
+                if(numTeamGroups % 3 == 0) {
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'></div>").insertBefore($("#teamAdd"));
+                    $("<br><br>").insertBefore($("#teamAdd"));
+                    numTeamGroups++;
+                }
+                else{
+                    $('<div class="teamTables "+(numTeamGroups)+" ondrop="drop(event)" ondragover="allowDrop(event)"></div>').insertBefore($("#teamAdd"));
+                    numTeamGroups++;
+                }
+            })
+
         });
 	
         function allowDrop(ev) {
@@ -91,8 +106,6 @@
         } else {
             alert('The File APIs are not fully supported in this browser.');
         }
-
-
 	
     </script>
 </head>
@@ -113,12 +126,14 @@
                 Input from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
             </div>
 
-
             <button name="Randomize" id="randomize">Randomize</button>
+
             <div class="teams">
-                <div class="teamTables first" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <div class="teamTables second" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <div class="teamTables third" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+
+                <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="teamTables 2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+                <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
             </div>
         </div>
     </div>
