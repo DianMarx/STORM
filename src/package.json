@@ -1,0 +1,27 @@
+{
+  "name": "STORM",
+  "version": "0.0.2",
+  "description": "STORM optimization",
+  "main": "app.js",
+  "dependencies": {
+    "ejs": "^2.3.2",
+    "express": "^4.13.1",
+    "mongodb": "^2.0.36",
+    "mongoose": "^4.0.6",
+    "nodejs": "^0.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DianMarx/STORM"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DianMarx/STORM/issues"
+  },
+  "homepage": "https://github.com/DianMarx/STORM"
+}
