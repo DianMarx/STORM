@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>STORM</title>
+    <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="style/css.css">
+
+    <script>
+        $.ajax({
+            url: '/index', complete: function(data){
+                alert(data);
+            }
+        });
+        $(function() {
+            $( "input[type=submit], a, button" ).button();
+        });
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h2 class="headerMessages">Welcome to STORM</h2>
+        <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
+    </div>
+
+    <div class="main">
+        <div class="sign">
+            <div class="signin">
+                <p class="signHeadings">Sign in</p>
+                <form action="teamSetup" method="GET">
+                    <table class="signinTable">
+                        <tr>
+                            <td>Username:</td>
+                            <td><input type="text" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" required/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="submits"><input class="submitButtons" type="submit" value="Submit"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="signup">
+                <p class="signHeadings">Don't have an account?<br>Sign up here.</p>
+                <form>
+                    <table class="signupTable">
+                        <tr>
+                            <td>Name:</td>
+                            <td><input type="text" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Username:</td>
+                            <td><input type="text" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" required/></td>
+                        </tr>
+                        <tr>
+                            <td>Retype Password:</td>
+                            <td><input type="password" required/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="submits"><input class="submitButtons" type="submit" value="Submit"/></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

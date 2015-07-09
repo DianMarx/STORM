@@ -1,0 +1,32 @@
+
+
+// Dummy users
+
+var db = require('../modules/database/dbInteraction');
+
+module.exports=function(app) {
+    app.get('/', function (req, res) {
+
+        res.render('index.html');
+        //here you use 'data'. just replace console.log(data) with implementation
+
+
+    });
+    app.get('/demo', function (req, res) {
+        db.getCollection('testCol', function (data) {
+            res.render('teamSetup', {subjects: data});
+        });
+    });
+
+    app.get('/test', function (req, res) {
+        db.getCollection('testCol', function(data){
+        res.render('test', {
+            users: data,
+            title: "EJS example",
+            header: "Some users"
+
+        });
+        });
+
+    });
+}
