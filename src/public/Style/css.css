@@ -79,10 +79,7 @@ hr:before {
     position:relative;
     top:70px;
 }
-.signin {
-    border: solid #000000; border-width: 0 1px;
-    position: relative;
-}
+
 .submits{
     text-align: right;
 }
@@ -91,7 +88,10 @@ hr:before {
     font-size: 15px;
 }
 
-
+.signin {
+    border: solid #000000; border-width: 0 1px;
+    position: relative;
+}
 
 BODY:last-child .signin {
     border: none;
@@ -144,15 +144,22 @@ BODY:last-child .signin {
     height: 300px;
     display: inline-block;
     width: 100%;
-    vertical-align:top;
+	vertical-align:top;
     margin-top:70px;
 }
 
-.members,.teams{
+.members{
     text-align: left;
     height: 300px;
     display: inline-block;
+	vertical-align:top;
+}
+
+.teams{
+    text-align: left;
+    display: inline-block;
     vertical-align:top;
+    margin-left:50px;
 }
 
 .names{
@@ -169,7 +176,6 @@ BODY:last-child .signin {
     height:300px;
     float:left;
     margin-left:10%;
-
     text-align: center;
 }
 
@@ -177,23 +183,37 @@ BODY:last-child .signin {
     width: 200px;
     height: 300px;
     display: inline-block;
+	vertical-align:top;
+    background:#EAF2FE;
+    border: solid 1pt;
+}
+
+.teamAdd{
+    width: 200px;
+    height: 300px;
+    display: inline-block;
     vertical-align:top;
+
+    color:#000;
+    -webkit-transition: background 0.5s linear;
+    -moz-transition: background 0.5s linear;
+    -ms-transition: background 0.5s linear;
+    -o-transition: background 0.5s linear;
+    transition: background 0.5s linear;
 }
 
-.first {
-    background:#666;
+.teamAdd:hover{
+    background-color: #EAF2FE;
 }
 
-.second {
-    background:#CCC;
+#plusButton{
+    margin-left:40%;
+    margin-top:62%;
 }
 
-.third {
-    background:#FFC;
-}
 #randomize
 {
-    margin-left: 25px;
+	margin-left: 0px;
 }
 
 .ui-widget
@@ -220,10 +240,8 @@ footer
 {
     background-color: #eee;
     height: auto;
-    width: 100%;
-    position: fixed;
     bottom: 0;
-    margin:auto;
+    margin:0;
     padding:5px;
     vertical-align:middle;
     border-top: 1px solid #e6e6e6;
@@ -291,10 +309,10 @@ td#tableMenu {
     border: none;
 }
 #aboutButton:hover {
-    border: none;
-    cursor: pointer;
-    color: red;
-}
+     border: none;
+     cursor: pointer;
+     color: red;
+ }
 #homeButton:hover {
     border: none;
     cursor: pointer;
@@ -307,24 +325,4 @@ td#tableMenu {
 }
 #demoDiv {
     text-align: left;
-}
-
-.aboutWrapper{
-    position:relative;
-    top:70px;
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-}
-.aboutUsText {
-    position: relative;
-}
-.contactWrapper{
-    position:relative;
-    top:70px;
-    margin-left: auto;
-    margin-right: auto;
-    left: 30%;
-    font-family: OpenSans;
-
 }
