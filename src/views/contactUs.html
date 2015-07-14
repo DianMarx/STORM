@@ -6,6 +6,66 @@
     <link rel="stylesheet" href="style/css.css">
 </head>
 <body>
+<div class="header">
+    <h2 class="headerMessages">Welcome to STORM</h2>
+    <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
 
+</div>
+
+<div class="main">
+
+    <div class="background">
+        <img src="../Images/Storm.png" style="width: 100%;top:auto;">
+    </div>
+
+    <div class="contactWrapper">
+        <form method="post" action="mailto:temp@temp.co.za?subject=ProjectSTORM-Contact Us" id="emailForm">
+            <table cellpadding="2" cellspacing="0" border="1" width="40%">
+                <tr>
+                    <th colspan="4"><strong><u>Please feel free to contact us!</u></strong></th>
+                </tr>
+                <tr>
+                    <td width="120">First Name:</td>
+                    <td colspan="3"><input class="left" type="text" name="fname" style="width: 300px;"></td>
+                </tr>
+                <tr>
+                    <td>Last Name:</td>
+                    <td colspan="3"><input class="left" type="text" name="lname" style="width: 300px;"></td>
+                </tr>
+                <tr>
+                    <td>How did you find us?</td>
+                    <td>Search Engine: <input type="checkbox" name="sengine" style="border: 0px"></td>
+                    <td>Word of Mouth: <input type="checkbox" name="word" style="border: 0px"></td>
+                    <td>Other: <input type="checkbox" name="other" style="border: 0px"></td>
+                </tr>
+                <tr>
+                    <td valign="top">Enter your Comments:</td>
+                    <td colspan="3"><textarea class="left" name="comments" style="width: 300px; height: 200px;"></textarea></td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right"><input type="submit" value="submit" style="margin-right: 20px; width: 60px;"><input type="reset" value="reset" style="margin-right: 20px; width: 60px;"></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+
+    <footer class="footer">
+        <div class="footerMenu">
+            <table id="tableMenu">
+                <tr id="tableMenu">
+                    <th id="tableMenu"><input id="homeButton" type="text" value="Home"
+                                              onclick="window.location='/';" /></th>
+                    <th id="tableMenu"><input id="aboutButton" type="text" value="About"
+                                              onclick="window.location='/about';" /></th>
+                    <th id="tableMenu"><input id="contactButton" type="text" value="Contact Us"
+                                              onclick="window.location='/contact';" /></th>
+                </tr>
+            </table>
+        </div>
+    </footer>
+
+
+
+</div>
 </body>
 </html>
