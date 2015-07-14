@@ -72,22 +72,104 @@
             });
 
             $("#plusButton").click(function(e){
-                if(numTeamGroups % 3 == 0) {
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
                     $("<br><br>").insertBefore($("#teamAdd"));
                     numTeamGroups++;
                 }
                 else{
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
                     numTeamGroups++;
                 }
-            })
 
-            $(".minusButton").click(function(e){
+                $(".minusButton").off();
 
-            })
+                $(".minusButton").on("click", function(e){
+                    var parent = $(this).parent();
+                    if (parent.find("div").length >= 1){
+                        fnOpenNormalDialog($(this));
+                    }
+                    else
+                    {
+                        confirmDeleteTeamTable($(this));
+                    }
+                });
+            });
 
+            $(".minusButton").on("click", function(e){
+                var parent = $(this).parent();
+                if (parent.find("div").length >= 1){
+                    fnOpenNormalDialog($(this));
+                }
+                else
+                {
+                    confirmDeleteTeamTable($(this));
+                }
+            });
         });
+
+
+
+
+        function fnOpenNormalDialog(element) {
+            $("#dialog-confirm").html("Are you sure you want to delete this team box?<br>Subjects will be returned to spawn pool.");
+
+            // Define the Dialog and its properties.
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                modal: true,
+                title: "Confirm delete",
+                height: 250,
+                width: 400,
+                buttons: {
+                    "Yes": function () {
+                        $(this).dialog('close');
+                        confirmDeleteTeamTable(element);
+                    },
+                    "No": function () {
+                        $(this).dialog('close');
+                    }
+                }
+            });
+        }
+
+        function confirmDeleteTeamTable(element)
+        {
+            var boxID = element.attr('class');
+            boxID = boxID.replace("minusButton mB", "");
+
+            numTeamGroups--;
+
+            $(".teams br").remove();
+
+            $("."+boxID).find("div").each(function(){
+                $(".names").append($(this));
+            });
+
+            $("."+boxID).remove();
+
+            var i = 0;
+            var fromHere = false;
+            $(".teams").find(".teamTables").each(function(){
+                i++;
+                if (i % 3 == 0)
+                {
+                    $("<br/><br/>").insertAfter($(this));
+                }
+
+                if ((i) == boxID)
+                    fromHere = true;
+
+                if (fromHere)
+                {
+                    $(this).removeClass((i+1).toString());
+                    $(this).addClass(boxID.toString());
+                    $(this).children(".minusButton").removeClass("mB"+(i+1).toString());
+                    $(this).children(".minusButton").addClass("mB"+boxID.toString());
+                    boxID++;
+                }
+            });
+        }
 	
         function allowDrop(ev) {
             ev.preventDefault();
@@ -142,7 +224,7 @@
                     <div class="subject" id=<%= i %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
                     </div> <% } %>
                 </div>
-                Input from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
+                Import from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
             </div>
 
             <button name="Randomize" id="randomize">Randomize</button>
@@ -150,8 +232,8 @@
             <div class="teams">
 
 
-                <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton" alt="plus" height="25" width="25"></div>
-                <div class="teamTables 2" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton" alt="plus" height="25" width="25"></div>
+                <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"></div>
+                <div class="teamTables 2" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB2" alt="plus" height="25" width="25"></div>
                 <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
             </div>
         </div>
@@ -162,6 +244,7 @@
     </div>
 
     <br>
+    <div id="dialog-confirm"></div>
 
 </body>
 <script src="scripts/inputCSV.js"></script>
