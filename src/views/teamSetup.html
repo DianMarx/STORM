@@ -10,7 +10,7 @@
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <link rel="stylesheet" href="style/css.css">
 
-    <script src="scripts/dbInteraction.js"></script>
+    <script src="scripts/algorithm.js"></script>
 
     <style>
         section {
@@ -44,31 +44,7 @@
         $(document).ready(function(e) {
 
 			$('#randomize').click(function(e) {
-				var max = 5;
-                //var i = $('.names').children().length;
-				//alert("yooo");
-				$('.names').children().each(function(index, element) {
-                    var randm = Math.floor(Math.random() * (4-1) + 1);
-					//alert(randm);
-					var done = false;
-					while(done != true){
-					switch(randm){
-					case 1:if($('.first').children().length < max){
-					 $(element).appendTo(".first"); done = true; 
-					 if($('.first').children().length == max) max = 4;
-					 break;} else max = 4;
-					case 2: if($('.second').children().length < max){
-					 $(element).appendTo(".second"); done = true; 
-					 if($('.second').children().length == max) max = 4;
-					 break;}else  max = 4; 
-					case 3: if($('.third').children().length < max){
-					 $(element).appendTo(".third");done = true;
-					 if($('.third').children().length == max) max = 4;
-					  break;}else max = 4;
-					  }
-					  randm = Math.floor(Math.random() * (4-1) + 1);
-					}
-                });
+                randomize($('.names').children().length,numTeamGroups-1);
             });
 
             $("#plusButton").click(function(e){
