@@ -63,7 +63,7 @@
                     numTeamGroups++;
                 }
                 else{
-                    $('<div class="teamTables "+(numTeamGroups)+" ondrop="drop(event)" ondragover="allowDrop(event)"></div>').insertBefore($("#teamAdd"));
+                    $('<div class="teamTables '+(numTeamGroups)+'" ondrop="drop(event)" ondragover="allowDrop(event)"></div>').insertBefore($("#teamAdd"));
                     numTeamGroups++;
                 }
             })
