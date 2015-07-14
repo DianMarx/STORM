@@ -16,14 +16,12 @@ module.exports=function(app) {
     app.get('/about', function (req, res) {
 
         res.render('aboutUs.html');
-        //here you use 'data'. just replace console.log(data) with implementation
 
 
     });
     app.get('/contact', function (req, res) {
 
         res.render('contactUs.html');
-        //here you use 'data'. just replace console.log(data) with implementation
 
 
     });
@@ -53,4 +51,5 @@ module.exports=function(app) {
 
 
     });
+
 }
