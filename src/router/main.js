@@ -4,6 +4,7 @@
 
 var db = require('../modules/database/dbInteraction');
 
+
 module.exports=function(app) {
     app.get('/', function (req, res) {
 
@@ -36,6 +37,19 @@ module.exports=function(app) {
         db.getCollection('testCol', function (data) {
             res.render('teamSetup', {subjects: data});
         });
+    });
+        app.get('/test', function (req, res) {
+            db.getCollection('testCol', function (data) {
+                res.render('test', {subjects: data});
+            });
+            //var val = req.query.name;
+            //console.log(req);
+
+        });
+
+    app.post('/insert', function (req, res) {
+
+        db.insertDocument(req.body.collection, req.body.data)
 
 
     });

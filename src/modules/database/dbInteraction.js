@@ -23,12 +23,32 @@ module.exports = {
     var data;
 
     col.find({},{'_id': 0},function (err, docs) {
-        console.log(data);
+
         data = docs;
         callback(data);
     });
 
-}
+},
+    insertDocument: function(colName, doc)
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        var insert = new col(JSON.parse(doc));
+
+        insert.save(function (err) {
+            if(err){console.log("Save failed");}
+            else console.log("Saved!");
+        });
+    },
+    removeDocument: function(colName, docId)
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        col.remove({id : docId}, function(err){
+            if(err) console.log("Remove failed");
+            else console.log("Removed!")
+        });
+    }
 }
 //how to call
 /**
