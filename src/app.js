@@ -11,7 +11,3 @@ app.engine('.html', require('ejs').__express);
 var server=app.listen(80,function(){
     console.log("Express is running on port 80");
 });
-
-
-
-//52416
