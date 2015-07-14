@@ -240,8 +240,10 @@ footer
 {
     background-color: #eee;
     height: auto;
+    width: 100%;
+    position: fixed;
     bottom: 0;
-    margin:0;
+    margin:auto;
     padding:5px;
     vertical-align:middle;
     border-top: 1px solid #e6e6e6;
@@ -309,10 +311,10 @@ td#tableMenu {
     border: none;
 }
 #aboutButton:hover {
-     border: none;
-     cursor: pointer;
-     color: red;
- }
+    border: none;
+    cursor: pointer;
+    color: red;
+}
 #homeButton:hover {
     border: none;
     cursor: pointer;
@@ -325,4 +327,24 @@ td#tableMenu {
 }
 #demoDiv {
     text-align: left;
+}
+
+.aboutWrapper{
+    position:relative;
+    top:70px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.aboutUsText {
+    position: relative;
+}
+.contactWrapper{
+    position:relative;
+    top:70px;
+    margin-left: auto;
+    margin-right: auto;
+    left: 30%;
+    font-family: OpenSans;
+
 }
