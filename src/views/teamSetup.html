@@ -13,16 +13,33 @@
     <script src="scripts/dbInteraction.js"></script>
 
     <style>
-	section {
-    width: 80%;
-    height: 500px;
-    background:#333;
-    margin: auto;
-    padding: 10px;
-}
+        section {
+            width: 80%;
+                height: 500px;
+                background:#333;
+                margin: auto;
+                padding: 10px;
+            }
+
+        .minusButton{
+            float:right;
+            opacity: 0;
+
+            -webkit-transition: opacity 0.5s ease-in-out;
+            -moz-transition: opacity 0.5s ease-in-out;
+            -ms-transition: opacity 0.5s ease-in-out;
+            -o-transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .teamTables:hover .minusButton{
+            opacity: 100;
+        }
 	</style>
 
     <script>
+
+        var numTeamGroups = 3; //Including add div, so technically numTeamGroups-1 droppable groups.
 
         $(document).ready(function(e) {
 
@@ -53,6 +70,23 @@
 					}
                 });
             });
+
+            $("#plusButton").click(function(e){
+                if(numTeamGroups % 3 == 0) {
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    $("<br><br>").insertBefore($("#teamAdd"));
+                    numTeamGroups++;
+                }
+                else{
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    numTeamGroups++;
+                }
+            })
+
+            $(".minusButton").click(function(e){
+                
+            })
+
         });
 	
         function allowDrop(ev) {
@@ -91,8 +125,6 @@
         } else {
             alert('The File APIs are not fully supported in this browser.');
         }
-
-
 	
     </script>
 </head>
@@ -113,12 +145,14 @@
                 Input from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
             </div>
 
-
             <button name="Randomize" id="randomize">Randomize</button>
+
             <div class="teams">
-                <div class="teamTables first" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <div class="teamTables second" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-                <div class="teamTables third" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+
+
+                <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton" alt="plus" height="25" width="25"></div>
+                <div class="teamTables 2" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton" alt="plus" height="25" width="25"></div>
+                <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
             </div>
         </div>
     </div>

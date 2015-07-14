@@ -22,7 +22,8 @@ module.exports = {
     col = mongoose.model(colName, mySchema);
     var data;
 
-    col.find(function (err, docs) {
+    col.find({},{'_id': 0},function (err, docs) {
+        console.log(data);
         data = docs;
         callback(data);
     });
