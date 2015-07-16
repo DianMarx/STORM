@@ -349,3 +349,29 @@ td#tableMenu {
     font-family: OpenSans;
 
 }
+
+
+
+
+section {
+    width: 80%;
+    height: 500px;
+    background:#333;
+    margin: auto;
+    padding: 10px;
+}
+
+.minusButton{
+    float:right;
+    opacity: 0;
+
+    -webkit-transition: opacity 0.5s ease-in-out;
+    -moz-transition: opacity 0.5s ease-in-out;
+    -ms-transition: opacity 0.5s ease-in-out;
+    -o-transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.teamTables:hover .minusButton{
+    opacity: 100;
+}
