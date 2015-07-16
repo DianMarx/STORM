@@ -12,6 +12,13 @@ db.once('open', function (callback) {
 
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
+var userSchema = new Schema({
+    id : Number,
+    name: String,
+    password: String,
+    projectID: [String],
+    email: String
+})
 
 module.exports = {
 //Get an array from collection colName
@@ -48,7 +55,19 @@ module.exports = {
             if(err) console.log("Remove failed");
             else console.log("Removed!")
         });
+    },
+    checkLogin: function(username, password, callback)
+    {
+        userSchema.seet('collection', 'User');
+        col = mongoose.model('User', userSchema);
+        col.find({user: username, password: password},{'_id': 0},function (err, docs)
+        {
+            if(err) console.log(err);
+            else
+            callback(docs);
+        });
     }
+
 }
 //how to call
 /**
@@ -57,6 +76,7 @@ getCollection('testCol', function(data){
     //here you use 'data'. just replace console.log(data) with implementation
 });
  **/
+
 
 
 

@@ -52,4 +52,18 @@ module.exports=function(app) {
 
     });
 
+    app.post('/login', function (req, res) {
+
+        db.insertDocument(req.body.collection, req.body.data)
+
+
+    });
+
+    app.get('/projectHome', function (req, res) {
+
+        res.render('projectSetup.html');
+
+
+    });
+
 }
