@@ -1,1 +1,7 @@
 src/node_modules/
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/STORM.iml
+.idea/vcs.xml
+.idea/scopes/scope_settings.xml
