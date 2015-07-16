@@ -22,6 +22,9 @@ var userSchema = new Schema({
 
 
 
+
+
+
 module.exports = {
 //Get an array from collection colName
 
@@ -58,6 +61,15 @@ module.exports = {
             else console.log("Removed!")
         });
     },
+    updateDocument: function(colName, id, updateInfo )
+{
+    mySchema.set('collection', colName);
+    col = mongoose.model(colName, mySchema);
+    col.update({id : id}, updateInfo, function(data){
+
+    });
+
+},
     checkLogin: function(username, password, callback)
 {
     userSchema.set('collection', 'Users');
