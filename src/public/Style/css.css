@@ -375,3 +375,17 @@ section {
 .teamTables:hover .minusButton{
     opacity: 100;
 }
+
+#options{
+    background: #E6E6E6;
+    display: inline-block;
+    border: 2px solid #1C94C4;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    padding: 10px 10px 10px 10px;
+}
+
+#totalTeams{
+    width:50px;
+}

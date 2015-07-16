@@ -27,7 +27,13 @@
                     <div class="subject" id=<%= i %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
                     </div> <% } %>
                 </div>
-                Import from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
+                <br><br>
+                <div id="options">
+                    <p style="font-size:120%; padding:0; margin:0;">Options</p><hr><br>
+                    Number of teams:&nbsp;&nbsp;&nbsp;&nbsp;<input id="totalTeams" type="number" min="0"/><br><br>
+                    Import from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
+                </div>
+
             </div>
 
             <button name="Randomize" id="randomize">Randomize</button>
@@ -42,9 +48,6 @@
         </div>
     </div>
 
-    <div id="dialog" title="Basic dialog">
-        <div id="dialogText"></div>
-    </div>
 
     <br>
     <div id="dialog-confirm"></div>

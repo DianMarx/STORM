@@ -19,9 +19,23 @@ $(document).ready(function(e) {
             reader.readAsText(file);
             reader.onload = function(e) {
                 var result = e.target.result;   // browser completed reading file
-                //alert(result);
-                $("#dialogText").text("Successfully read contents of file.")
-                $( "#dialog" ).dialog( "open" );
+                $("#dialog-confirm").html("Successfully read the contents of the file.");
+
+                // Define the Dialog and its properties.
+                $("#dialog-confirm").dialog({
+                    resizable: false,
+                    modal: true,
+                    title: "Success",
+                    height: 250,
+                    width: 400,
+                    buttons: {
+                        "Ok": function () {
+                            $(this).dialog('close');
+                        }
+                    },
+                    show: { effect: "scale", duration: 250 },
+                    hide: { effect: "scale", duration: 250 }
+                });
 
                 var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
 
@@ -33,24 +47,142 @@ $(document).ready(function(e) {
 
                 document.getElementById("subjects").innerHTML = "";
 
-                for(i = 0; i < arrayOfTheInput.length-1; i++)
+                for(i = 1; i < arrayOfTheInput.length-1; i++)
                 {
-                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ arrayOfTheInput[i] +"<//div>";
+                    var line = arrayOfTheInput[i].split(",");
+                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ line[1] +"<//div>";
                 }
 
                 var JSONObject = []; //Hierdie is die JSON object wat in die DB gestoor gaan word.
 
-                for(i = 0; i < arrayOfTheInput.length-1; i++)
+                for(i = 1; i < arrayOfTheInput.length-1; i++)
                 {
+                    var line = arrayOfTheInput[i].split(",");
+
                     JSONObject.push({
-                        "Name" : arrayOfTheInput[i]
+                        "id" : line[0],
+                        "Name" : line[1]
                     })
                 }
 
-                //alert(JSON.stringify(JSONObject));
+                alert(JSON.stringify(JSONObject));
             };
         }
     }
+
+    $("#totalTeams").change(function(){
+        var empty = true;
+        $(".teams").find("div").each(function(){
+
+            if ($(this).find("div").length >= 1)
+            {
+                empty = false;
+            }
+        });
+
+        if (!empty)
+        {
+            $("#dialog-confirm").html("There are subjects in some of the team boxes.<br>Changing this value will move all participants back to the spawn pool.<br><br>Are you sure you want to continue?<br>HINT: You can add and remove team boxes to the right.");
+
+            // Define the Dialog and its properties.
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                modal: true,
+                title: "Change total team boxes",
+                height: 250,
+                width: 400,
+                buttons: {
+                    "Yes": function () {
+                        var numTeams = numTeamGroups;
+                        for (var i = 1; i < numTeams; i++)
+                        {
+                            var element = $("."+ 1).find("img");
+                            confirmDeleteTeamTable(element);
+                        }
+
+                        for(var i = 0; i < $("#totalTeams").val(); i++)
+                        {
+                            if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+                                $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                                $("<br><br>").insertBefore($("#teamAdd"));
+                                numTeamGroups++;
+
+                            }
+                            else{
+                                $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                                numTeamGroups++;
+                            }
+                        }
+
+                        $(".minusButton").off();
+
+                        $(".minusButton").on("click", function(e){
+                            var parent = $(this).parent();
+                            if (parent.find("div").length >= 1){
+                                fnOpenNormalDialog($(this));
+                            }
+                            else
+                            {
+                                confirmDeleteTeamTable($(this));
+                                $("#totalTeams").val(numTeamGroups-1);
+                            }
+                        });
+
+                        $("#totalTeams").val(numTeamGroups-1);
+
+                        $(this).dialog('close');
+                    },
+                    "No": function () {
+                        $("#totalTeams").val((numTeamGroups-1));
+                        $(this).dialog('close');
+                    }
+                },
+                show: {effect: "scale", duration: 250},
+                hide: {effect: "scale", duration: 250}
+            });
+        }
+        else
+        {
+            var numTeams = numTeamGroups;
+            for (var i = 1; i < numTeams; i++)
+            {
+                var element = $("."+ 1).find("img");
+                confirmDeleteTeamTable(element);
+            }
+
+            for(var i = 0; i < $("#totalTeams").val(); i++)
+            {
+                if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    $("<br><br>").insertBefore($("#teamAdd"));
+                    numTeamGroups++;
+
+                }
+                else{
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    numTeamGroups++;
+                }
+            }
+
+            $(".minusButton").off();
+
+            $(".minusButton").on("click", function(e){
+                var parent = $(this).parent();
+                if (parent.find("div").length >= 1){
+                    fnOpenNormalDialog($(this));
+                }
+                else
+                {
+                    confirmDeleteTeamTable($(this));
+                    $("#totalTeams").val(numTeamGroups-1);
+                }
+            });
+
+            $("#totalTeams").val(numTeamGroups-1);
+        }
+    });
+
+    $("#totalTeams").val((numTeamGroups-1));
 
     $('#randomize').click(function(e) {
         randomize($('.names').children().length,numTeamGroups-1);
@@ -61,10 +193,12 @@ $(document).ready(function(e) {
             $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
             $("<br><br>").insertBefore($("#teamAdd"));
             numTeamGroups++;
+            $("#totalTeams").val(numTeamGroups-1);
         }
         else{
             $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
+            $("#totalTeams").val(numTeamGroups-1);
         }
 
         $(".minusButton").off();
@@ -77,8 +211,11 @@ $(document).ready(function(e) {
             else
             {
                 confirmDeleteTeamTable($(this));
+                $("#totalTeams").val(numTeamGroups-1);
             }
         });
+
+
     });
 
     $(".minusButton").on("click", function(e){
@@ -89,6 +226,7 @@ $(document).ready(function(e) {
         else
         {
             confirmDeleteTeamTable($(this));
+            $("#totalTeams").val(numTeamGroups-1);
         }
     });
 });
@@ -109,12 +247,15 @@ function fnOpenNormalDialog(element) {
         buttons: {
             "Yes": function () {
                 $(this).dialog('close');
+                $("#totalTeams").val(numTeamGroups-1);
                 confirmDeleteTeamTable(element);
             },
             "No": function () {
                 $(this).dialog('close');
             }
-        }
+        },
+        show: { effect: "scale", duration: 250 },
+        hide: { effect: "scale", duration: 250 }
     });
 }
 
