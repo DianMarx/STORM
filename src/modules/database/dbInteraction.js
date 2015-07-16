@@ -20,6 +20,8 @@ var userSchema = new Schema({
     email: String
 })
 
+
+
 module.exports = {
 //Get an array from collection colName
 
@@ -57,16 +59,17 @@ module.exports = {
         });
     },
     checkLogin: function(username, password, callback)
+{
+    userSchema.set('collection', 'Users');
+    col = mongoose.model('Users', userSchema);
+    col.find({username: username},{'_id': 0},function (err, docs)
     {
-        userSchema.seet('collection', 'User');
-        col = mongoose.model('User', userSchema);
-        col.find({user: username, password: password},{'_id': 0},function (err, docs)
-        {
-            if(err) console.log(err);
-            else
+        if(err) console.log(err);
+        else
             callback(docs);
-        });
-    }
+    });
+}
+
 
 }
 //how to call
@@ -76,6 +79,7 @@ getCollection('testCol', function(data){
     //here you use 'data'. just replace console.log(data) with implementation
 });
  **/
+
 
 
 

@@ -54,7 +54,10 @@ module.exports=function(app) {
 
     app.post('/login', function (req, res) {
 
-        db.insertDocument(req.body.collection, req.body.data)
+        db.checkLogin(req.body.username, req.body.password, function(data)
+        {
+           res.send(data);
+        });
 
 
     });
