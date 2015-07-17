@@ -2,10 +2,11 @@
  * Created by Andreas on 2015/07/08.
  */
 
-
 var numTeamGroups = 3; //Including add div, so technically numTeamGroups-1 droppable groups.
 
 $(document).ready(function(e) {
+
+    $( "input[type=submit], a, button, input[type=file]" ).button();
 
     document.getElementById("CSVInput").onchange = function(e){
 
@@ -38,20 +39,9 @@ $(document).ready(function(e) {
                 });
 
                 var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
-
-                /*
-
-                 String manipulation kom hier. Die ekstra values (soos punte ens) na 'n "," kom.
-
-                 */
+                var headings = arrayOfTheInput[0].split(",");
 
                 document.getElementById("subjects").innerHTML = "";
-
-                for(i = 1; i < arrayOfTheInput.length-1; i++)
-                {
-                    var line = arrayOfTheInput[i].split(",");
-                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ line[1] +"<//div>";
-                }
 
                 var JSONObject = []; //Hierdie is die JSON object wat in die DB gestoor gaan word.
 
@@ -59,13 +49,25 @@ $(document).ready(function(e) {
                 {
                     var line = arrayOfTheInput[i].split(",");
 
-                    JSONObject.push({
-                        "id" : line[0],
-                        "Name" : line[1]
-                    })
+                    tempObj = {};
+                    for (var k = 0; k < headings.length; k++)
+                    {
+                        if (typeof line[k] == 'undefined')
+                        {
+                            tempObj[headings[k]] = "";
+                        }
+                        else
+                            tempObj[headings[k]] = line[k];
+                    }
+                    JSONObject.push(tempObj);
                 }
 
-                alert(JSON.stringify(JSONObject));
+                for(i = 0; i < JSONObject.length; i++)
+                {
+                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] +"</div>";
+                }
+
+                //alert(JSON.stringify(JSONObject));
             };
         }
     }
@@ -82,64 +84,55 @@ $(document).ready(function(e) {
 
         if (!empty)
         {
-            $("#dialog-confirm").html("There are subjects in some of the team boxes.<br>Changing this value will move all participants back to the spawn pool.<br><br>Are you sure you want to continue?<br>HINT: You can add and remove team boxes to the right.");
-
-            // Define the Dialog and its properties.
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                modal: true,
-                title: "Change total team boxes",
-                height: 250,
-                width: 400,
-                buttons: {
-                    "Yes": function () {
-                        var numTeams = numTeamGroups;
-                        for (var i = 1; i < numTeams; i++)
-                        {
-                            var element = $("."+ 1).find("img");
-                            confirmDeleteTeamTable(element);
-                        }
-
-                        for(var i = 0; i < $("#totalTeams").val(); i++)
-                        {
-                            if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-                                $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                                $("<br><br>").insertBefore($("#teamAdd"));
-                                numTeamGroups++;
-
-                            }
-                            else{
-                                $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                                numTeamGroups++;
-                            }
-                        }
-
-                        $(".minusButton").off();
-
-                        $(".minusButton").on("click", function(e){
-                            var parent = $(this).parent();
-                            if (parent.find("div").length >= 1){
-                                fnOpenNormalDialog($(this));
-                            }
-                            else
-                            {
-                                confirmDeleteTeamTable($(this));
-                                $("#totalTeams").val(numTeamGroups-1);
-                            }
-                        });
-
-                        $("#totalTeams").val(numTeamGroups-1);
-
-                        $(this).dialog('close');
-                    },
-                    "No": function () {
-                        $("#totalTeams").val((numTeamGroups-1));
-                        $(this).dialog('close');
+            buttons = {
+                "Yes": function () {
+                    var numTeams = numTeamGroups;
+                    for (var i = 1; i < numTeams; i++)
+                    {
+                        var element = $("."+ 1).find("img");
+                        confirmDeleteTeamTable(element);
                     }
+
+                    for(var i = 0; i < $("#totalTeams").val(); i++)
+                    {
+                        if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                            $("<br><br>").insertBefore($("#teamAdd"));
+                            numTeamGroups++;
+
+                        }
+                        else{
+                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                            numTeamGroups++;
+                        }
+                    }
+
+                    $(".minusButton").off();
+
+                    $(".minusButton").on("click", function(e){
+                        var parent = $(this).parent();
+                        if (parent.find("div").length >= 1){
+                            fnOpenNormalDialog($(this));
+                        }
+                        else
+                        {
+                            confirmDeleteTeamTable($(this));
+                            $("#totalTeams").val(numTeamGroups-1);
+                        }
+                    });
+
+                    $("#totalTeams").val(numTeamGroups-1);
+
+                    $(this).dialog('close');
                 },
-                show: {effect: "scale", duration: 250},
-                hide: {effect: "scale", duration: 250}
-            });
+                "No": function () {
+                    $("#totalTeams").val((numTeamGroups-1));
+                    $(this).dialog('close');
+                }
+            };
+
+            dialogMessage("Change total team boxes", "There are subjects in some of the team boxes.<br>Changing this value will move all participants back to the spawn pool.<br><br>Are you sure you want to continue?<br>HINT: You can add and remove team boxes to the right.",buttons);
+            $("#dialog-confirm").html();
         }
         else
         {
@@ -231,32 +224,21 @@ $(document).ready(function(e) {
     });
 });
 
-
-
-
 function fnOpenNormalDialog(element) {
-    $("#dialog-confirm").html("Are you sure you want to delete this team box?<br>Subjects will be returned to spawn pool.");
 
-    // Define the Dialog and its properties.
-    $("#dialog-confirm").dialog({
-        resizable: false,
-        modal: true,
-        title: "Confirm delete",
-        height: 250,
-        width: 400,
-        buttons: {
-            "Yes": function () {
-                $(this).dialog('close');
-                $("#totalTeams").val(numTeamGroups-1);
-                confirmDeleteTeamTable(element);
-            },
-            "No": function () {
-                $(this).dialog('close');
-            }
+    buttons = {
+        "Yes": function () {
+            $(this).dialog('close');
+            $("#totalTeams").val(numTeamGroups-1);
+            confirmDeleteTeamTable(element);
         },
-        show: { effect: "scale", duration: 250 },
-        hide: { effect: "scale", duration: 250 }
-    });
+        "No": function () {
+            $(this).dialog('close');
+        }
+    };
+
+    dialogMessage("Confirm delete", "Are you sure you want to delete this team box?<br>Subjects will be returned to spawn pool.", buttons);
+    $("#dialog-confirm").html();
 }
 
 function confirmDeleteTeamTable(element)
@@ -311,25 +293,25 @@ function drop(ev) {
     ev.target.appendChild(document.getElementById(data));
 }
 
-$(function() {
-    $( "input[type=submit], a, button, input[type=file]" ).button();
-
-    $( "#dialog" ).dialog({
-        autoOpen: false,
-        width: 400,
-        buttons: [
-            {
-                text: "Ok",
-                click: function() {
-                    $( this ).dialog( "close" );
-                }
-            }
-        ]
-    });;
-});
-
 if (window.File && window.FileReader && window.FileList && window.Blob) {
     // Great success! All the File APIs are supported.
 } else {
     alert('The File APIs are not fully supported in this browser.');
+}
+
+//Dynamic dialog message box.
+function dialogMessage(title,mesg, buttons) {
+    $("#dialog-confirm").html(mesg);
+
+    // Define the Dialog and its properties.
+    $("#dialog-confirm").dialog({
+        resizable: false,
+        modal: true,
+        title: title,
+        height: 250,
+        width: 400,
+        buttons: buttons,
+        show: { effect: "scale", duration: 250 },
+        hide: { effect: "scale", duration: 250 }
+    });
 }
