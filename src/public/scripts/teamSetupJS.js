@@ -96,13 +96,13 @@ $(document).ready(function(e) {
                     for(var i = 0; i < $("#totalTeams").val(); i++)
                     {
                         if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
                             $("<br><br>").insertBefore($("#teamAdd"));
                             numTeamGroups++;
 
                         }
                         else{
-                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
                             numTeamGroups++;
                         }
                     }
@@ -118,6 +118,23 @@ $(document).ready(function(e) {
                         {
                             confirmDeleteTeamTable($(this));
                             $("#totalTeams").val(numTeamGroups-1);
+                        }
+                    });
+
+                    $(".leftArrow").off();
+
+                    $(".leftArrow").on("click", function(e){
+                        var parent = $(this).parent();
+                        if (parent.find("div").length >= 1){
+                            moveBackDialog($(this));
+                            $(".leftArrow").off();
+
+                            $(".leftArrow").on("click", function(e){
+                                var parent = $(this).parent();
+                                if (parent.find("div").length >= 1){
+                                    moveBackDialog($(this));
+                                }
+                            });
                         }
                     });
 
@@ -146,13 +163,13 @@ $(document).ready(function(e) {
             for(var i = 0; i < $("#totalTeams").val(); i++)
             {
                 if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
                     $("<br><br>").insertBefore($("#teamAdd"));
                     numTeamGroups++;
 
                 }
                 else{
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
                     numTeamGroups++;
                 }
             }
@@ -171,6 +188,23 @@ $(document).ready(function(e) {
                 }
             });
 
+            $(".leftArrow").off();
+
+            $(".leftArrow").on("click", function(e){
+                var parent = $(this).parent();
+                if (parent.find("div").length >= 1){
+                    moveBackDialog($(this));
+                    $(".leftArrow").off();
+
+                    $(".leftArrow").on("click", function(e){
+                        var parent = $(this).parent();
+                        if (parent.find("div").length >= 1){
+                            moveBackDialog($(this));
+                        }
+                    });
+                }
+            });
+
             $("#totalTeams").val(numTeamGroups-1);
         }
     });
@@ -183,13 +217,13 @@ $(document).ready(function(e) {
 
     $("#plusButton").click(function(e){
         if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
             $("<br><br>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
         }
         else{
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'></div>").insertBefore($("#teamAdd"));
+            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
         }
@@ -208,7 +242,22 @@ $(document).ready(function(e) {
             }
         });
 
+        $(".leftArrow").off();
 
+        $(".leftArrow").on("click", function(e){
+            var parent = $(this).parent();
+            if (parent.find("div").length >= 1){
+                moveBackDialog($(this));
+                $(".leftArrow").off();
+
+                $(".leftArrow").on("click", function(e){
+                    var parent = $(this).parent();
+                    if (parent.find("div").length >= 1){
+                        moveBackDialog($(this));
+                    }
+                });
+            }
+        });
     });
 
     $(".minusButton").on("click", function(e){
@@ -222,7 +271,17 @@ $(document).ready(function(e) {
             $("#totalTeams").val(numTeamGroups-1);
         }
     });
+
+    $(".leftArrow").on("click", function(e){
+        var parent = $(this).parent();
+        if (parent.find("div").length >= 1){
+            moveBackDialog($(this));
+        }
+    });
 });
+
+//End of on document load
+
 
 function fnOpenNormalDialog(element) {
 
@@ -274,7 +333,67 @@ function confirmDeleteTeamTable(element)
             $(this).addClass(boxID.toString());
             $(this).children(".minusButton").removeClass("mB"+(i+1).toString());
             $(this).children(".minusButton").addClass("mB"+boxID.toString());
+            $(this).children(".leftArrow").removeClass("lA"+(i+1).toString());
+            $(this).children(".leftArrow").addClass("lA"+boxID.toString());
             boxID++;
+        }
+    });
+}
+
+function moveBackDialog(element) {
+
+    buttons = {
+        "Yes": function () {
+            $(this).dialog('close');
+            moveBack(element);
+        },
+        "No": function () {
+            $(this).dialog('close');
+        }
+    };
+
+    dialogMessage("Confirm move", "Move back all subjects in this team?<br>Subjects will be returned to spawn pool.", buttons);
+    $("#dialog-confirm").html();
+}
+
+function moveBack(element){
+    var boxID = element.attr('class');
+    boxID = boxID.replace("leftArrow lA", "");
+
+    $("."+boxID).find("div").each(function(){
+        $(".names").append($(this));
+    });
+
+    $("."+boxID).html('<img src="images/minus_button.png" class="minusButton mB'+boxID+'" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA'+boxID+'" alt="move back" height="25" width="25">');
+
+    $(".minusButton").off();
+
+    $(".minusButton").on("click", function(e){
+        var parent = $(this).parent();
+        if (parent.find("div").length >= 1){
+            fnOpenNormalDialog($(this));
+        }
+        else
+        {
+            confirmDeleteTeamTable($(this));
+            $("#totalTeams").val(numTeamGroups-1);
+        }
+    });
+
+    $(".leftArrow").off();
+
+    $(".leftArrow").on("click", function(e){
+        var parent = $(this).parent();
+        if (parent.find("div").length >= 1){
+            moveBackDialog($(this));
+            $(".leftArrow").off();
+
+            $(".leftArrow").on("click", function(e){
+                var parent = $(this).parent();
+                if (parent.find("div").length >= 1){
+                    moveBackDialog($(this));
+                }
+            });
         }
     });
 }
