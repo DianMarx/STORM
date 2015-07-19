@@ -101,7 +101,6 @@ module.exports = {
             callback(docs);
         }
     }
-
 }
 
 
