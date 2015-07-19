@@ -51,8 +51,6 @@
                         {
                             $("#loginUser").css("border-color", "red");
                             $(".sign").effect('shake');
-
-                            //alert("not getting in bitch");
                         }
                         else
                         if(data.password != pass)
@@ -66,7 +64,6 @@
                             sessionStorage['User'] = JSON.stringify(data);
                             window.location.href = "/projectHome";
                         }
-                        //alert(JSON.stringify(data));
                     },
 
                     error: function()
