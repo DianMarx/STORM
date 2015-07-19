@@ -12,6 +12,7 @@ db.once('open', function (callback) {
 
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
+
 var userSchema = new Schema({
     id : Number,
     name: String,
@@ -20,10 +21,12 @@ var userSchema = new Schema({
     email: String
 })
 
-
-
-
-
+var projectSchema = new Schema({
+    id : Number,
+    projectName: String,
+    subjects: String,
+    admin: Boolean
+})
 
 module.exports = {
 //Get an array from collection colName
@@ -70,6 +73,7 @@ module.exports = {
     });
 
 },
+
     checkLogin: function(username, password, callback)
 {
     userSchema.set('collection', 'Users');
@@ -80,10 +84,28 @@ module.exports = {
         else
             callback(docs);
     });
+},
+
+
+    /*Get all project names where ids match the ids in array.
+    used to populate projectSetup page if a user has one or more existing projects*/
+
+    getProjects: function(ids,callback)
+    {
+        projectSchema.set('collection', 'Projects');
+        col = mongoose.model('Users', projectSchema);
+        col.find({'id' : {$in:ids}}),function (err, docs)
+        {
+            if(err) console.log(err);
+            else
+            callback(docs);
+        }
+    }
+
 }
 
 
-}
+
 //how to call
 /**
 getCollection('testCol', function(data){
