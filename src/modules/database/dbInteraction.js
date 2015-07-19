@@ -93,12 +93,18 @@ module.exports = {
     getProjects: function(ids,callback)
     {
         projectSchema.set('collection', 'Projects');
-        col = mongoose.model('Users', projectSchema);
+        col = mongoose.model('Projects', projectSchema);
         col.find({'id' : {$in:ids}}),function (err, docs)
         {
-            if(err) console.log(err);
+            if(err)
+            {
+                console.log(err);
+            }
             else
-            callback(docs);
+            {
+                callback(docs);
+            }
+
         }
     }
 }

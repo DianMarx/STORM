@@ -11,12 +11,64 @@
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 
     <script>
+
         //If not set, error dialog and return to login page
-        var user = sessionStorage['User'];
+        var user = JSON.parse(sessionStorage['User']);
         var projects = user.projectID;
 
         $(document).ready(function(e) {
-            alert(user);
+
+            $.ajax({
+                type: "POST",
+                url: '/projectSetup',
+                data: JSON.stringify(projects),
+                dataType: "json",
+                success: function (dat, testStatus) {
+
+                    var data = JSON.stringify(dat);
+                    data = JSON.parse(data.substring(1,data.length-1));
+
+
+                    /*if(JSON.stringify(data) == "[]")
+                    {
+                        $("#loginUser").css("border-color", "red");
+                        $(".sign").effect('shake');
+                    }
+                    else
+                    if(data.password != pass)
+                    {
+                        $("#loginPass").css("border-color", "red");
+                        $(".sign").effect('shake');
+                    }
+                    else
+                    {
+                        sessionStorage['User'] = JSON.stringify(data);
+                        window.location.href = "/projectHome";
+                    }*/
+                },
+
+                error: function(e)
+                {
+
+                    /*$("#errorDialog").html("An error has occured: <br> Could not connect to database");
+                    $("#errorDialog").dialog({
+                        resizable: false,
+                        modal: true,
+                        title: "Error",
+                        height: 250,
+                        width: 400,
+                        buttons: {
+                            "Ok": function () {
+                                $(this).dialog('close');
+                                confirmDeleteTeamTable(element);
+                            }
+                        }
+
+                    });*/
+                }
+            });
+
+
         });
 
     </script>

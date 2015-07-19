@@ -43,7 +43,7 @@
                     data: {username: user},
                     dataType: "json",
                     success: function (dat, testStatus) {
-                        //alert(JSON.stringify(dat));
+
                         var data = JSON.stringify(dat);
                         data = JSON.parse(data.substring(1,data.length-1));
 
@@ -67,7 +67,6 @@
 
                     error: function()
                     {
-
                         $("#errorDialog").html("An error has occured: <br> Could not connect to database");
                         $("#errorDialog").dialog({
                             resizable: false,

@@ -66,6 +66,14 @@ module.exports=function(app) {
 
         res.render('projectSetup.html');
 
+    });
+
+    app.post('/projectSetup', function (req, res) {
+
+        db.getProjects(req.body, function(data)
+        {
+            res.send(data);
+        });
 
     });
 
