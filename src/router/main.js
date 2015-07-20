@@ -70,7 +70,7 @@ module.exports=function(app) {
 
     app.post('/projectSetup', function (req, res) {
 
-        db.getProjects(req.body, function(data)
+        db.getProjects(req.body.ids, function(data)
         {
             res.send(data);
         });

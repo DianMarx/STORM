@@ -92,20 +92,33 @@ module.exports = {
 
     getProjects: function(ids,callback)
     {
+        //console.log(JSON.parse(ids));
+        ids = JSON.parse(ids);
+
         projectSchema.set('collection', 'Projects');
         col = mongoose.model('Projects', projectSchema);
-        col.find({'id' : {$in:ids}}),function (err, docs)
-        {
-            if(err)
-            {
-                console.log(err);
-            }
-            else
-            {
-                callback(docs);
-            }
 
+        //for (var i=0 ;i < ids.length; i++)
+        //{
+        //    var id = ids[i];
+
+            col.find({id: ids[0]},function (err, docs) // hy moet basically deur die id array gan en all die entries trug stuur in 'n array
+            {
+                if(err) console.log(err);
+                else
+                    console.log(docs);
+            });
+       // }
+
+        /*
+        projectSchema.set('collection', 'Projects');
+        col = mongoose.model('Projects', projectSchema);
+        col.find({id : '1'}),function (err, docs)
+        {
+                console.log(docs);
+                callback(docs);
         }
+        */
     }
 }
 

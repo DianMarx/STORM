@@ -14,20 +14,20 @@
 
         //If not set, error dialog and return to login page
         var user = JSON.parse(sessionStorage['User']);
-        var projects = user.projectID;
+        var projects = JSON.stringify(user.projectID);
 
         $(document).ready(function(e) {
 
             $.ajax({
                 type: "POST",
                 url: '/projectSetup',
-                data: JSON.stringify(projects),
+                data: {"ids" : projects},
                 dataType: "json",
                 success: function (dat, testStatus) {
 
                     var data = JSON.stringify(dat);
                     data = JSON.parse(data.substring(1,data.length-1));
-
+                    alert(data);
 
                     /*if(JSON.stringify(data) == "[]")
                     {
@@ -49,7 +49,7 @@
 
                 error: function(e)
                 {
-
+                    alert(e);
                     /*$("#errorDialog").html("An error has occured: <br> Could not connect to database");
                     $("#errorDialog").dialog({
                         resizable: false,
