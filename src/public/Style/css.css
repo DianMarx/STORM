@@ -186,6 +186,7 @@ BODY:last-child .signin {
 	vertical-align:top;
     background:#EAF2FE;
     border: solid 1pt;
+    overflow:auto;
 }
 
 .teamAdd{
