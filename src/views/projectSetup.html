@@ -25,9 +25,9 @@
                 dataType: "json",
                 success: function (dat, testStatus) {
 
+                    console.log(dat);
                     var data = JSON.stringify(dat);
                     data = JSON.parse(data.substring(1,data.length-1));
-                    alert(data);
 
                     /*if(JSON.stringify(data) == "[]")
                     {
