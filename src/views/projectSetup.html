@@ -37,7 +37,7 @@
             }
             else { //user is logged on.
 
-                //$('.loader').html('<img src="loader.gif"> Loading Projects...');
+                $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
                 var user = JSON.parse(sessionStorage['User']);
                 var projectIDs = JSON.stringify(user.projectID);
                 $("#user").text("User: " + user.username);
@@ -51,8 +51,15 @@
                     success: function (dat, testStatus) {
 
                         var data = JSON.stringify(dat);
+                        var displayProjects = "";
+                        for(var i = 0; i < dat.length; i++)
+                        {
+                            //alert(dat[i].projectName);
+                            displayProjects += '<a href="#"><p>'+dat[i].projectName+'</p></a>';
+                        }
+                        $("#Projects").html(displayProjects);
                         //alert(dat[0].projectName);
-                        data = JSON.parse(data.substring(1,data.length-1));
+
 
                     },
 
@@ -97,7 +104,7 @@
     <div class="background">
         <img src="../Images/Storm.png" style="width: 100%;top:auto;">
     </div>
-    <div id="Projects" class="loader"><img src="images/loader.gif"><br/> Loading Projects...</div>
+    <div id="Projects" class="loader"></div>
     <div class="aboutWrapper">
         <div class="aboutUsText">
 
