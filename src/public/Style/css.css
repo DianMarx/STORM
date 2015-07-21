@@ -411,3 +411,11 @@ section {
 #totalTeams{
     width:50px;
 }
+
+#Projects{
+    position:relative;
+}
+
+.projLink{
+    text-decoration: none;
+}
