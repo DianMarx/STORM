@@ -54,34 +54,16 @@
                         var displayProjects = "";
                         for(var i = 0; i < dat.length; i++)
                         {
-                            //alert(dat[i].projectName);
-                            displayProjects += '<a href="#"><p>'+dat[i].projectName+'</p></a>';
+                            displayProjects += '<p><a class="projLink" href="#">'+dat[i].projectName+'</a></p>';
                         }
                         $("#Projects").html(displayProjects);
-                        //alert(dat[0].projectName);
-
+                        $(".projLink").css("text-decoration" , "none" );
 
                     },
 
                     error: function(e)
                     {
                         console.log(e);
-                        alert(e);
-                        /*$("#errorDialog").html("An error has occured: <br> Could not connect to database");
-                        $("#errorDialog").dialog({
-                            resizable: false,
-                            modal: true,
-                            title: "Error",
-                            height: 250,
-                            width: 400,
-                            buttons: {
-                                "Ok": function () {
-                                    $(this).dialog('close');
-                                    confirmDeleteTeamTable(element);
-                                }
-                            }
-
-                        });*/
                     }
                 });
             }
