@@ -12,61 +12,72 @@
 
     <script>
 
-        //If not set, error dialog and return to login page
-        var user = JSON.parse(sessionStorage['User']);
-        var projects = JSON.stringify(user.projectID);
-
         $(document).ready(function(e) {
 
-            $.ajax({
-                type: "POST",
-                url: '/projectSetup',
-                data: {"ids" : projects},
-                dataType: "json",
-                success: function (dat, testStatus) {
 
-                    console.log(dat);
-                    var data = JSON.stringify(dat);
-                    data = JSON.parse(data.substring(1,data.length-1));
+            if (sessionStorage.length == 0) // no user logged on.
+            {
+                alert("Please log in");
+                window.location.href = "/";
 
-                    /*if(JSON.stringify(data) == "[]")
-                    {
-                        $("#loginUser").css("border-color", "red");
-                        $(".sign").effect('shake');
-                    }
-                    else
-                    if(data.password != pass)
-                    {
-                        $("#loginPass").css("border-color", "red");
-                        $(".sign").effect('shake');
-                    }
-                    else
-                    {
-                        sessionStorage['User'] = JSON.stringify(data);
-                        window.location.href = "/projectHome";
-                    }*/
-                },
-
-                error: function(e)
-                {
-                    alert(e);
-                    /*$("#errorDialog").html("An error has occured: <br> Could not connect to database");
-                    $("#errorDialog").dialog({
-                        resizable: false,
-                        modal: true,
-                        title: "Error",
-                        height: 250,
-                        width: 400,
-                        buttons: {
-                            "Ok": function () {
-                                $(this).dialog('close');
-                                confirmDeleteTeamTable(element);
-                            }
+                $("#errorDialog").html("You are not logged in. <br> Please go back and log in or sign up. ");
+                $("#errorDialog").dialog({
+                    resizable: false,
+                    modal: true,
+                    title: "Error",
+                    height: 250,
+                    width: 400,
+                    buttons: {
+                        "Ok": function () {
+                            $(this).dialog('close');
+                             //return to login
                         }
+                    }
+                });
+            }
+            else { //user is logged on.
 
-                    });*/
-                }
-            });
+                //$('.loader').html('<img src="loader.gif"> Loading Projects...');
+                var user = JSON.parse(sessionStorage['User']);
+                var projectIDs = JSON.stringify(user.projectID);
+                $("#user").text("User: " + user.username);
+
+                //send project ids to server and get projects related to a user
+                $.ajax({
+                    type: "POST",
+                    url: '/projectSetup',
+                    data: {"ids" : projectIDs},
+                    dataType: "json",
+                    success: function (dat, testStatus) {
+
+                        var data = JSON.stringify(dat);
+                        //alert(dat[0].projectName);
+                        data = JSON.parse(data.substring(1,data.length-1));
+
+                    },
+
+                    error: function(e)
+                    {
+                        console.log(e);
+                        alert(e);
+                        /*$("#errorDialog").html("An error has occured: <br> Could not connect to database");
+                        $("#errorDialog").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Error",
+                            height: 250,
+                            width: 400,
+                            buttons: {
+                                "Ok": function () {
+                                    $(this).dialog('close');
+                                    confirmDeleteTeamTable(element);
+                                }
+                            }
+
+                        });*/
+                    }
+                });
+            }
 
 
         });
@@ -75,7 +86,8 @@
 </head>
 <body>
 <div class="header">
-    <h2 class="headerMessages">Manage Projects</h2>
+    <h2 class="headerMessages">Manage Projects</h2><br/>
+    <h4 id="user"></h4>
     <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
 
 </div>
@@ -85,7 +97,7 @@
     <div class="background">
         <img src="../Images/Storm.png" style="width: 100%;top:auto;">
     </div>
-
+    <div id="Projects" class="loader"><img src="images/loader.gif"><br/> Loading Projects...</div>
     <div class="aboutWrapper">
         <div class="aboutUsText">
 
