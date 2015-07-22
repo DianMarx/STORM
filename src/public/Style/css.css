@@ -413,9 +413,23 @@ section {
 }
 
 #Projects{
+    opacity: 0.8;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding-top: 20px;
+    background-color: #EAF2FE;
+    margin-top: 40px;
     position:relative;
+    border-radius: 10px;
 }
 
 .projLink{
     text-decoration: none;
+    color: #000000;
+    font-size: 20px;
+}
+
+.projLink:hover{
+    font-size: 25px;
+    color: #000099;
 }
