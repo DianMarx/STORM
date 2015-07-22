@@ -433,3 +433,17 @@ section {
     font-size: 25px;
     color: #000099;
 }
+
+#AddProjects
+{
+    position: relative;
+    padding-top: 40px;
+}
+
+#AddProjectsImg{
+    opacity: 0.8;
+}
+
+#AddProjectsImg:hover{
+    opacity: 1;
+}
