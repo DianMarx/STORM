@@ -12,9 +12,80 @@
 
     <script>
 
+        function UploadCSV()
+        {
+            document.getElementById("CSVInput").onchange = function(e){
+                alert("yay");
+                var myFileInput = document.getElementById('CSVInput');
+                var myFile = myFileInput.files[0];
 
+                var file = document.getElementById('CSVInput').files[0];
+                if (file) {
+                    // create reader
+                    var reader = new FileReader();
+                    reader.readAsText(file);
+                    reader.onload = function(e) {
+                        alert("yay");
+                        var result = e.target.result;   // browser completed reading file
+                        $("#dialog-confirm").html("Successfully read the contents of the file.");
+
+                        // Define the Dialog and its properties.
+                        $("#dialog-confirm").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Success",
+                            height: 250,
+                            width: 400,
+                            buttons: {
+                                "Ok": function () {
+                                    $(this).dialog('close');
+                                }
+                            },
+                            show: { effect: "scale", duration: 250 },
+                            hide: { effect: "scale", duration: 250 }
+                        });
+
+                        var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
+                        var headings = arrayOfTheInput[0].split(",");
+
+                        var JSONObject = []; //Hierdie is die JSON object wat in die DB gestoor gaan word.
+
+                        for(i = 1; i < arrayOfTheInput.length-1; i++)
+                        {
+                            var line = arrayOfTheInput[i].split(",");
+
+                            tempObj = {};
+                            for (var k = 0; k < headings.length; k++)
+                            {
+                                if (typeof line[k] == 'undefined')
+                                {
+                                    tempObj[headings[k]] = "";
+                                }
+                                else
+                                    tempObj[headings[k]] = line[k];
+                            }
+                            JSONObject.push(tempObj);
+                        }
+
+
+                        //alert(JSON.stringify(JSONObject));
+                    };
+                }
+            }
+        }
 
         $(document).ready(function(e) {
+
+            $("#AddProjectsImg").click(function(){
+                $("#AddProjects").html( '<div id="AddProjectDetails">' +
+                                            '<form>' +
+                                                'Project Name: <br/><input type="text" name="projectName"><br/><br/>' +
+                                                'Import subjects from .CSV file: <br/><input type="file" id="CSVInput" name="file" accept=".csv"/>' +
+                                            '</form>' +
+                                        '</div>');
+                $( "input[type=submit], button, input[type=file]" ).button();
+                $("#CSVInput").onclick = UploadCSV();
+            });
 
             $("#AddProjectsImg").hover(
                     function(){$(this).animate({width: 150, height:150}, 500);},
@@ -74,6 +145,7 @@
             }
 
 
+
         });
 
     </script>
@@ -96,7 +168,7 @@
     </div>
 
     <div id="AddProjects" ><img id="AddProjectsImg" src="images/plus_button.png" height="100px"><br/>Add Projects</div>
-
+    <div id="dialog-confirm"></div>
 
 </div>
 <footer class="footer">
