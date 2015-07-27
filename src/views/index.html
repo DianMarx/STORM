@@ -48,7 +48,7 @@
 
                         var data = JSON.stringify(dat);
                         data = JSON.parse(data.substring(1,data.length-1));
-
+                        //alert(JSON.stringify(data));
                         if(JSON.stringify(data) == "[]")
                         {
                             $("#loginUser").css("border-color", "red");
@@ -90,6 +90,7 @@
 
             });
         });
+        /**
         $.ajax({
             url: '/index', complete: function(data){
                 //alert(data);
@@ -97,7 +98,7 @@
         });
         $(function() {
             $( "input[type=submit], a, button" ).button();
-        });
+        });**/
     </script>
 </head>
 <body>
