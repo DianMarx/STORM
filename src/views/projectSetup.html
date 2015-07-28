@@ -127,29 +127,34 @@
                 var projectIDs = JSON.stringify(user.projectID);
                 $("#user").text("User: " + user.username);
 
+
+
                 //send project ids to server and get projects related to a user
-                $.ajax({
-                    type: "POST",
-                    url: '/projectSetup',
-                    data: {"ids" : projectIDs},
-                    dataType: "json",
-                    success: function (dat, testStatus) {
+                if (user.projectID.length !== 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/projectSetup',
+                        data: {"ids": projectIDs},
+                        dataType: "json",
+                        success: function (dat, testStatus) {
 
-                        var data = JSON.stringify(dat);
-                        var displayProjects = "";
-                        for(var i = 0; i < dat.length; i++)
-                        {
-                            displayProjects += '<div><a class="projLink" href="#">'+dat[i].projectName+'</a></div><br/>';
+                            var data = JSON.stringify(dat);
+                            var displayProjects = "";
+
+                            for (var i = 0; i < dat.length; i++) {
+                                displayProjects += '<div><a class="projLink" href="#">' + dat[i].projectName + '</a></div><br/>';
+                            }
+                            $("#Projects").html(displayProjects);
+
+                        },
+                        error: function (e) {
+                            console.log(e);
                         }
-                        $("#Projects").html(displayProjects);
-
-                    },
-
-                    error: function(e)
-                    {
-                        console.log(e);
-                    }
-                });
+                    });
+                }
+                else{
+                    $("#Projects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
+                }
             }
 
 
