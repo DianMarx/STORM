@@ -16,6 +16,7 @@ var mySchema = new Schema({name : String}, {strict:false});
 var userSchema = new Schema({
     id : Number,
     name: String,
+    username: String,
     password: String,
     projectID: [String],
     email: String
@@ -27,9 +28,39 @@ var projectSchema = new Schema({
     subjects: String,
     admin: Boolean
 })
+var idSchema = new Schema({id : Number}, {strict:false});
+
+
 
 module.exports = {
 //Get an array from collection colName
+
+    addUser: function(data, callback)
+    {
+      //console.log(data);
+        userSchema.set('collection', 'Users');
+        col = mongoose.model("Users", userSchema);
+        col.findOne({username: data.username}, function(err, ret)
+        {
+
+            if(ret == null)
+            {
+                col.findOne().sort('-id').exec( function(err, doc) {
+                    var max = doc.id;
+                    data.id = max +1;
+                    var insert = new col(data);
+                    insert.save(function (err) {
+                        if(err){callback(1);}
+                        else callback(2);
+                    });
+
+                });
+            } else callback(0);
+
+        });
+
+        },
+
 
     getCollection: function(colName, callback)
 {
@@ -89,7 +120,6 @@ module.exports = {
 
     /*Get all project names where ids match the ids in array.
     used to populate projectSetup page if a user has one or more existing projects*/
-
     getProjects: function(ids,callback)
     {
         ids = JSON.parse(ids);
