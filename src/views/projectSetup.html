@@ -11,6 +11,12 @@
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 
     <script>
+        var Subjects;
+
+        function AddProjectToDB(Sub)
+        {
+
+        }
 
         function UploadCSV()
         {
@@ -66,7 +72,7 @@
                             }
                             JSONObject.push(tempObj);
                         }
-
+                        Subjects = JSON.stringify(JSONObject);
 
                         //alert(JSON.stringify(JSONObject));
                     };
@@ -81,10 +87,12 @@
                                             '<form>' +
                                                 'Project Name: <br/><input type="text" name="projectName"><br/><br/>' +
                                                 'Import subjects from .CSV file: <br/><input type="file" id="CSVInput" name="file" accept=".csv"/>' +
+                                                '<input type="button" value="Add Project" id="AddProject">' +
                                             '</form>' +
                                         '</div>');
                 $( "input[type=submit], button, input[type=file]" ).button();
                 $("#CSVInput").onclick = UploadCSV();
+                $("#AddProject").onclick = AddProjectToDB();
             });
 
             $("#AddProjectsImg").hover(
