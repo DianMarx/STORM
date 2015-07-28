@@ -28,6 +28,23 @@
             return "";
         }
 
+        function errorBox(message){
+            $("#errorDialog").html("An error has occured: <br> " + message);
+            $("#errorDialog").dialog({
+                resizable: false,
+                modal: true,
+                title: "Password Mismatch",
+                height: 250,
+                width: 400,
+                buttons: {
+                    "Ok": function () {
+                        $(this).dialog('close');
+                        confirmDeleteTeamTable(element);
+                    }
+                }
+
+            });
+        }
         $(document).ready(function(e) {
             sessionStorage.clear();
 
@@ -89,6 +106,69 @@
 
 
             });
+
+            $("#signUpForm").submit(function (event) {
+                event.preventDefault();
+
+                var $form = $(this),
+                        name = $form.find("input[name='name']").val(),
+                        user = $form.find("input[name='username']").val(),
+                        pass = $form.find("input[name='password']").val(),
+                        confirm = $form.find("input[name='confirm']").val(),
+                        email = $form.find("input[name='email']").val();
+
+                if(pass != confirm) {
+                    errorBox("Passwords do not match, please retype them");
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: '/signUp',
+                        data: {name: name, username: user, password: pass, projectID: "[]", email: email},
+                        dataType: "json",
+                        success: function (dat, testStatus) {
+
+
+                            switch (dat.code)
+                            {
+                                case 0:
+                                    errorBox("Username is not available");
+                                    break;
+                                case 1:
+                                    errorBox("Something went wrong while trying to write to the database");
+                                    break;
+                                case 2:
+                                    sessionStorage['User'] = JSON.stringify(dat.user);
+                                    window.location.href = "/projectHome";
+                                    break;
+
+                            }
+                            //data = JSON.parse(data.substring(1,data.length-1));
+
+                        },
+
+                        error: function () {
+                            $("#errorDialog").html("An error has occured: <br> Could not connect to database");
+                            $("#errorDialog").dialog({
+                                resizable: false,
+                                modal: true,
+                                title: "Error",
+                                height: 250,
+                                width: 400,
+                                buttons: {
+                                    "Ok": function () {
+                                        $(this).dialog('close');
+                                        confirmDeleteTeamTable(element);
+                                    }
+                                }
+
+                            });
+                        }
+                    });
+                }
+
+            });
+
         });
         /**
         $.ajax({
@@ -139,27 +219,27 @@
             </div>
             <div class="signup">
                 <p class="signHeadings">Don't have an account?<br>Sign up here.</p>
-                <form>
+                <form id="signUpForm">
                     <table class="signupTable">
                         <tr>
                             <td>Name:</td>
-                            <td><input type="text" required/></td>
+                            <td><input name="name" type="text" required/></td>
                         </tr>
                         <tr>
                             <td>Username:</td>
-                            <td><input type="text" required/></td>
+                            <td><input name="username" type="text" required/></td>
                         </tr>
                         <tr>
                             <td>Email:</td>
-                            <td><input type="email" required/></td>
+                            <td><input name="email" type="email" required/></td>
                         </tr>
                         <tr>
                             <td>Password:</td>
-                            <td><input type="password" required/></td>
+                            <td><input name="password" type="password" required/></td>
                         </tr>
                         <tr>
                             <td>Retype Password:</td>
-                            <td><input type="password" required/></td>
+                            <td><input name="confirm" type="password" required/></td>
                         </tr>
                         <tr>
                             <td></td>

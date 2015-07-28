@@ -56,7 +56,20 @@ module.exports=function(app) {
 
         db.checkLogin(req.body.username, req.body.password, function(data)
         {
-           res.send(data);
+            res.send(data);
+        });
+
+
+    });
+    app.post('/signUp', function (req, res) {
+
+
+
+        db.addUser(req.body, function(code)
+        { //0 Username exists
+            //1 failure
+            //2 success
+           res.send({code: code,user: req.body});
         });
 
 
