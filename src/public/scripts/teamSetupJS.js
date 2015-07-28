@@ -2,7 +2,7 @@
  * Created by Andreas on 2015/07/08.
  */
 
-var numTeamGroups = 3; //Including add div, so technically numTeamGroups-1 droppable groups.
+var numTeamGroups = 3; //Including add div, so technically numTeamGroups-1 drop able groups.
 
 $(document).ready(function(e) {
 
@@ -213,6 +213,10 @@ $(document).ready(function(e) {
 
     $('#randomize').click(function(e) {
         randomize($('.names').children().length,numTeamGroups-1);
+    });
+
+    $('#shuffle').click(function(e) {
+        shuffle($('.names').children().length,numTeamGroups-1);
     });
 
     $("#plusButton").click(function(e){
