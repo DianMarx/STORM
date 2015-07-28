@@ -1,10 +1,4 @@
-src/node_modules/body-parser
-src/node_modules/ejs
-src/node_modules/express
-src/node_modules/mongodb
-src/node_modules/mongoose
-src/node_modules/nodejs
-src/node_modules/.bin
+src/node_modules/
 src/.idea/
 src/.idea/workspace.xml
 src/.idea/workspace.xml
