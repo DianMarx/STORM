@@ -130,7 +130,10 @@
 
 
                 //send project ids to server and get projects related to a user
-                if (user.projectID.length !== 0) {
+                if (user.projectID.length === 0) {
+                    $("#Projects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
+                }
+                else if (user.projectID.length > 0) {
                     $.ajax({
                         type: "POST",
                         url: '/projectSetup',
@@ -152,9 +155,7 @@
                         }
                     });
                 }
-                else{
-                    $("#Projects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
-                }
+
             }
 
 
