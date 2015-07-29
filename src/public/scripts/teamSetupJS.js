@@ -2,7 +2,7 @@
  * Created by Andreas on 2015/07/08.
  */
 
-var numTeamGroups = 3; //Including add div, so technically numTeamGroups-1 drop able groups.
+var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
 
 $(document).ready(function(e) {
 
@@ -282,6 +282,9 @@ $(document).ready(function(e) {
             moveBackDialog($(this));
         }
     });
+
+    $("#plusButton").click();
+    $("#plusButton").click();
 });
 
 //End of on document load

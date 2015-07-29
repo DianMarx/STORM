@@ -18,9 +18,9 @@ function randomize(numSubj, numTeam){
 
     }
     var trueMax = max;
-alert(max);
+//alert(max);
     $('.names').children().each(function(index, element) {
-alert(index + " " + element);
+//alert(index + " " + element);
         var done = false;
         while(!done){
             var randm = Math.floor(Math.random() * (numTeams) + 1);
