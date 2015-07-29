@@ -21,22 +21,17 @@ function shuffle(numSubj, numTeams){
 
     }
     var arrayLength = numSubjects;
-    var unitArray = [];
+    var unitArray = [arrayLength];
     var trueMax = max;
 
    //Still Testing
     $('.names').children().each(function(index, element) {
-        var done = false;
+        //window.alert(element.innerHTML);
         var counter = 0;
-        while(!done){
-         //   unitArray[counter] = element;
-            $(element).appendTo(unitArray[counter]);
-
-            window.alert(counter);
+            unitArray[counter] = element.innerHTML;
+           // $(element).appendTo(unitArray[counter]);
             window.alert(unitArray[counter]);
-            counter++;
-            if (counter >= 7) done=true;
-        };
+        counter++;
     });
 
 }
