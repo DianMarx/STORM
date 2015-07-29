@@ -26,7 +26,7 @@ alert(index + " " + element);
             var randm = Math.floor(Math.random() * (numTeams) + 1);
 
             if($('.' + randm).children("div").length < max){
-                //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
+                alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
                 $(element).appendTo('.' + randm); done = true;
 
                 if($('.' + randm).children("div").length == max)
