@@ -145,7 +145,7 @@ BODY:last-child .signin {
     display: inline-block;
     width: 100%;
 	vertical-align:top;
-    margin-top:70px;
+    margin-top:50px;
 }
 
 .members{
@@ -187,6 +187,7 @@ BODY:last-child .signin {
     background:#EAF2FE;
     border: solid 1pt;
     overflow:auto;
+    margin-left:5px;
 }
 
 .teamAdd{
@@ -201,6 +202,12 @@ BODY:last-child .signin {
     -ms-transition: background 0.5s linear;
     -o-transition: background 0.5s linear;
     transition: background 0.5s linear;
+    margin-left:5px;
+}
+
+.shuffling_selection{
+    display: inline-block;
+
 }
 
 .teamAdd:hover{
@@ -402,9 +409,9 @@ section {
     background: #E6E6E6;
     display: inline-block;
     border: 2px solid #1C94C4;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
     padding: 10px 10px 10px 10px;
 }
 

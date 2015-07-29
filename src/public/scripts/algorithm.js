@@ -18,15 +18,15 @@ function randomize(numSubj, numTeam){
 
     }
     var trueMax = max;
-alert(max);
+//alert(max);
     $('.names').children().each(function(index, element) {
-alert(index + " " + element);
+//alert(index + " " + element);
         var done = false;
         while(!done){
             var randm = Math.floor(Math.random() * (numTeams) + 1);
 
             if($('.' + randm).children("div").length < max){
-                alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
+                //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
                 $(element).appendTo('.' + randm); done = true;
 
                 if($('.' + randm).children("div").length == max)
