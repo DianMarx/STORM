@@ -5,7 +5,7 @@
 var algorithm = require('./algorithm.js');
 var projectSetup = require('./projectSetup.js');
 var shuffling = require('./shuffling.js');
-var teamSetup = require('./teamSetup.js');
+var teamSetup = require('./teamSetupJS.js');
 
 //algorithm
 exports.randomize = function(test)
