@@ -11,8 +11,7 @@ function shuffle(numSubj, numTeams){
     var even = false;
     var remaining = 0;
     //Get user's Choice for Shuffling
-    shuffleChoice = $('input[name="shuffleS"]:checked').val();
-    window.alert(shuffleChoice);
+    shuffleChoice = $('input[name="shuffleRad"]:checked').val();
     if(max % 1 == 0) even = true;
     else {
 
