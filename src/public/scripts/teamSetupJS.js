@@ -214,7 +214,7 @@ $(document).ready(function(e) {
     $('#randomize').click(function(e) {
         randomize($('.names').children().length,numTeamGroups-1);
     });
-
+//Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
         shuffle($('.names').children().length,numTeamGroups-1);
     });

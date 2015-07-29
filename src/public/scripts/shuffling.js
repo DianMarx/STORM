@@ -3,14 +3,16 @@
  */
 
 function shuffle(numSubj, numTeams){
-
     var totSubjects = $('.subject').length;
-
+    var shuffleChoice = 3;
     var numSubjects = numSubj;
     var numOfTeams = numTeams;
     var max = totSubjects/numOfTeams;
     var even = false;
     var remaining = 0;
+    //Get user's Choice for Shuffling
+    shuffleChoice = $('input[name="shuffleS"]:checked').val();
+
     if(max % 1 == 0) even = true;
     else {
 
@@ -23,15 +25,18 @@ function shuffle(numSubj, numTeams){
     var arrayLength = numSubjects;
     var unitArray = [arrayLength];
     var trueMax = max;
-
+    var counter = 0;
    //Still Testing
+    //Sort
     $('.names').children().each(function(index, element) {
-        //window.alert(element.innerHTML);
-        var counter = 0;
             unitArray[counter] = element.innerHTML;
-           // $(element).appendTo(unitArray[counter]);
-            window.alert(unitArray[counter]);
         counter++;
     });
+    unitArray.sort();
 
+    //Populate Teams
+    for(i=0;i<numSubjects;i++)
+    {
+        
+    }
 }
