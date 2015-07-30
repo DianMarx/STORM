@@ -78,7 +78,14 @@ requirements specify
 \input{./subsections/architectureConstraints.tex}
 \section{Architecture design}
 \subsection{Overview}
+MVC architecture - using express.js framework
+\begin {enumerate}
+\item Model - Database connection and access done via mongoose, requests handeled by AJAX.
+\item View - ExpressJS defines a response object for rendering html views and serving the view with JSON data.
+\item Controller - Defined in form of routes. ExpressJS routes  are middleware functions which accepts request and result objects used to route data.
+\end {enumerate}
 \subsection{Modularization}
+\input{./subsections/modularization.tex}
 \subsection{Architectural tactics addressing quality requirements}
 \subsection{Architectural components} 
 \subsection{Development architecture} 
