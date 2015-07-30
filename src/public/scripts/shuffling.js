@@ -60,12 +60,21 @@ function shuffle(numSubj, numTeams){
 
         for(i=0;i<numSubjects;i++)
         {
+            var inserted;
+            [lbl] start:
             if($('.' + countSubj).children("div").length < max){
                 $(unitArray[i]).appendTo('.' + countSubj);
                 countSubj++;
+                inserted = true;
             }
-            if(countSubj > numOfTeams) countSubj = 1;
+            else {
+                countSubj++;
+                inserted = false;
 
+            }
+
+            if(countSubj > numOfTeams) countSubj = 1;
+            if ( !inserted) goto start;
         }
     }
 
