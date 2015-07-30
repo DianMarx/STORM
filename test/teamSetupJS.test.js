@@ -1,32 +1,8 @@
 /**
- * Created by Shaun on 2015-07-28.
+ * Created by Shaun on 2015-07-30.
  */
 
-var algorithm = require('./algorithm.js');
-var projectSetup = require('./projectSetup.js');
-var shuffling = require('./shuffling.js');
 var teamSetup = require('./teamSetupJS.js');
-
-//algorithm
-exports.randomize = function(test)
-{
-    algorithm.randomize(numSubj, function(val)
-    {
-        test.done();
-    })
-}
-
-//projectSetup
-
-
-//shuffling
-exports.shuffle = function(test)
-{
-    shuffling.shuffle(numSubj, function(val)
-    {
-        test.done();
-    })
-}
 
 //teamSetup
 exports.fnOpenNormalDialog = function(test)
