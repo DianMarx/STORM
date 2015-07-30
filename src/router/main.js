@@ -32,7 +32,11 @@ module.exports=function(app) {
     });
 
     app.get('/teamSetup', function (req, res) {
-        db.getCollection(req.query.collection, function (data) {
+
+        if (req.query.collection === undefined) return;
+        var collection = req.query.collection;
+
+        db.getCollection(collection, function (data) {
             res.render('teamSetup', {subjects: data});
         });
     });
