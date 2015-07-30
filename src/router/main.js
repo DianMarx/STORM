@@ -32,7 +32,7 @@ module.exports=function(app) {
     });
 
     app.get('/teamSetup', function (req, res) {
-        db.getCollection('testCol', function (data) {
+        db.getCollection(req.query.collection, function (data) {
             res.render('teamSetup', {subjects: data});
         });
     });
