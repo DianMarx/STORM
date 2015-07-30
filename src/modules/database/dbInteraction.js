@@ -13,8 +13,54 @@ db.once('open', function (callback) {
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
 
+var userSchema = new Schema({
+    id : Number,
+    name: String,
+    username: String,
+    password: String,
+    projectID: [String],
+    email: String
+})
+
+var projectSchema = new Schema({
+    id : Number,
+    projectName: String,
+    subjects: String,
+    admin: Boolean
+})
+var idSchema = new Schema({id : Number}, {strict:false});
+
+
+
 module.exports = {
 //Get an array from collection colName
+
+    addUser: function(data, callback)
+    {
+      //console.log(data);
+        userSchema.set('collection', 'Users');
+        col = mongoose.model("Users", userSchema);
+        col.findOne({username: data.username}, function(err, ret)
+        {
+
+            if(ret == null)
+            {
+                col.findOne().sort('-id').exec( function(err, doc) {
+                    var max = doc.id;
+                    data.id = max +1;
+                    var insert = new col(data);
+                    insert.save(function (err) {
+                        if(err){callback(1);}
+                        else callback(2);
+                    });
+
+                });
+            } else callback(0);
+
+        });
+
+        },
+
 
     getCollection: function(colName, callback)
 {
@@ -22,13 +68,77 @@ module.exports = {
     col = mongoose.model(colName, mySchema);
     var data;
 
-    col.find(function (err, docs) {
+    col.find({},{'_id': 0},function (err, docs) {
+
         data = docs;
         callback(data);
     });
 
+},
+    insertDocument: function(colName, doc)
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        var insert = new col(JSON.parse(doc));
+
+        insert.save(function (err) {
+            if(err){console.log("Save failed");}
+            else console.log("Saved!");
+        });
+    },
+    removeDocument: function(colName, docId)
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        col.remove({id : docId}, function(err){
+            if(err) console.log("Remove failed");
+            else console.log("Removed!")
+        });
+    },
+    updateDocument: function(colName, id, updateInfo )
+{
+    mySchema.set('collection', colName);
+    col = mongoose.model(colName, mySchema);
+    col.update({id : id}, updateInfo, function(data){
+
+    });
+
+},
+
+    checkLogin: function(username, password, callback)
+{
+    userSchema.set('collection', 'Users');
+    col = mongoose.model('Users', userSchema);
+    col.find({username: username},{'_id': 0},function (err, docs)
+    {
+        if(err) console.log(err);
+        else
+            callback(docs);
+    });
+},
+
+
+    /*Get all project names where ids match the ids in array.
+    used to populate projectSetup page if a user has one or more existing projects*/
+    getProjects: function(ids,callback)
+    {
+        ids = JSON.parse(ids);
+        projectSchema.set('collection', 'Projects');
+        col = mongoose.model('Projects', projectSchema);
+
+        col.find({id: {$in : ids}},function (err, docs)
+        {
+            if(err) console.log(err);
+            else
+                callback(docs);
+        });
+
+
+    }
 }
-}
+
+
+
 //how to call
 /**
 getCollection('testCol', function(data){
@@ -36,6 +146,8 @@ getCollection('testCol', function(data){
     //here you use 'data'. just replace console.log(data) with implementation
 });
  **/
+
+
 
 
 

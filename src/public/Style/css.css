@@ -1,0 +1,456 @@
+@font-face {
+    font-family: OpenSans;
+    src: url(../fonts/OpenSans-Regular.ttf);
+}
+
+@font-face {
+    font-family: OpenSansSemiBold;
+    src: url(../fonts/OpenSans-Semibold.ttf);
+}
+
+@font-face {
+    font-family: OpenSansItalic;
+    src: url(../fonts/OpenSans-Italic.ttf);
+}
+
+body{
+    font-family: OpenSans;
+    margin:0;
+    padding:0;
+}
+
+.header{
+    background-color: #eee;
+    width: 100%;
+    top:0;
+    height: 100px;
+    margin:0;
+    padding:0;
+    vertical-align:middle;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.headerMessages{
+    position:relative;
+    padding-left:30px;
+    top:30px;
+    margin:0;
+}
+
+hr {
+    border: 0;
+    height: 2px;
+    margin:18px 0;
+    position:relative;
+    background: -moz-linear-gradient(left, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0.65) 50%, rgba(0,0,0,0) 90%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0)), color-stop(10%,rgba(0,0,0,0)), color-stop(50%,rgba(0,0,0,0.65)), color-stop(90%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: linear-gradient(left, rgba(0,0,0,0) 0%,rgba(0,0,0,0) 10%,rgba(0,0,0,0.65) 50%,rgba(0,0,0,0) 90%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+}
+
+hr:before {
+    content: "";
+    display: block;
+    border-top: solid 1px #f9f9f9;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    top: 50%;
+    z-index: 1;
+}
+
+.main{
+    width:100%;
+    text-align: center;
+}
+
+.signup,.signin{
+    text-align: left;
+    display: inline-block;
+    padding: 20px;
+    height:300px;
+    position:relative;
+}
+
+.sign{
+    position:relative;
+    top:70px;
+}
+
+.submits{
+    text-align: right;
+}
+
+.submitButtons{
+    font-size: 15px;
+}
+
+.signin {
+    border: solid #000000; border-width: 0 1px;
+    position: relative;
+}
+
+BODY:last-child .signin {
+    border: none;
+}
+
+.signin:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+}
+
+.signin:after {right: 0; }
+.signin:after {
+    /* SVG gradient image as Data URI for IE9 that does not support CSS gradients. */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2QwZTRmNyIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjI0JSIgc3RvcC1jb2xvcj0iIzczYjFlNyIgc3RvcC1vcGFjaXR5PSIwLjQ4Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0iIzBjMTBmZiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9Ijc5JSIgc3RvcC1jb2xvcj0iIzUzOWZlMSIgc3RvcC1vcGFjaXR5PSIwLjQyIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4N2JjZWEiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(208,228,247,0) 0%, rgba(0, 0, 0, 0.48) 24%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0.42) 79%, rgba(135,188,234,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(208,228,247,0)), color-stop(24%, rgba(0, 0, 0, 0.48)), color-stop(50%, rgb(0, 0, 0)), color-stop(79%, rgba(0, 0, 0, 0.42)), color-stop(100%,rgba(135,188,234,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(208,228,247,0) 0%, rgba(0, 0, 0, 0.48) 24%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0.42) 79%,rgba(135,188,234,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(208,228,247,0) 0%, rgba(0, 0, 0, 0.48) 24%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0.42) 79%,rgba(135,188,234,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(208,228,247,0) 0%, rgba(0, 0, 0, 0.48) 24%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0.42) 79%,rgba(135,188,234,0) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(208,228,247,0) 0%, rgba(0, 0, 0, 0.48) 24%, rgb(0, 0, 0) 50%, rgba(0, 0, 0, 0.42) 79%,rgba(135,188,234,0) 100%); /* W3C */
+}
+
+.signinTable{
+    margin-top: auto;
+    margin-top: 40%;
+}
+
+.signupTable{
+    margin-top: auto;
+    margin-top: 25%;
+}
+
+#logo{
+    position: absolute;
+    right: 10px;
+    top:10px;
+}
+
+.signHeadings{
+    margin:0;
+    text-align:center;
+    font-size:16pt;
+}
+
+.teamSetup{
+    text-align: center;
+    height: 300px;
+    display: inline-block;
+    width: 100%;
+	vertical-align:top;
+    margin-top:50px;
+}
+
+.members{
+    text-align: left;
+    height: 300px;
+    display: inline-block;
+	vertical-align:top;
+}
+
+.teams{
+    text-align: left;
+    display: inline-block;
+    vertical-align:top;
+    margin-left:50px;
+}
+
+.names{
+    height:300px;
+    width:100%;
+    text-align: left;
+    display: inline-block;
+    overflow:auto;
+    border: solid 1pt;
+}
+
+.members{
+    width:200px;
+    height:300px;
+    float:left;
+    margin-left:10%;
+    text-align: center;
+}
+
+.teamTables{
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+	vertical-align:top;
+    background:#EAF2FE;
+    border: solid 1pt;
+    overflow:auto;
+    margin-left:5px;
+}
+
+.teamAdd{
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+    vertical-align:top;
+
+    color:#000;
+    -webkit-transition: background 0.5s linear;
+    -moz-transition: background 0.5s linear;
+    -ms-transition: background 0.5s linear;
+    -o-transition: background 0.5s linear;
+    transition: background 0.5s linear;
+    margin-left:5px;
+}
+
+.shuffling_selection{
+    display: inline-block;
+
+}
+
+.teamAdd:hover{
+    background-color: #EAF2FE;
+}
+
+#plusButton{
+    margin-left:40%;
+    margin-top:62%;
+}
+
+#randomize
+{
+	margin-left: 0px;
+}
+
+.ui-widget
+{
+    font-size:14px;
+}
+
+/* .AboutUs
+{
+
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+    background-color: #b0c4de;
+    font-size:14px;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: OpenSans;
+    src: url(../fonts/OpenSans-Regular.ttf);
+}
+*/
+footer
+{
+    background-color: #eee;
+    height: auto;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    margin:auto;
+    padding:5px;
+    vertical-align:middle;
+    border-top: 1px solid #e6e6e6;
+    text-align: center;
+}
+
+.AboutUsText
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    height: auto;
+    vertical-align:middle;
+    font-size: 11px;
+    bottom: 0;
+}
+
+.PlaceHolder
+{
+    height: 100px;
+}
+
+.background {
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 15%;
+    width: auto;
+    height: auto;
+    opacity: 0.15;
+}
+
+table#tableMenu {
+    color: #333;
+    font-family: Helvetica, Arial, sans-serif;
+    width: 640px;
+    border-collapse:
+    collapse; border-spacing: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td#tableMenu {
+    background: #FAFAFA;
+    text-align: center;
+}
+
+#homeButton {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+#aboutButton {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+#contactButton {
+    border: none;
+    background-color: inherit;
+    text-align: center;
+}
+
+#aboutButton:active {
+    border: none;
+}
+#aboutButton:hover {
+    border: none;
+    cursor: pointer;
+    color: red;
+}
+#homeButton:hover {
+    border: none;
+    cursor: pointer;
+    color: red;
+}
+#contactButton:hover {
+    border: none;
+    cursor: pointer;
+    color: red;
+}
+#demoDiv {
+    text-align: left;
+}
+
+.aboutWrapper{
+    position:relative;
+    top:70px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.aboutUsText {
+    position: relative;
+}
+.contactWrapper{
+    position:relative;
+    top:70px;
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-family: OpenSans;
+
+}
+
+
+
+
+section {
+    width: 80%;
+    height: 500px;
+    background:#333;
+    margin: auto;
+    padding: 10px;
+}
+
+.minusButton{
+    float:right;
+    opacity: 0;
+
+    -webkit-transition: opacity 0.1s ease-in-out;
+    -moz-transition: opacity 0.1s ease-in-out;
+    -ms-transition: opacity 0.1s ease-in-out;
+    -o-transition: opacity 0.1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
+}
+
+.leftArrow{
+    float:right;
+    right:5px;
+    top:0px;
+
+
+    opacity: 0;
+
+    position:relative;
+
+    -webkit-transition: opacity 0.1s ease-in-out;
+    -moz-transition: opacity 0.1s ease-in-out;
+    -ms-transition: opacity 0.1s ease-in-out;
+    -o-transition: opacity 0.1s ease-in-out;
+    transition: opacity 0.1s ease-in-out;
+}
+
+.teamTables:hover .minusButton{
+    opacity: 100;
+}
+
+.teamTables:hover .leftArrow{
+    opacity: 100;
+}
+
+#options{
+    background: #E6E6E6;
+    display: inline-block;
+    border: 2px solid #1C94C4;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 10px 10px 10px 10px;
+}
+
+#totalTeams{
+    width:50px;
+}
+
+#Projects{
+    opacity: 0.8;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding-top: 20px;
+    background-color: #EAF2FE;
+    margin-top: 40px;
+    position:relative;
+    border-radius: 10px;
+}
+
+.projLink{
+    text-decoration: none;
+    color: #000000;
+    font-size: 20px;
+}
+
+.projLink:hover{
+    font-size: 25px;
+    color: #000099;
+}
+
+#AddProjects
+{
+    position: relative;
+    padding-top: 40px;
+}
+
+#AddProjectsImg{
+    opacity: 0.8;
+}
+
+#AddProjectsImg:hover{
+    opacity: 1;
+}
