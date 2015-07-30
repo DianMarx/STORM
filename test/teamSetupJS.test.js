@@ -2,7 +2,7 @@
  * Created by Shaun on 2015-07-30.
  */
 
-var teamSetup = require('./teamSetupJS.js');
+var teamSetup = require('../src/public/scripts/teamSetupJS.js');
 
 //teamSetup
 exports.fnOpenNormalDialog = function(test)
