@@ -2,8 +2,12 @@ This module deals with the configuration of projects. Initially a skeleton proje
 and additional criteria can be added at a later stage as needed.
 \subsubsection{Use-cases}
 The project module provides services to create and manipulate projects.\par
-\includegraphics[width=13cm]{./graphics/createProjectUseCase.jpg}
-    \rule{0\linewidth}{0.15\linewidth}\par
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=15cm]{./graphics/projectModuleUseCase.jpg}
+    \caption{Project Module Use Case}
+\end{figure}
+    
 \begin{enumerate}
 \item addProjectDetails\par
 Priority: Critical.\par
@@ -23,16 +27,16 @@ Pre-condition: Client must have created a STORM project skeleton.\par
 Pre-condition: A .csv file should exist and should be selected.\par
 Pre-condition: The .csv should have subjects in it.\par
 Post-condition: Project database is updated with a list of subjects.\par
-\item configureCriteria\par
-Priority: Critical.\par
-Pre-condition: Client must have a STORM profile.\par
-Pre-condition: Client must be logged into STORM.\par
-Pre-condition: Client must have created a STORM project skeleton.\par
-Post-condition: Criteria for project is changed.\par
-\end{enumerate}
 \begin{figure}[h]
     \centering
     \includegraphics[width=15cm]{./graphics/createProjectState.jpg}
-    \caption{createProject sate diagram}
-    \label{fig:createProject_state}
+    \caption{Create project sate diagram}
 \end{figure}
+%\item configureCriteria\par
+%Priority: Critical.\par
+%Pre-condition: Client must have a STORM profile.\par
+%Pre-condition: Client must be logged into STORM.\par
+%Pre-condition: Client must have created a STORM project skeleton.\par
+%Post-condition: Criteria for project is changed.\par
+\end{enumerate}
+
