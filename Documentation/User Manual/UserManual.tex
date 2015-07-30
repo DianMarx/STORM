@@ -4,6 +4,8 @@
 \usepackage{hyperref}
 \usepackage{epsfig}
 \usepackage{epstopdf}
+\usepackage{wrapfig}
+\usepackage[margin=1in]{geometry}
 
 
 %\graphicspath{{}}
@@ -14,16 +16,18 @@
 \begin{center}
 \begin{minipage}{0.75\linewidth}
     \centering
+%STORM logo
+    \includegraphics[width=14cm]{./graphics/Storm.png}
 %University logo
-    \includegraphics[width=13cm]{./graphics/universityLogo.jpg}
+    \includegraphics[width=7cm]{./graphics/universityLogo.jpg}
     \rule{0\linewidth}{0.15\linewidth}\par
-
+    \vspace{0.9cm}
 %Thesis title
     {\uppercase{\Large Project Storm \par}}
    	
-	\vspace{0.5cm}
-	{\Large Team NAME \par}
-	\vspace{0.5cm}
+	\vspace{0.7cm}
+	{\Large Team ``NAME" \par}
+	\vspace{0.7cm}
 %Author's name
     {\normalsize Renaldo van Dyk 12204359\par}
     {\normalsize Andreas du Preez 12207871\par}
@@ -33,7 +37,7 @@
     
     \vspace{1cm}
     
-    \href{https://github.com/DianMarx/STORM}{Click here to go to our GitHub}
+   % \href{https://github.com/DianMarx/STORM}{Click here to go to our GitHub}
     \vspace{1cm}
 	
 \end{minipage}
@@ -44,20 +48,25 @@
 \newpage
 \section{General Information}
 \subsection{System Overview}
-The complete system should enable users to build teams, from a list of students, by selecting a set of criteria. This will aid the users in such a way that the users do not have to build the teams manually, which may require a lot of time. The users can spend their time rather on analysing the results of each ?Rocking the Boat? round to change the criteria for the next round more effectively.
+	\input{./GeneralInformation/SystemOverview}
 
 \subsection{System Configuration}
-
+	\input{./GeneralInformation/SystemConfiguration}
+\pagebreak
 \subsection{Installation}
-
+	\input{./GeneralInformation/Installation}
+	
 \newpage
 \section{Getting Started}
-
+	\input{./GettingStarted/GettingStarted}
+	
 \newpage
 \section{Using the system}
-
+	\input{./UsingTheSystem/UsingTheSystem}
+	
 \newpage
 \section{Troubleshooting}
-
+	\input{./Troubleshooting/Troubleshooting}
+	
 \end{document}
 
