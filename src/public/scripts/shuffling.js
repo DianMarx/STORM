@@ -60,21 +60,21 @@ function shuffle(numSubj, numTeams){
 
         for(i=0;i<numSubjects;i++)
         {
-            var inserted;
-            [lbl] start:
-            if($('.' + countSubj).children("div").length < max){
-                $(unitArray[i]).appendTo('.' + countSubj);
-                countSubj++;
-                inserted = true;
-            }
-            else {
-                countSubj++;
-                inserted = false;
+            var inserted = false;
+            while(!inserted) {
+                if ($('.' + countSubj).children("div").length < max) {
+                    $(unitArray[i]).appendTo('.' + countSubj);
+                    countSubj++;
+                    inserted = true;
+                }
+                else {
+                    countSubj++;
+                    inserted = false;
 
-            }
+                }
 
-            if(countSubj > numOfTeams) countSubj = 1;
-            if ( !inserted) goto start;
+                if (countSubj > numOfTeams) countSubj = 1;
+            }
         }
     }
 
