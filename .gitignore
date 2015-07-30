@@ -1,0 +1,13 @@
+src/node_modules/
+<<<<<<< HEAD
+src/.idea/
+src/.idea/workspace.xml
+src/.idea/workspace.xml
+=======
+.idea/encodings.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/STORM.iml
+.idea/vcs.xml
+.idea/scopes/scope_settings.xml
+>>>>>>> origin/Documentation
