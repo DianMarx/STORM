@@ -62,26 +62,27 @@
                     data: {username: user},
                     dataType: "json",
                     success: function (dat, testStatus) {
-
-                        var data = JSON.stringify(dat);
-                        data = JSON.parse(data.substring(1,data.length-1));
-                        //alert(JSON.stringify(data));
-                        if(JSON.stringify(data) == "[]")
-                        {
+                        if (dat.length == 0) {
                             $("#loginUser").css("border-color", "red");
                             $(".sign").effect('shake');
                         }
-                        else
-                        if(data.password != pass)
-                        {
-                            $("#loginPass").css("border-color", "red");
-                            $(".sign").effect('shake');
+                        else {
+
+                            var data = JSON.stringify(dat);
+                            data = JSON.parse(data.substring(1, data.length - 1));
+                            //alert(JSON.stringify(data));
+
+
+                            if (data.password != pass) {
+                                $("#loginPass").css("border-color", "red");
+                                $(".sign").effect('shake');
+                            }
+                            else {
+                                sessionStorage['User'] = JSON.stringify(data);
+                                window.location.href = "/projectHome";
+                            }
                         }
-                        else
-                        {
-                            sessionStorage['User'] = JSON.stringify(data);
-                            window.location.href = "/projectHome";
-                        }
+
                     },
 
                     error: function()
