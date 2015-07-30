@@ -10,7 +10,7 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     var subjects = JSON.parse($('#jsondat').text());
-    window.alert(JSON.stringify(subjects));
+    //window.alert(JSON.stringify(subjects));
 
 
     document.getElementById("CSVInput").onchange = function(e){
