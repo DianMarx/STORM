@@ -8,6 +8,11 @@ $(document).ready(function(e) {
 
     $( "input[type=submit], a, button, input[type=file]" ).button();
 
+    //Moved array van subject objects
+    var subjects = JSON.parse($('#jsondat').text());
+    window.alert(JSON.stringify(subjects));
+
+
     document.getElementById("CSVInput").onchange = function(e){
 
         var myFileInput = document.getElementById('CSVInput');
@@ -216,7 +221,7 @@ $(document).ready(function(e) {
     });
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
-        shuffle($('.names').children().length,numTeamGroups-1);
+        shuffle($('.names').children().length,numTeamGroups-1,subjects);
     });
 
     $("#plusButton").click(function(e){

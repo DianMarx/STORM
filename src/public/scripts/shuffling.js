@@ -2,7 +2,7 @@
  * Created by Dian on 15/07/28.
  */
 
-function shuffle(numSubj, numTeams){
+function shuffle(numSubj, numTeams, subjects){
     var totSubjects = $('.subject').length;
     var shuffleChoice;
     var numSubjects = numSubj;
