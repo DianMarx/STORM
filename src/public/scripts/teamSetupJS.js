@@ -8,10 +8,39 @@ $(document).ready(function(e) {
 
     $( "input[type=submit], a, button, input[type=file]" ).button();
 
+    //Moved array van subject objects
+    var subjects = JSON.parse($('#jsondat').text());
+    //window.alert(JSON.stringify(subjects));
+
+
     document.getElementById("CSVInput").onchange = function(e){
 
         var myFileInput = document.getElementById('CSVInput');
         var myFile = myFileInput.files[0];
+
+        var ext = this.value.match(/\.(.+)$/)[1];
+        if (ext !== "csv")
+        {
+            $("#dialog-confirm").html("Invalid file type.");
+
+            // Define the Dialog and its properties.
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                modal: true,
+                title: "Error",
+                height: 250,
+                width: 400,
+                buttons: {
+                    "Ok": function () {
+                        $(this).dialog('close');
+                    }
+                },
+                show: { effect: "scale", duration: 250 },
+                hide: { effect: "scale", duration: 250 }
+            });
+
+            return "invalid file type";
+        }
 
         var file = document.getElementById('CSVInput').files[0];
         if (file) {
@@ -68,6 +97,8 @@ $(document).ready(function(e) {
                 }
 
                 //alert(JSON.stringify(JSONObject));
+
+                return "success";
             };
         }
     }
@@ -216,7 +247,7 @@ $(document).ready(function(e) {
     });
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
-        shuffle($('.names').children().length,numTeamGroups-1);
+        shuffle($('.names').children().length,numTeamGroups-1,subjects);
     });
 
     $("#plusButton").click(function(e){

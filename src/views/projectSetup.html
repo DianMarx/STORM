@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="scripts/projectSetup.js"></script>
 
     <script>
         var Subjects;
@@ -145,9 +146,14 @@
                             var displayProjects = "";
 
                             for (var i = 0; i < dat.length; i++) {
-                                displayProjects += '<div><a class="projLink" href="/teamsetup">' + dat[i].projectName + '</a></div><br/>';
+                                displayProjects += '<div><a class="projLink" type="submit" href="/teamSetup?collection='+dat[i].projectName+'" id="'+dat[i].projectName+'">' + dat[i].projectName + '</a></div><br/>';
                             }
                             $("#Projects").html(displayProjects);
+
+                            $(".projLink").click(function (e) {
+                                //$.get("/teamSetup",{collection:$(this).attr('id')});
+                                window.location.href="/teamSetup";
+                            });
 
                         },
                         error: function (e) {
@@ -161,6 +167,8 @@
 
 
         });
+
+
 
     </script>
 </head>
