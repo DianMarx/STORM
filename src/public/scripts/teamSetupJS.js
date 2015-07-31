@@ -18,6 +18,30 @@ $(document).ready(function(e) {
         var myFileInput = document.getElementById('CSVInput');
         var myFile = myFileInput.files[0];
 
+        var ext = this.value.match(/\.(.+)$/)[1];
+        if (ext !== "csv")
+        {
+            $("#dialog-confirm").html("Invalid file type.");
+
+            // Define the Dialog and its properties.
+            $("#dialog-confirm").dialog({
+                resizable: false,
+                modal: true,
+                title: "Error",
+                height: 250,
+                width: 400,
+                buttons: {
+                    "Ok": function () {
+                        $(this).dialog('close');
+                    }
+                },
+                show: { effect: "scale", duration: 250 },
+                hide: { effect: "scale", duration: 250 }
+            });
+
+            return "invalid file type";
+        }
+
         var file = document.getElementById('CSVInput').files[0];
         if (file) {
             // create reader
@@ -73,6 +97,8 @@ $(document).ready(function(e) {
                 }
 
                 //alert(JSON.stringify(JSONObject));
+
+                return "success";
             };
         }
     }
