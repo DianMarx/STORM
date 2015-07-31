@@ -34,5 +34,5 @@
 \contentsline {subsection}{\numberline {4.3}Architectural tactics addressing quality requirements}{18}{subsection.4.3}
 \contentsline {subsubsection}{\numberline {4.3.1}Database abstraction}{18}{subsubsection.4.3.1}
 \contentsline {subsubsection}{\numberline {4.3.2}UI components framework}{18}{subsubsection.4.3.2}
-\contentsline {subsection}{\numberline {4.4}Architectural components}{18}{subsection.4.4}
-\contentsline {subsection}{\numberline {4.5}Development architecture}{18}{subsection.4.5}
+\contentsline {subsubsection}{\numberline {4.3.3}Maximize client-side scripting}{19}{subsubsection.4.3.3}
+\contentsline {subsubsection}{\numberline {4.3.4}MVC}{19}{subsubsection.4.3.4}
