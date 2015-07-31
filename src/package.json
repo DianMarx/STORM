@@ -11,7 +11,9 @@
     "mongoose": "^4.0.6",
     "nodejs": "^0.0.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "qunitjs": "^1.18.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
