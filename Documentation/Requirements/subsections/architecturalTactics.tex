@@ -1,0 +1,16 @@
+This section discusses the architectural tactics which are used to concretely address the quality
+requirements for the application
+
+\subsubsection{Database abstraction}
+The system includes a database abstraction module to improve:
+\begin {itemize}
+\item Deplayability as mentioned in section \ref {3.2.5} in environments where different databases are used,
+\item Security as mentioned in section \ref {3.2.6} to isolate database and hide sesitive subject data.
+\end {itemize}
+
+\subsubsection{UI components framework}
+The system will use a rich, dynamic JQuery-UI component library in order to:
+\begin {itemize}
+\item provide a rich, dynamic user interface for usability (requirement \ref {3.2.1}),
+\item improve scalability (requirement \ref {3.2.2}) and performance (requirement \ref {3.2.3}).
+\end{itemize}
