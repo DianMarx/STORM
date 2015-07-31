@@ -26,7 +26,7 @@ function shuffle(numSubj, numTeams, subjects){
     var arrayCriteria = [numSubjects];
     var counter = 0;
    //Still Testing
-    //Sort
+    //Create arrays for sort
     $('.names').children().each(function(index, element) {
             unitArray[counter] = element;
 /*            window.alert(element.innerHTML);
@@ -43,27 +43,28 @@ function shuffle(numSubj, numTeams, subjects){
     //Zip for concurrent sorting.
     var sortZip = [];
     for(var t=0;t<numSubjects;t++){
-        sortZip.push({arraySubjects : arraySubjects[t], arrayCriteria: arrayCriteria[t],unitArray: unitArray[t]});
+        sortZip.push({arrSubj : arraySubjects[t], arrCrit: arrayCriteria[t],unitArr: unitArray[t]});
     }
 
     //Sort according to criteria
     sortZip.sort(function (a, b) {
-        if (a.arrayCriteria > b.arrayCriteria) {
+        return (a.arrCrit - b.arrCrit);
+        /* if (a.arrCrit > b.arrCrit) {
             return 1;
         }
-        if (a.arrayCriteria < b.arrayCriteria) {
+        if (a.arrCrit < b.arrCrit) {
             return -1;
         }
         // a must be equal to b
-        return 0;
+        return 0;*/
     });
     //Unzip after sorting
     var z;
     for(t=0;t<sortZip.length;t++){
         z=sortZip[t];
-        arraySubjects[t] = z.arraySubjects;
-        arrayCriteria[t] = z.arrayCriteria;
-        unitArray[t] = z.unitArray;
+        arraySubjects[t] = z.arrSubj;
+        arrayCriteria[t] = z.arrCrit;
+        unitArray[t] = z.unitArr;
     };
 
     //Populate Teams
