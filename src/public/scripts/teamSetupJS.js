@@ -10,7 +10,22 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     var subjects = JSON.parse($('#jsondat').text());
-    //window.alert(JSON.stringify(subjects));
+
+    //gets all the subjects' fields
+    var fields = [];
+    for(var name in subjects[0])
+    {
+        fields.push(name);
+    }
+    var div = $("<div id='selection'>Select variable to shuffle by:<br></div><br>").insertAfter("#shuffleHeading");
+    for(var i = 0; i < fields.length; i++)
+    {
+
+        var temp = fields[i];
+        div.append(' <input type="radio" name="'+temp+'" id="'+temp+'" class="shuffleBy" value="'+temp+'" /> '+fields[i] + "<br> " );
+
+    }
+
 
 
     document.getElementById("CSVInput").onchange = function(e){
@@ -247,7 +262,10 @@ $(document).ready(function(e) {
     });
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
+        var parameter = $(".shuffleBy:checked").val();
+        //alert(parameter);
         shuffle($('.names').children().length,numTeamGroups-1,subjects);
+
     });
 
     $("#plusButton").click(function(e){
