@@ -23,7 +23,6 @@ var userSchema = new Schema({
 })
 
 var projectSchema = new Schema({
-    id : Number,
     projectName: String,
     subjects: String,
     admin: Boolean
@@ -93,6 +92,18 @@ module.exports = {
         var insert = new col(JSON.parse(doc));
 
         insert.save(function (err) {
+            if(err){console.log("Save failed");}
+            else console.log("Saved!");
+        });
+    },
+    insertProject: function(doc,callback)
+    {
+        projectSchema.set('collection', "Projects");
+        col = mongoose.model("Projects", projectSchema);
+        var insert = new col(JSON.parse(doc));
+
+        insert.save(function (err,docsInserted) {
+            callback(docsInserted);
             if(err){console.log("Save failed");}
             else console.log("Saved!");
         });

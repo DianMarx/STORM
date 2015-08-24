@@ -26,8 +26,45 @@ $(document).ready(function(e) {
         $('#AddProjectDetails').on('submit', function(e){
             e.preventDefault();
 
+            var projectData = {
+                'projectName'  : $("#projectName").val(),
+                'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
+                'admin' : true
+            };
 
             $.ajax({
+                type: "POST",
+                url: '/projectStore',
+                data: projectData,
+                success: function (dat, testStatus)
+                {
+                    user.projectID.push(dat);
+                    var userData =
+                    {
+                        'userID':user.id,
+                        'projectIDs': user.projectID
+                    };
+
+                    //Update user to reflect new project created by him
+                    $.ajax({
+                        type: "POST",
+                        url: '/addProjToUser',
+                        data: projectData,
+                        success: function (dat, testStatus)
+                        {
+
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+
+            /*$.ajax({
                 type: "POST",
                 url: '/subjectsStore',
                 data: "subjectsName="+$("#projectName").val() + "_" + "Subjects"+"&subjects="+JSON.stringify(Subjects),
@@ -38,7 +75,7 @@ $(document).ready(function(e) {
                 error: function (e) {
                     console.log(e);
                 }
-            });
+            });*/
         });
     });
 

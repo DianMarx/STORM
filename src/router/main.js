@@ -104,5 +104,19 @@ module.exports=function(app) {
 
 
     });
+    app.post('/projectStore', function (req, res)
+    {
+
+        var projData = JSON.stringify(req.body);
+        db.insertProject(projData,function(newProjectID)
+        {
+            var newID = newProjectID._id;
+            res.send(newID);
+        });
+
+        /*Insert Subject Data*/
+
+
+    });
 
 }
