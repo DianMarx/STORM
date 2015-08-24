@@ -94,4 +94,15 @@ module.exports=function(app) {
 
     });
 
+    app.post('/subjectsStore', function (req, res)
+    {
+        var subjects = req.body.subjects;
+        subjects = JSON.parse(subjects);
+        var SubjectsName =  req.body.subjectsName;
+
+        /*Insert Subject Data*/
+
+
+    });
+
 }
