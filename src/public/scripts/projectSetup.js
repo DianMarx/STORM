@@ -111,12 +111,11 @@ $(document).ready(function(e) {
                     //Update user to reflect new project created by him
                     $.ajax({
                         type: "POST",
-                        url: '/update',
-                        data: {data: JSON.stringify(user), collection: 'Users', id: user.id},
-                        success: function (dat, testStatus)
+                        url: '/projToUser',
+                        data: {projectID: dat, id: user.id},
+                        success: function ()
                         {
-
-                            alert(JSON.stringify(Subjects));
+                            subjToDB(projectData.subjects);
                         },
                         error: function (e) {
                             console.log(e);
@@ -147,7 +146,22 @@ $(document).ready(function(e) {
 
 
 });
-
+//sunjects Array to db
+function subjToDB(colName)
+{
+    $.ajax({
+        type: "POST",
+        url: '/subjToDB',
+        data: {data: JSON.stringify(Subjects), collection: colName},
+        success: function ()
+        {
+            //alert("do");
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
 //Function to convert CSV file to JSON object
 function uploadCSV()
 {

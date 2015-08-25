@@ -58,18 +58,26 @@ module.exports=function(app) {
 
     app.post('/update', function (req, res) {
 
-        //console.log(req.body.collection + " " +req.body.id + " "+req.body.data  );
+
         db.updateDocument(req.body.collection, req.body.id, req.body.data)
         //console.log("yolo");
 
     });
 
-    app.post('', function (req, res) {
+    app.post('/projToUser', function (req, res) {
 
-        //console.log(req.body.collection + " " +req.body.id + " "+req.body.data  );
-        db.updateDocument(req.body.collection, req.body.id, req.body.data)
+        //console.log(req.body.id + " "+req.body.projectID );
+        db.updateUser(req.body.id, req.body.projectID)
         //console.log("yolo");
+        res.send("");
+    });
 
+    app.post('/subjToDB', function (req, res) {
+
+        console.log(req.body.data);
+        db.subjToDB(req.body.data, req.body.collection);
+        //console.log("yolo");
+        res.send("");
     });
 
     app.post('/login', function (req, res) {
