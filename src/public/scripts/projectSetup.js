@@ -47,7 +47,7 @@ $(document).ready(function(e) {
                     var displayProjects = "";
 
                     for (var i = 0; i < dat.length; i++) {
-                        displayProjects += '<div><a class="projLink" type="submit" href="/teamSetup?collection='+dat[i].projectName+'" id="'+dat[i].projectName+'">' + dat[i].projectName + '</a></div><br/>';
+                        displayProjects += '<div><a class="projLink" type="submit" href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'">' + dat[i].projectName + '</a></div><br/>';
                     }
                     $("#Projects").html(displayProjects);
 
@@ -211,8 +211,9 @@ function uploadCSV()
                         {
                             tempObj[headings[k]] = "";
                         }
-                        else
+                        else {
                             tempObj[headings[k]] = line[k];
+                        }
                     }
                     JSONObject.push(tempObj);
                 }

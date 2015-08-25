@@ -63,8 +63,8 @@ module.exports = {
 
     getCollection: function(colName, callback)
     {
-        mySchema.set('collection', colName);
-        col = mongoose.model(colName, mySchema);
+        idSchema.set('collection', colName);
+        col = mongoose.model(colName, idSchema);
         var data;
 
         col.find({},{'_id': 0},function (err, docs) {
