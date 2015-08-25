@@ -119,9 +119,11 @@ module.exports = {
     },
     updateDocument: function(colName, id, updateInfo )
     {
-        mySchema.set('collection', colName);
-        col = mongoose.model(colName, mySchema);
-        col.update({id : id}, updateInfo, function(data){
+        idSchema.set('collection', colName);
+        col = mongoose.model(colName, idSchema);
+
+
+        col.update({'id' : id}, JSON.parse(updateInfo), function(data){
 
         });
 

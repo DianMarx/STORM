@@ -3,84 +3,6 @@ var user; //logged in user
 
 $(document).ready(function(e) {
 
-    //Animation for Add project image
-    $("#AddProjectsImg").hover(
-        function(){$(this).animate({width: 150, height:150}, 500);},
-        function(){$(this).animate({width: 100, height:100}, 300);}
-    );
-
-    //Add form to enter project details
-    $("#AddProjectsImg").click(function(){
-        $("#AddProjects").html( '<div id="AddProjectDetails">' +
-        '<form id="addProjForm">' +
-        'Project Name: <br/><input type="text" id="projectName"><br/><br/>' +
-        'Import subjects from .CSV file: <br/><input type="file" id="CSVInput" name="file" accept=".csv"/>' +
-        '<input type="submit" value="Submit"/>' +
-        '</form>' +
-        '</div>');
-        $( "input[type=submit], button, input[type=file]" ).button();
-
-        $("#CSVInput").onclick = uploadCSV();
-
-        //Submit project details and create new project in database
-        $('#AddProjectDetails').on('submit', function(e){
-            e.preventDefault();
-
-            var projectData = {
-                'projectName'  : $("#projectName").val(),
-                'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
-                'admin' : true
-            };
-
-            $.ajax({
-                type: "POST",
-                url: '/projectStore',
-                data: projectData,
-                success: function (dat, testStatus)
-                {
-                    user.projectID.push(dat);
-                    var userData =
-                    {
-                        'userID':user.id,
-                        'projectIDs': user.projectID
-                    };
-
-                    //Update user to reflect new project created by him
-                    $.ajax({
-                        type: "POST",
-                        url: '/addProjToUser',
-                        data: projectData,
-                        success: function (dat, testStatus)
-                        {
-
-                        },
-                        error: function (e) {
-                            console.log(e);
-                        }
-                    });
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-
-            /*$.ajax({
-                type: "POST",
-                url: '/subjectsStore',
-                data: "subjectsName="+$("#projectName").val() + "_" + "Subjects"+"&subjects="+JSON.stringify(Subjects),
-                success: function (dat, testStatus) {
-
-
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });*/
-        });
-    });
-
-
-
     if (sessionStorage.length == 0) // no user logged on.
     {
         alert("Please log in");
@@ -142,6 +64,88 @@ $(document).ready(function(e) {
         }
 
     }
+
+
+    //Animation for Add project image
+    $("#AddProjectsImg").hover(
+        function(){$(this).animate({width: 150, height:150}, 500);},
+        function(){$(this).animate({width: 100, height:100}, 300);}
+    );
+
+    //Add form to enter project details
+    $("#AddProjectsImg").click(function(){
+        $("#AddProjects").html( '<div id="AddProjectDetails">' +
+        '<form id="addProjForm">' +
+        'Project Name: <br/><input type="text" id="projectName"><br/><br/>' +
+        'Import subjects from .CSV file: <br/><input type="file" id="CSVInput" name="file" accept=".csv"/>' +
+        '<input type="submit" value="Submit"/>' +
+        '</form>' +
+        '</div>');
+        $( "input[type=submit], button, input[type=file]" ).button();
+
+        $("#CSVInput").onclick = uploadCSV();
+
+        //Submit project details and create new project in database
+        $('#AddProjectDetails').on('submit', function(e){
+            e.preventDefault();
+
+            var projectData = {
+                'projectName'  : $("#projectName").val(),
+                'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
+                'admin' : true
+            };
+
+            $.ajax({
+                type: "POST",
+                url: '/projectStore',
+                data: projectData,
+                success: function (dat, testStatus)
+                {
+                    user.projectID.push(dat);
+                    var userData =
+                    {
+                        'userID':user.id,
+                        'projectIDs': user.projectID
+                    };
+
+                    //Update user to reflect new project created by him
+                    $.ajax({
+                        type: "POST",
+                        url: '/update',
+                        data: {data: JSON.stringify(user), collection: 'Users', id: user.id},
+                        success: function (dat, testStatus)
+                        {
+
+                            alert(JSON.stringify(Subjects));
+                        },
+                        error: function (e) {
+                            console.log(e);
+                        }
+                    });
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+
+            /*$.ajax({
+                type: "POST",
+                url: '/subjectsStore',
+                data: "subjectsName="+$("#projectName").val() + "_" + "Subjects"+"&subjects="+JSON.stringify(Subjects),
+                success: function (dat, testStatus) {
+
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });*/
+        });
+    });
+
+
+
+
 });
 
 //Function to convert CSV file to JSON object
@@ -199,6 +203,7 @@ function uploadCSV()
                     JSONObject.push(tempObj);
                 }
                 Subjects = JSONObject;
+
             };
         }
     }

@@ -56,6 +56,22 @@ module.exports=function(app) {
 
     });
 
+    app.post('/update', function (req, res) {
+
+        //console.log(req.body.collection + " " +req.body.id + " "+req.body.data  );
+        db.updateDocument(req.body.collection, req.body.id, req.body.data)
+        //console.log("yolo");
+
+    });
+
+    app.post('', function (req, res) {
+
+        //console.log(req.body.collection + " " +req.body.id + " "+req.body.data  );
+        db.updateDocument(req.body.collection, req.body.id, req.body.data)
+        //console.log("yolo");
+
+    });
+
     app.post('/login', function (req, res) {
 
         db.checkLogin(req.body.username, req.body.password, function(data)
