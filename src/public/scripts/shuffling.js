@@ -36,6 +36,7 @@ function shuffle(numSubj, numTeams, subjects){
                 window.alert("In If");*/
                 arraySubjects[counter] = subjects[counter].name;
                 arrayCriteria[counter] = subjects[counter].grade;
+                //alert(subjects[counter].grade);
             //}
        // }
         counter++;

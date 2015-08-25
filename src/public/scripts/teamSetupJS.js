@@ -108,7 +108,7 @@ $(document).ready(function(e) {
 
                 for(i = 0; i < JSONObject.length; i++)
                 {
-                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] + " Mark:" + JSONObject[i]["Mark"] +"</div>";
+                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] + "</div>"; //" Mark:" + JSONObject[i]["Mark"] +
                 }
                 //alert("Hello");
                 //alert(JSON.stringify(JSONObject));
