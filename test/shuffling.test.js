@@ -7,7 +7,7 @@ var shuffling = require('../src/public/scripts/shuffling.js');
 //shuffling
 exports.shuffle = function(test)
 {
-    shuffling.shuffle(numSubj, function(val)
+    shuffling.shuffle(numSubj, numTeams, function(val)
     {
         test.done();
     })

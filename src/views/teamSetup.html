@@ -16,11 +16,15 @@
     <script src="views/tests.js"></script>
 </head>
 <p hidden="true" id="jsondat"><%-JSON.stringify(subjects);%></p>
-<!--<script>$(document).ready(function(e){
+<script>$(document).ready(function(e){
     //array van subject objects
     var subjects = JSON.parse($('#jsondat').text());
+    for(var i = 0; i < subjects.length; i++)
+    {
+        $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].name + '</div');
+    }
 
-});</script>-->
+});</script>
 <body>
     <div class="header">
         <h2 class="headerMessages">Team Setup</h2>
@@ -30,11 +34,11 @@
     <div class="main">
         <div class="teamSetup">
             <div class="members">
-                <p style="font-size: large">Spawn Pool</p>
+                <p style="font-size: large">Subject Pool</p>
                 <div id="subjects" class="names" ondrop="drop(event)" ondragover="allowDrop(event)">
-                    <%for(var i = 0; i < subjects.length; i++){%>
-                    <div class="subject" id=<%= i %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
-                    </div> <% } %>
+                    <!--<%for(var i = 0; i < subjects.length; i++){%>
+                    <div class="subject" id=<%= subjects[i].id %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
+                    </div> <% } %> -->
                 </div>
                 <br><br><br>
                 <div id="options">
@@ -46,7 +50,7 @@
             </div>
 
             <div class="shuffling_selection">
-                <p style="font-size: large">Shuffling Method</p>
+                <p id="shuffleHeading" style="font-size: large">Shuffling Method</p>
                 <button name="Randomize" id="randomize">Randomize</button><br><br>
                 <button name="Shuffle By" id="shuffle">Shuffle Teams By</button><br>
 

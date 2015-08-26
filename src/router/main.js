@@ -94,4 +94,29 @@ module.exports=function(app) {
 
     });
 
+    app.post('/subjectsStore', function (req, res)
+    {
+        var subjects = req.body.subjects;
+        subjects = JSON.parse(subjects);
+        var SubjectsName =  req.body.subjectsName;
+
+        /*Insert Subject Data*/
+
+
+    });
+    app.post('/projectStore', function (req, res)
+    {
+
+        var projData = JSON.stringify(req.body);
+        db.insertProject(projData,function(newProjectID)
+        {
+            var newID = newProjectID._id;
+            res.send(newID);
+        });
+
+        /*Insert Subject Data*/
+
+
+    });
+
 }

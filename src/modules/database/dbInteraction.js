@@ -23,7 +23,6 @@ var userSchema = new Schema({
 })
 
 var projectSchema = new Schema({
-    id : Number,
     projectName: String,
     subjects: String,
     admin: Boolean
@@ -59,22 +58,22 @@ module.exports = {
 
         });
 
-        },
+    },
 
 
     getCollection: function(colName, callback)
-{
-    mySchema.set('collection', colName);
-    col = mongoose.model(colName, mySchema);
-    var data;
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        var data;
 
-    col.find({},{'_id': 0},function (err, docs) {
+        col.find({},{'_id': 0},function (err, docs) {
 
-        data = docs;
-        callback(data);
-    });
+            data = docs;
+            callback(data);
+        });
 
-},
+    },
     insertDocument: function(colName, doc)
     {
         mySchema.set('collection', colName);
@@ -82,6 +81,29 @@ module.exports = {
         var insert = new col(JSON.parse(doc));
 
         insert.save(function (err) {
+            if(err){console.log("Save failed");}
+            else console.log("Saved!");
+        });
+    },
+    insertSubjects: function(colName, doc)
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        var insert = new col(JSON.parse(doc));
+
+        insert.save(function (err) {
+            if(err){console.log("Save failed");}
+            else console.log("Saved!");
+        });
+    },
+    insertProject: function(doc,callback)
+    {
+        projectSchema.set('collection', "Projects");
+        col = mongoose.model("Projects", projectSchema);
+        var insert = new col(JSON.parse(doc));
+
+        insert.save(function (err,docsInserted) {
+            callback(docsInserted);
             if(err){console.log("Save failed");}
             else console.log("Saved!");
         });
@@ -96,26 +118,26 @@ module.exports = {
         });
     },
     updateDocument: function(colName, id, updateInfo )
-{
-    mySchema.set('collection', colName);
-    col = mongoose.model(colName, mySchema);
-    col.update({id : id}, updateInfo, function(data){
+    {
+        mySchema.set('collection', colName);
+        col = mongoose.model(colName, mySchema);
+        col.update({id : id}, updateInfo, function(data){
 
-    });
+        });
 
-},
+    },
 
     checkLogin: function(username, password, callback)
-{
-    userSchema.set('collection', 'Users');
-    col = mongoose.model('Users', userSchema);
-    col.find({username: username},{'_id': 0},function (err, docs)
     {
-        if(err) console.log(err);
-        else
-            callback(docs);
-    });
-},
+        userSchema.set('collection', 'Users');
+        col = mongoose.model('Users', userSchema);
+        col.find({username: username},{'_id': 0},function (err, docs)
+        {
+            if(err) console.log(err);
+            else
+                callback(docs);
+        });
+    },
 
 
     /*Get all project names where ids match the ids in array.
@@ -126,16 +148,16 @@ module.exports = {
         projectSchema.set('collection', 'Projects');
         col = mongoose.model('Projects', projectSchema);
 
-        col.find({id: {$in : ids}},function (err, docs)
+        col.find({_id: {$in : ids}},function (err, docs)
         {
             if(err) console.log(err);
             else
                 callback(docs);
         });
-
-
     }
 }
+
+
 
 
 
