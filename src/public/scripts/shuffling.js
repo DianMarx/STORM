@@ -77,6 +77,7 @@ function shuffle(numSubj, numTeams, subjects){
         {
             if($('.' + countSubj).children("div").length < max){
                 $(unitArray[i]).appendTo('.' + countSubj);
+               // $(arrayCriteria[i]).appendTo('.' + countSubj);
                 if($('.' + countSubj).children("div").length == max)
                 {countSubj++}
             }

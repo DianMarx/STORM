@@ -63,8 +63,8 @@ module.exports = {
 
     getCollection: function(colName, callback)
     {
-        mySchema.set('collection', colName);
-        col = mongoose.model(colName, mySchema);
+        idSchema.set('collection', colName);
+        col = mongoose.model(colName, idSchema);
         var data;
 
         col.find({},{'_id': 0},function (err, docs) {
@@ -119,12 +119,44 @@ module.exports = {
     },
     updateDocument: function(colName, id, updateInfo )
     {
-        mySchema.set('collection', colName);
-        col = mongoose.model(colName, mySchema);
-        col.update({id : id}, updateInfo, function(data){
+        idSchema.set('collection', colName);
+        col = mongoose.model(colName, idSchema);
 
+
+        //stub
+
+    },
+    updateUser: function(id, projID )
+    {
+        userSchema.set('collection', 'Users');
+        col = mongoose.model('Users', userSchema);
+
+
+        col.findOne({id:id}, function(err,user)
+        {
+            if(err){return next(err)}
+            user.projectID.push(projID);
+            user.save(function(err){
+                if(err) return next(err);
+            });
         });
 
+    },
+    subjToDB: function(data, col)
+    {
+        idSchema.set('collection', col);
+        coll = mongoose.model(col, idSchema);
+        var id = 0;
+        users = JSON.parse(data);
+        users.forEach(function(user)
+        {
+
+            user.id = parseInt(user.id);
+            newUser = new coll(user);
+            newUser.save(function(err){
+                if(err) return next(err);
+            });
+        });
     },
 
     checkLogin: function(username, password, callback)

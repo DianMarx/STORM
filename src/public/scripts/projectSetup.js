@@ -3,6 +3,69 @@ var user; //logged in user
 
 $(document).ready(function(e) {
 
+    if (sessionStorage.length == 0) // no user logged on.
+    {
+        alert("Please log in");
+        window.location.href = "/";
+
+        $("#errorDialog").html("You are not logged in. <br> Please go back and log in or sign up. ");
+        $("#errorDialog").dialog({
+            resizable: false,
+            modal: true,
+            title: "Error",
+            height: 250,
+            width: 400,
+            buttons: {
+                "Ok": function () {
+                    $(this).dialog('close');
+                    //return to login
+                }
+            }
+        });
+    }
+    else //user is logged on.
+    {
+
+        $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
+        user = JSON.parse(sessionStorage['User']);
+        var projectIDs = JSON.stringify(user.projectID);
+        $("#user").text("User: " + user.username);
+
+        //send project ids to server and get projects related to a user
+        if (user.projectID.length === 0) {
+            $("#Projects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
+        }
+        else if (user.projectID.length > 0) {
+            $.ajax({
+                type: "POST",
+                url: '/projectSetup',
+                data: {"ids": projectIDs},
+                dataType: "json",
+                success: function (dat, testStatus) {
+
+                    var data = JSON.stringify(dat);
+                    var displayProjects = "";
+
+                    for (var i = 0; i < dat.length; i++) {
+                        displayProjects += '<div><a class="projLink" type="submit" href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'">' + dat[i].projectName + '</a></div><br/>';
+                    }
+                    $("#Projects").html(displayProjects);
+
+                    $(".projLink").click(function (e) {
+                        //$.get("/teamSetup",{collection:$(this).attr('id')});
+                        window.location.href="/teamSetup";
+                    });
+
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            });
+        }
+
+    }
+
+
     //Animation for Add project image
     $("#AddProjectsImg").hover(
         function(){$(this).animate({width: 150, height:150}, 500);},
@@ -48,11 +111,11 @@ $(document).ready(function(e) {
                     //Update user to reflect new project created by him
                     $.ajax({
                         type: "POST",
-                        url: '/addProjToUser',
-                        data: projectData,
-                        success: function (dat, testStatus)
+                        url: '/projToUser',
+                        data: {projectID: dat, id: user.id},
+                        success: function ()
                         {
-
+                            subjToDB(projectData.subjects);
                         },
                         error: function (e) {
                             console.log(e);
@@ -81,69 +144,24 @@ $(document).ready(function(e) {
 
 
 
-    if (sessionStorage.length == 0) // no user logged on.
-    {
-        alert("Please log in");
-        window.location.href = "/";
 
-        $("#errorDialog").html("You are not logged in. <br> Please go back and log in or sign up. ");
-        $("#errorDialog").dialog({
-            resizable: false,
-            modal: true,
-            title: "Error",
-            height: 250,
-            width: 400,
-            buttons: {
-                "Ok": function () {
-                    $(this).dialog('close');
-                    //return to login
-                }
-            }
-        });
-    }
-    else //user is logged on.
-    {
-
-        $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
-        user = JSON.parse(sessionStorage['User']);
-        var projectIDs = JSON.stringify(user.projectID);
-        $("#user").text("User: " + user.username);
-
-        //send project ids to server and get projects related to a user
-        if (user.projectID.length === 0) {
-            $("#Projects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
-        }
-        else if (user.projectID.length > 0) {
-            $.ajax({
-                type: "POST",
-                url: '/projectSetup',
-                data: {"ids": projectIDs},
-                dataType: "json",
-                success: function (dat, testStatus) {
-
-                    var data = JSON.stringify(dat);
-                    var displayProjects = "";
-
-                    for (var i = 0; i < dat.length; i++) {
-                        displayProjects += '<div><a class="projLink" type="submit" href="/teamSetup?collection='+dat[i].projectName+'" id="'+dat[i].projectName+'">' + dat[i].projectName + '</a></div><br/>';
-                    }
-                    $("#Projects").html(displayProjects);
-
-                    $(".projLink").click(function (e) {
-                        //$.get("/teamSetup",{collection:$(this).attr('id')});
-                        window.location.href="/teamSetup";
-                    });
-
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-
-    }
 });
-
+//sunjects Array to db
+function subjToDB(colName)
+{
+    $.ajax({
+        type: "POST",
+        url: '/subjToDB',
+        data: {data: JSON.stringify(Subjects), collection: colName},
+        success: function ()
+        {
+            //alert("do");
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
 //Function to convert CSV file to JSON object
 function uploadCSV()
 {
@@ -193,12 +211,14 @@ function uploadCSV()
                         {
                             tempObj[headings[k]] = "";
                         }
-                        else
+                        else {
                             tempObj[headings[k]] = line[k];
+                        }
                     }
                     JSONObject.push(tempObj);
                 }
                 Subjects = JSONObject;
+
             };
         }
     }

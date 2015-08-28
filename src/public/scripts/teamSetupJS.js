@@ -17,6 +17,7 @@ $(document).ready(function(e) {
     {
         fields.push(name);
     }
+
     var div = $("<div id='selection'>Select variable to shuffle by:<br></div><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++)
     {
@@ -108,7 +109,7 @@ $(document).ready(function(e) {
 
                 for(i = 0; i < JSONObject.length; i++)
                 {
-                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] + "</div>"; //" Mark:" + JSONObject[i]["Mark"] +
+                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] + "<div style='float: right'>" + "|" + JSONObject[i]["Mark"] + "</div>" + "</div>"; //" Mark:" + JSONObject[i]["Mark"] +
                 }
                 //alert("Hello");
                 //alert(JSON.stringify(JSONObject));

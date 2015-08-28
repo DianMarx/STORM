@@ -21,6 +21,11 @@
     var subjects = JSON.parse($('#jsondat').text());
     for(var i = 0; i < subjects.length; i++)
     {
+        if(subjects.name == undefined)
+        {
+            $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].Name + '</div');
+        }
+        else
         $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].name + '</div');
     }
 
