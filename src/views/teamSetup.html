@@ -23,10 +23,10 @@
     {
         if(subjects.name == undefined)
         {
-            $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].Name + '</div');
+            $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].Name + subjects[i].Mark + '</div');
         }
         else
-        $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].name + '</div');
+            $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].name + '</div');
     }
 
 });</script>
