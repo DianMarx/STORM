@@ -29,16 +29,15 @@ function shuffle(numSubj, numTeams, subjects){
     //Create arrays for sort
     $('.names').children().each(function(index, element) {
             unitArray[counter] = element;
-/*            window.alert(element.innerHTML);
         for (var i=0;i<numSubjects;i++){
-            window.alert(element.innerHTML + subjects[i].name);
-            if(subjects[i].name === element.innerHTML){
-                window.alert("In If");*/
-                arraySubjects[counter] = subjects[counter].name;
-                arrayCriteria[counter] = subjects[counter].grade;
-                //alert(subjects[counter].grade);
-            //}
-       // }
+            //window.alert(element.id + subjects[i].id);
+            if(subjects[i].id == element.id){
+                window.alert("In If");
+                arraySubjects[counter] = subjects[i].Name;
+                arrayCriteria[counter] = subjects[i].Mark;
+                window.alert(subjects[i].Name+arraySubjects[counter]+arrayCriteria[counter]);
+            }
+        }
         counter++;
     });
     //Zip for concurrent sorting.
