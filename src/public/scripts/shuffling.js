@@ -32,10 +32,10 @@ function shuffle(numSubj, numTeams, subjects){
         for (var i=0;i<numSubjects;i++){
             //window.alert(element.id + subjects[i].id);
             if(subjects[i].id == element.id){
-                window.alert("In If");
+              //  window.alert("In If");
                 arraySubjects[counter] = subjects[i].Name;
                 arrayCriteria[counter] = subjects[i].Mark;
-                window.alert(subjects[i].Name+arraySubjects[counter]+arrayCriteria[counter]);
+               // window.alert(subjects[i].Name+arraySubjects[counter]+arrayCriteria[counter]);
             }
         }
         counter++;
