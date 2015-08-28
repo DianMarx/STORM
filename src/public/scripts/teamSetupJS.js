@@ -143,7 +143,7 @@ $(document).ready(function(e) {
 
                     for(var i = 0; i < $("#totalTeams").val(); i++)
                     {
-                        if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+                        if(numTeamGroups % 2 == 0 && numTeamGroups != 0) {
                             $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
                             $("<br><br>").insertBefore($("#teamAdd"));
                             numTeamGroups++;
@@ -210,7 +210,7 @@ $(document).ready(function(e) {
 
             for(var i = 0; i < $("#totalTeams").val(); i++)
             {
-                if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+                if(numTeamGroups % 2 == 0 && numTeamGroups != 0) {
                     $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
                     $("<br><br>").insertBefore($("#teamAdd"));
                     numTeamGroups++;
@@ -271,7 +271,7 @@ $(document).ready(function(e) {
     });
 
     $("#plusButton").click(function(e){
-        if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
+        if(numTeamGroups % 2 == 0 && numTeamGroups != 0) {
             $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
             $("<br><br>").insertBefore($("#teamAdd"));
             numTeamGroups++;
