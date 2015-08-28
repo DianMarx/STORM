@@ -18,13 +18,13 @@ $(document).ready(function(e) {
         fields.push(name);
     }
 
-    var div = $("<div id='selection'>Select variable to shuffle by:<br></div><br>").insertAfter("#shuffleHeading");
-    for(var i = 0; i < fields.length; i++)
-    {
+    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i][0] != '_') {
 
         var temp = fields[i];
-        div.append(' <input type="radio" name="'+temp+'" id="'+temp+'" class="shuffleBy" value="'+temp+'" /> '+fields[i] + "<br> " );
-
+        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+    }
     }
 
 
