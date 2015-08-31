@@ -1,6 +1,6 @@
 var Subjects; // Object that holds Subject data extracted from CSV
 var user; //logged in user
-
+var projectData;
 $(document).ready(function(e) {
 
     if (sessionStorage.length == 0) // no user logged on.
@@ -89,7 +89,7 @@ $(document).ready(function(e) {
         $('#AddProjectDetails').on('submit', function(e){
             e.preventDefault();
 
-            var projectData = {
+            projectData = {
                 'projectName'  : $("#projectName").val(),
                 'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
                 'admin' : true
@@ -155,7 +155,7 @@ function subjToDB(colName)
         data: {data: JSON.stringify(Subjects), collection: colName},
         success: function ()
         {
-            //alert("do");
+            window.location = "teamsetup" +"?collection="+ projectData.subjects;
         },
         error: function (e) {
             console.log(e);
