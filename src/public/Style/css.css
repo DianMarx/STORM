@@ -186,6 +186,7 @@ BODY:last-child .signin {
     height: 100%;
     resize: vertical;
     position: relative;
+    z-index: 1;
 
 }
 
@@ -205,6 +206,7 @@ BODY:last-child .signin {
     float:left;
     margin-left:15px;
     text-align: center;
+    z-index: 20;
 }
 
 .teamTables{
@@ -216,7 +218,7 @@ BODY:last-child .signin {
     background:#EAF2FE;
     border: solid 1pt;
     overflow:auto;
-    margin-left:5px;
+    margin:5px;
     padding: 10px;
 }
 
