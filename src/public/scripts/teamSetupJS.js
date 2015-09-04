@@ -54,7 +54,7 @@ $(document).ready(function(e) {
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $(".subjBody").append("<tr class='subject' id='" + subjects[i].id + "' draggable='true' ondragstart='drag(event)'><td>"+sub[fields[0]]+"</td></tr>")
+            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' draggable='true' ondragstart='drag(event)'><td>"+sub[fields[0]]+"</td></tr>")
         }
 
     }
@@ -66,7 +66,7 @@ $(document).ready(function(e) {
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $("#"+i).append("<td id='"+field +"'>"+sub[field]+"</td>");
+            $("#"+sub.id).append("<td id='"+field +"'>"+sub[field]+"</td>");
         }
     }
 
