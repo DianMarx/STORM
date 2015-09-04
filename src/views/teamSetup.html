@@ -51,6 +51,11 @@
         </table>
         <button class="btn btn-default">Save</button>
         <button class="btn btn-default">Reload</button>
+        <div id="options">
+            <p style="font-size:120%; padding:0; margin:0;">Options</p><hr><br>
+
+            Import from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
+        </div>
     </div>
 </div>
 <div class="algorithmBox panel panel-default" style="margin: 0;">
@@ -67,10 +72,12 @@
     </div>
 </div>
 
-
+<div style="height: 100px;">
+    <div style="text-align: left; margin:5px; position: absolute;" id="selectFields">Show fields: <br></div>
+    <div style="text-align: right; float: right; margin:20px;  ">Number of teams:<input id="totalTeams" type="number" min="0"/><br><br></div>
+</div>
     <div class="main">
-        <div style="text-align: left; margin:5px;" id="selectFields">Show fields: <br></div>
-        <div class="teamSetup">
+
             <div class="members">
                 <p style="font-size: large">Subject Pool</p>
 
@@ -80,22 +87,18 @@
                     </div> <% } %> -->
                 </div>
                 <br><br><br>
-                <div id="options">
-                    <p style="font-size:120%; padding:0; margin:0;">Options</p><hr><br>
-                    Number of teams:&nbsp;&nbsp;&nbsp;&nbsp;<input id="totalTeams" type="number" min="0"/><br><br>
-                    Import from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
-                </div>
+
 
             </div>
 
 
             <div class="teams">
-                <p style="font-size: large; text-align: center">Teams</p>
+                <p style="font-size: large; text-align: center">Sandbox</p>
                 <!-- This is how the team boxes will look like -->
                 <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
                 <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
             </div>
-        </div>
+
     </div>
 
 

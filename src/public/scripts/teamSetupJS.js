@@ -7,6 +7,11 @@ var testUser = false;
 var user;
 $(document).ready(function(e) {
 
+    $(function(){
+        $('.teamTables').draggable({
+            containment:'parent'
+        });
+    });
     if (typeof sessionStorage === 'undefined') {
         testUser = true;
     }
@@ -47,10 +52,12 @@ $(document).ready(function(e) {
     }
 }
     populateSubjectPool()
+
+    //Loads subject pool with first variable(name)
     function populateSubjectPool()
     {
         $('#subjects').empty();
-        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody"></tbody></table>');
+        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody ondrop="drop(event)" ondragover="allowDrop(event)" class="subjBody"></tbody></table>');
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
@@ -58,6 +65,7 @@ $(document).ready(function(e) {
         }
 
     }
+
 
     //User selectable fields to view
     function addField(field)
@@ -69,7 +77,7 @@ $(document).ready(function(e) {
             $("#"+sub.id).append("<td id='"+field +"'>"+sub[field]+"</td>");
         }
     }
-
+    //Removes from all records
     function removeField(field)
     {
         $("th#"+ field).remove();
@@ -87,6 +95,7 @@ $(document).ready(function(e) {
     }
     }
 
+    //user checks a checkbox
     $(".viewBy").change(function()
     {
         if(this.checked) {
@@ -99,235 +108,9 @@ $(document).ready(function(e) {
     });
 
 
-    document.getElementById("CSVInput").onchange = function(e){
 
-        var myFileInput = document.getElementById('CSVInput');
-        var myFile = myFileInput.files[0];
 
-        var ext = this.value.match(/\.(.+)$/)[1];
-        if (ext !== "csv")
-        {
-            $("#dialog-confirm").html("Invalid file type.");
 
-            // Define the Dialog and its properties.
-            $("#dialog-confirm").dialog({
-                resizable: false,
-                modal: true,
-                title: "Error",
-                height: 250,
-                width: 400,
-                buttons: {
-                    "Ok": function () {
-                        $(this).dialog('close');
-                    }
-                },
-                show: { effect: "scale", duration: 250 },
-                hide: { effect: "scale", duration: 250 }
-            });
-
-            return "invalid file type";
-        }
-
-        var file = document.getElementById('CSVInput').files[0];
-        if (file) {
-            // create reader
-            var reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function(e) {
-                var result = e.target.result;   // browser completed reading file
-                $("#dialog-confirm").html("Successfully read the contents of the file.");
-
-                // Define the Dialog and its properties.
-                $("#dialog-confirm").dialog({
-                    resizable: false,
-                    modal: true,
-                    title: "Success",
-                    height: 250,
-                    width: 400,
-                    buttons: {
-                        "Ok": function () {
-                            $(this).dialog('close');
-                        }
-                    },
-                    show: { effect: "scale", duration: 250 },
-                    hide: { effect: "scale", duration: 250 }
-                });
-
-                var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
-                var headings = arrayOfTheInput[0].split(",");
-
-                document.getElementById("subjects").innerHTML = "";
-
-                var JSONObject = []; //Hierdie is die JSON object wat in die DB gestoor gaan word.
-
-                for(i = 1; i < arrayOfTheInput.length-1; i++)
-                {
-                    var line = arrayOfTheInput[i].split(",");
-
-                    tempObj = {};
-                    for (var k = 0; k < headings.length; k++)
-                    {
-                        if (typeof line[k] == 'undefined')
-                        {
-                            tempObj[headings[k]] = "";
-                        }
-                        else
-                            tempObj[headings[k]] = line[k];
-                    }
-                    JSONObject.push(tempObj);
-                }
-
-                for(i = 0; i < JSONObject.length; i++)
-                {
-                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] + "<div style='float: right'>" + "|" + JSONObject[i]["Mark"] + "</div>" + "</div>"; //" Mark:" + JSONObject[i]["Mark"] +
-                }
-                //alert("Hello");
-                //alert(JSON.stringify(JSONObject));
-                //alert(JSON.stringify(JSONObject));
-
-                return "success";
-            };
-        }
-    }
-
-    $("#totalTeams").change(function(){
-        var empty = true;
-        $(".teams").find("div").each(function(){
-
-            if ($(this).find("div").length >= 1)
-            {
-                empty = false;
-            }
-        });
-
-        if (!empty)
-        {
-            buttons = {
-                "Yes": function () {
-                    var numTeams = numTeamGroups;
-                    for (var i = 1; i < numTeams; i++)
-                    {
-                        var element = $("."+ 1).find("img");
-                        confirmDeleteTeamTable(element);
-                    }
-
-                    for(var i = 0; i < $("#totalTeams").val(); i++)
-                    {
-                        if(numTeamGroups % 2 == 0 && numTeamGroups != 0) {
-                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                            $("<br><br>").insertBefore($("#teamAdd"));
-                            numTeamGroups++;
-
-                        }
-                        else{
-                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                            numTeamGroups++;
-                        }
-                    }
-
-                    $(".minusButton").off();
-
-                    $(".minusButton").on("click", function(e){
-                        var parent = $(this).parent();
-                        if (parent.find("div").length >= 1){
-                            fnOpenNormalDialog($(this));
-                        }
-                        else
-                        {
-                            confirmDeleteTeamTable($(this));
-                            $("#totalTeams").val(numTeamGroups-1);
-                        }
-                    });
-
-                    $(".leftArrow").off();
-
-                    $(".leftArrow").on("click", function(e){
-                        var parent = $(this).parent();
-                        if (parent.find("div").length >= 1){
-                            moveBackDialog($(this));
-                            $(".leftArrow").off();
-
-                            $(".leftArrow").on("click", function(e){
-                                var parent = $(this).parent();
-                                if (parent.find("div").length >= 1){
-                                    moveBackDialog($(this));
-                                }
-                            });
-                        }
-                    });
-
-                    $("#totalTeams").val(numTeamGroups-1);
-
-                    $(this).dialog('close');
-                },
-                "No": function () {
-                    $("#totalTeams").val((numTeamGroups-1));
-                    $(this).dialog('close');
-                }
-            };
-
-            dialogMessage("Change total team boxes", "There are subjects in some of the team boxes.<br>Changing this value will move all participants back to the spawn pool.<br><br>Are you sure you want to continue?<br>HINT: You can add and remove team boxes to the right.",buttons);
-            $("#dialog-confirm").html();
-        }
-        else
-        {
-            var numTeams = numTeamGroups;
-            for (var i = 1; i < numTeams; i++)
-            {
-                var element = $("."+ 1).find("img");
-                confirmDeleteTeamTable(element);
-            }
-
-            for(var i = 0; i < $("#totalTeams").val(); i++)
-            {
-                if(numTeamGroups % 2 == 0 && numTeamGroups != 0) {
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                    $("<br><br>").insertBefore($("#teamAdd"));
-                    numTeamGroups++;
-
-                }
-                else{
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                    numTeamGroups++;
-                }
-            }
-
-            $(".minusButton").off();
-
-            $(".minusButton").on("click", function(e){
-                var parent = $(this).parent();
-                if (parent.find("div").length >= 1){
-                    fnOpenNormalDialog($(this));
-                }
-                else
-                {
-                    confirmDeleteTeamTable($(this));
-                    $("#totalTeams").val(numTeamGroups-1);
-                }
-            });
-
-            $(".leftArrow").off();
-
-            $(".leftArrow").on("click", function(e){
-                var parent = $(this).parent();
-                if (parent.find("div").length >= 1){
-                    moveBackDialog($(this));
-                    $(".leftArrow").off();
-
-                    $(".leftArrow").on("click", function(e){
-                        var parent = $(this).parent();
-                        if (parent.find("div").length >= 1){
-                            moveBackDialog($(this));
-                        }
-                    });
-                }
-            });
-
-            $("#totalTeams").val(numTeamGroups-1);
-        }
-    });
-
-    $("#totalTeams").val((numTeamGroups-1));
 
     $('#randomize').click(function(e) {
         randomize($('.names').children().length,numTeamGroups-1);
@@ -341,17 +124,15 @@ $(document).ready(function(e) {
     });
 
     $("#plusButton").click(function(e){
-        if(numTeamGroups % 2 == 0 && numTeamGroups != 0) {
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-            $("<br><br>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
-        }
-        else{
+
             $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
-        }
+        $(function(){
+            $('.teamTables').draggable({
+                containment:'parent'
+            });
+        });
 
         $(".minusButton").off();
 
@@ -537,7 +318,8 @@ function drag(ev) {
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+
+    ev.target.closest('tbody').appendChild(document.getElementById(data));
 }
 
 if (window.File && window.FileReader && window.FileList && window.Blob) {
