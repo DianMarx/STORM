@@ -80,6 +80,13 @@ hr:before {
 .signup{
     width: 250px;
     float: right;
+    position: relative;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 3px;
+    backface-visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.75);
+
 }
 
 .signin{

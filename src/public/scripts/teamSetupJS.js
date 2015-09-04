@@ -3,8 +3,21 @@
  */
 
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
-
+var testUser = false;
+var user;
 $(document).ready(function(e) {
+
+    if(typeof sessionStorage === 'undefined'){
+        testUser = true;
+    }
+    else {
+        var user = JSON.parse(sessionStorage['User']);
+        //Page Setup for user
+        $("#righty").prepend(user.username+ '  ');
+
+    }
+
+
 
     $( "input[type=submit], a, button, input[type=file]" ).button();
 

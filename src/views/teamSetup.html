@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="scripts/teamSetupJS.js"></script>
     <link rel="stylesheet" href="style/css.css">
-
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <script src="scripts/algorithm.js"></script>
     <script src="scripts/shuffling.js"></script>
     <script src="views/tests.js"></script>
@@ -31,11 +32,20 @@
 
 });</script>
 <body>
-    <div class="header">
-        <h2 class="headerMessages">Team Setup</h2>
-        <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
+<nav class="navbar navbar-default">
 
+    <div class="container-fluid">
+        <div class=" navbar-form navbar-right" id="righty">
+
+            <a id="logOutBtn" href=""><button class="btn btn-default">Log Out</button> </a>
+        </div>
+        <div class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">My Projects</a></li>
+
+        </div>
     </div>
+</nav>
 
     <div class="main">
         <div class="teamSetup">
