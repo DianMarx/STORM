@@ -208,7 +208,10 @@ BODY:last-child .signin {
     text-align: center;
     z-index: 20;
 }
-
+#subjBody
+{
+    z-index: 20;
+}
 .teamTables{
     resize: both;
     width: 250px;
@@ -220,6 +223,7 @@ BODY:last-child .signin {
     overflow:auto;
     margin:5px;
     padding: 10px;
+    z-index: 2;
 }
 
 .teamAdd{

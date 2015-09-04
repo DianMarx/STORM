@@ -57,7 +57,7 @@ $(document).ready(function(e) {
     function populateSubjectPool()
     {
         $('#subjects').empty();
-        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody ondrop="drop(event)" ondragover="allowDrop(event)" class="subjBody"></tbody></table>');
+        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody ondrop="drop(event)" ondragover="allowDrop(event)" class="subjBody"><tr></tr></tbody></table>');
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
@@ -125,7 +125,8 @@ $(document).ready(function(e) {
 
     $("#plusButton").click(function(e){
 
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
+            var temp = '<table class="table" id="tables"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody"></tbody></table>';
+            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
         $(function(){
@@ -318,7 +319,7 @@ function drag(ev) {
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-
+    //alert(ev.target.closest('tbody').className);
     ev.target.closest('tbody').appendChild(document.getElementById(data));
 }
 
