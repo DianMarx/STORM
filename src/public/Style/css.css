@@ -13,6 +13,11 @@
     src: url(../fonts/OpenSans-Italic.ttf);
 }
 
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body{
     font-family: OpenSans;
     margin:0;
@@ -35,6 +40,7 @@ body{
     padding-left:30px;
     top:30px;
     margin:0;
+    float: left;
 }
 
 hr {
@@ -66,8 +72,17 @@ hr:before {
     width:100%;
     text-align: center;
 }
+.vid
+{
+    text-align: left;
+    position: absolute;
+}
+.signup{
+    width: 250px;
+    float: right;
+}
 
-.signup,.signin{
+.signin{
     text-align: left;
     display: inline-block;
     padding: 20px;
@@ -126,11 +141,14 @@ BODY:last-child .signin {
     margin-top: auto;
     margin-top: 25%;
 }
-
+.logo{
+    right:10px;
+}
 #logo{
-    position: absolute;
+    float: right;
+    position: relative;
+    top: 10px;
     right: 10px;
-    top:10px;
 }
 
 .signHeadings{
