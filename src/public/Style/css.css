@@ -30,7 +30,13 @@ body{
     vertical-align:middle;
     border-bottom: 1px solid #e6e6e6;
 }
-
+.algorithBox
+{
+    width: 100%;
+}
+#shuffleSetup{
+    width: 100%;
+}
 .headerMessages{
     position:relative;
     padding-left:30px;

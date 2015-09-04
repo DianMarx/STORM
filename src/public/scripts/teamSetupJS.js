@@ -7,39 +7,96 @@ var testUser = false;
 var user;
 $(document).ready(function(e) {
 
-    if(typeof sessionStorage === 'undefined'){
+    if (typeof sessionStorage === 'undefined') {
         testUser = true;
     }
     else {
         var user = JSON.parse(sessionStorage['User']);
         //Page Setup for user
-        $("#righty").prepend(user.username+ '  ');
+        $("#righty").prepend(user.username + '  ');
 
     }
-
-
-
-    $( "input[type=submit], a, button, input[type=file]" ).button();
+    $("input[type=submit], a, button, input[type=file]").button();
 
     //Moved array van subject objects
     var subjects = JSON.parse($('#jsondat').text());
 
     //gets all the subjects' fields
     var fields = [];
-    for(var name in subjects[0])
+    for (var name in subjects[0]) {
+
+        if (name[0] != '_') {
+            fields.push(name);
+            $('<th>' + name + '</th>').appendTo("#subjectFields");
+        }
+    }
+    populateTable();
+
+    //toSubjects table
+    function populateTable() {
+
+    $('#subjectsTable').empty();
+    for (var i = 0; i < subjects.length; i++) {
+        var sub = subjects[i];
+
+        $('<tr>').appendTo("#subjectsTable");
+        for (var p = 0; p < fields.length; p++) {
+            $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
+        }
+        $('</tr>').appendTo("#subjectsTable");
+    }
+}
+    populateSubjectPool()
+    function populateSubjectPool()
     {
-        fields.push(name);
+        $('#subjects').empty();
+        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody"></tbody></table>');
+        for(var i = 0; i < subjects.length; i++)
+        {
+            var sub = subjects[i];
+            $(".subjBody").append("<tr class='subject' id='" + subjects[i].id + "' draggable='true' ondragstart='drag(event)'><td>"+sub[fields[0]]+"</td></tr>")
+        }
+
     }
 
-    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    //User selectable fields to view
+    function addField(field)
+    {
+        $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
+        for(var i = 0; i < subjects.length; i++)
+        {
+            var sub = subjects[i];
+            $("#"+i).append("<td id='"+field +"'>"+sub[field]+"</td>");
+        }
+    }
+
+    function removeField(field)
+    {
+        $("th#"+ field).remove();
+        $("td#"+ field).remove();
+    }
+
+        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
         if (fields[i][0] != '_') {
 
         var temp = fields[i];
         div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+            if(fields[i].toLowerCase() != 'name')
+            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
     }
     }
 
+    $(".viewBy").change(function()
+    {
+        if(this.checked) {
+            addField(this.value);
+        }
+        else
+        {
+            removeField(this.value);
+        }
+    });
 
 
     document.getElementById("CSVInput").onchange = function(e){
