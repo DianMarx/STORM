@@ -18,19 +18,19 @@ function randomize(numSubj, numTeam){
 
     }
     var trueMax = max;
-//alert(max);
+alert(max);
     $('.names').find('.subject').each(function(index, element) {
 //alert(index + " " + element);
         var done = false;
         while(!done){
             var randm = Math.floor(Math.random() * (numTeams) + 1);
 
-            if($('.' + randm).children("tr").length < max){
+            if($('.' + randm).find("tr").length-1 < max){
                 //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
                 var to = $('.' + randm).find('.subjBody');
                 $(element).appendTo(to); done = true;
 
-                if($('.' + randm).children("tr").length == max)
+                if($('.' + randm).find("tr").length-1 == max)
                 {if(!even){if(remaining > 0)remaining--; if(remaining ==0) max = trueMax-1;}}
 
             }

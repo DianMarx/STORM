@@ -139,7 +139,7 @@ $(document).ready(function(e) {
     $('#shuffle').click(function(e) {
         var parameter = $(".shuffleBy:checked").val();
         //alert(parameter);
-        shuffle($('.names').children().length,numTeamGroups-1,subjects);
+        shuffle($('.names').find('.subjBody').children().length,numTeamGroups-1,subjects);
 
     });
 
