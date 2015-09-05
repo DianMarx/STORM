@@ -7,11 +7,7 @@ var testUser = false;
 var user;
 $(document).ready(function(e) {
 
-    $(function(){
-        $('.teamTables').draggable({
-            containment:'parent'
-        });
-    });
+
     if (typeof sessionStorage === 'undefined') {
         testUser = true;
     }
@@ -52,16 +48,16 @@ $(document).ready(function(e) {
     }
 }
     populateSubjectPool()
-
+    $(".table").selectable();
     //Loads subject pool with first variable(name)
     function populateSubjectPool()
     {
         $('#subjects').empty();
-        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody ondrop="drop(event)" ondragover="allowDrop(event)" class="subjBody"><tr></tr></tbody></table>');
+        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody"></tbody></table>');
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' draggable='true' ondragstart='drag(event)'><td>"+sub[fields[0]]+"</td></tr>")
+            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' ><td>"+sub[fields[0]]+"</td></tr>")
         }
 
     }
@@ -109,6 +105,30 @@ $(document).ready(function(e) {
 
 
 
+//Change number of groups
+    $("#totalTeams").change(function() {
+        var empty = true;
+        $(".teams").find("div").each(function () {
+
+            if ($(this).find("tr").length >= 2) {
+                empty = false;
+            }
+        });
+        var c = false;
+        if(!empty)
+        {
+            c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
+        }
+        if(empty || c){
+            $(".subject").detach().appendTo("#subjects table .subjBody");
+            $(".teamTables").detach();
+            numTeamGroups = 1;
+            var temp = parseInt($("#totalTeams").val());
+            for(var r = 0; r < temp; r++){
+            $("#plusButton").click();}
+        }
+    });
+
 
 
 
@@ -126,13 +146,30 @@ $(document).ready(function(e) {
     $("#plusButton").click(function(e){
 
             var temp = '<table class="table" id="tables"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody"></tbody></table>';
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
-        $(function(){
-            $('.teamTables').draggable({
-                containment:'parent'
-            });
+
+        $('.teamTables').draggable({
+            containment:'parent'
+        });
+
+        $('.teamTables').dblclick(function(){
+
+            var isDisabled = $(this).draggable('option', 'disabled');
+            if(isDisabled)
+                makeDraggable(this);
+            else
+                disableDrag(this);
+        });
+
+        $(".teamTables").droppable({
+            accept: '.subject',
+            cursor: "normal",
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            }
         });
 
         $(".minusButton").off();
@@ -188,6 +225,37 @@ $(document).ready(function(e) {
 
     $("#plusButton").click();
     $("#plusButton").click();
+
+    //dragable
+
+    var k = {};
+    $(".subject").draggable({
+
+        helper: "clone",
+        cursor: "move",
+        opacity: "0.5",
+        revert: "invalid",
+        start: function(){
+            k.tr = this;
+        }
+
+    });
+
+    $(".teamTables").droppable({
+        accept: '.subject',
+        cursor: "normal",
+        drop: function(event, ui) {
+            //var temp = alert();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+        }
+    });
+    $("#subjects").droppable({
+        accept: '.subject',
+        drop: function(event, ui) {
+            //var temp = alert();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+        }
+    });
 });
 
 //End of on document load
@@ -208,6 +276,16 @@ function fnOpenNormalDialog(element) {
 
     dialogMessage("Confirm delete", "Are you sure you want to delete this team box?<br>Subjects will be returned to spawn pool.", buttons);
     $("#dialog-confirm").html();
+}
+
+function makeDraggable(t){
+
+    $(t).draggable('enable');
+}
+function disableDrag(t)
+{
+
+    $(t).draggable("disable");
 }
 
 function confirmDeleteTeamTable(element)
@@ -308,20 +386,8 @@ function moveBack(element){
     });
 }
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
 
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
 
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    //alert(ev.target.closest('tbody').className);
-    ev.target.closest('tbody').appendChild(document.getElementById(data));
-}
 
 if (window.File && window.FileReader && window.FileList && window.Blob) {
     // Great success! All the File APIs are supported.

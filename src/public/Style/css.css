@@ -208,9 +208,10 @@ BODY:last-child .signin {
     text-align: center;
     z-index: 20;
 }
-#subjBody
+.subjBody
 {
-    z-index: 20;
+    z-index: 100;
+    height: 80%;
 }
 .teamTables{
     resize: both;
