@@ -150,9 +150,6 @@ $(document).ready(function(e) {
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
 
-        $('.teamTables').draggable({
-            containment:'parent'
-        });
 
         $('.teamTables').dblclick(function(){
 
@@ -171,7 +168,9 @@ $(document).ready(function(e) {
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             }
         });
-
+        $('.teamTables').draggable({
+            containment:'parent'
+        });
         $(".minusButton").off();
 
         $(".minusButton").on("click", function(e){
@@ -190,13 +189,13 @@ $(document).ready(function(e) {
 
         $(".leftArrow").on("click", function(e){
             var parent = $(this).parent();
-            if (parent.find("div").length >= 1){
+            if (parent.find("tr").length >= 2){
                 moveBackDialog($(this));
                 $(".leftArrow").off();
 
                 $(".leftArrow").on("click", function(e){
                     var parent = $(this).parent();
-                    if (parent.find("div").length >= 1){
+                    if (parent.find("tr").length >= 2){
                         moveBackDialog($(this));
                     }
                 });
@@ -206,7 +205,7 @@ $(document).ready(function(e) {
 
     $(".minusButton").on("click", function(e){
         var parent = $(this).parent();
-        if (parent.find("div").length >= 1){
+        if (parent.find("tr").length >= 2){
             fnOpenNormalDialog($(this));
         }
         else
@@ -218,7 +217,7 @@ $(document).ready(function(e) {
 
     $(".leftArrow").on("click", function(e){
         var parent = $(this).parent();
-        if (parent.find("div").length >= 1){
+        if (parent.find("tr").length >= 2){
             moveBackDialog($(this));
         }
     });
@@ -297,8 +296,8 @@ function confirmDeleteTeamTable(element)
 
     $(".teams br").remove();
 
-    $("."+boxID).find("div").each(function(){
-        $(".names").append($(this));
+    $("."+boxID).find(".subjBody tr").each(function(){
+        $(".names table tbody").append($(this));
     });
 
     $("."+boxID).remove();
@@ -307,10 +306,7 @@ function confirmDeleteTeamTable(element)
     var fromHere = false;
     $(".teams").find(".teamTables").each(function(){
         i++;
-        if (i % 3 == 0)
-        {
-            $("<br/><br/>").insertAfter($(this));
-        }
+
 
         if ((i) == boxID)
             fromHere = true;
@@ -348,11 +344,11 @@ function moveBack(element){
     var boxID = element.attr('class');
     boxID = boxID.replace("leftArrow lA", "");
 
-    $("."+boxID).find("div").each(function(){
-        $(".names").append($(this));
+    $("."+boxID).find(".subjBody tr").each(function(){
+        $(".names table tbody").append($(this));
     });
 
-    $("."+boxID).html('<img src="images/minus_button.png" class="minusButton mB'+boxID+'" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA'+boxID+'" alt="move back" height="25" width="25">');
+    $("."+boxID).find('.subject').detach();
 
     $(".minusButton").off();
 
@@ -372,13 +368,13 @@ function moveBack(element){
 
     $(".leftArrow").on("click", function(e){
         var parent = $(this).parent();
-        if (parent.find("div").length >= 1){
+        if (parent.find("tr").length >= 2){
             moveBackDialog($(this));
             $(".leftArrow").off();
 
             $(".leftArrow").on("click", function(e){
                 var parent = $(this).parent();
-                if (parent.find("div").length >= 1){
+                if (parent.find("tr").length >= 2){
                     moveBackDialog($(this));
                 }
             });
