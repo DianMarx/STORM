@@ -460,28 +460,38 @@ section {
     opacity: 0.8;
     margin-left: 30%;
     margin-right: 30%;
-    padding-top: 20px;
     background-color: #EAF2FE;
     margin-top: 40px;
     position:relative;
     border-radius: 10px;
+    padding: 0%;
 }
 
 .projLink{
+    position:static;
     text-decoration: none;
     color: #000000;
     font-size: 20px;
 }
 
 .projLink:hover{
-    font-size: 25px;
-    color: #000099;
+    text-decoration: none;
 }
+.singleProject:hover{
+    background-color: rgba(0, 6, 255, 0.18);
+}
+.singleProject{
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
 
 #AddProjects
 {
     position: relative;
     padding-top: 40px;
+    margin-left: 30%;
+    margin-right: 30%;
 }
 
 #AddProjectsImg{

@@ -10,22 +10,34 @@
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script src="scripts/projectSetup.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 </head>
 <body>
-<div class="header">
-    <h2 class="headerMessages">Manage Projects</h2><br/>
-    <h4 id="user"></h4>
-    <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
+<nav class="navbar navbar-default">
 
-</div>
+    <div class="container-fluid">
+        <div class=" navbar-form navbar-right" id="righty">
+            <a id="logOutBtn" href=""><button class="btn btn-default">Log Out</button> </a>
+        </div>
+        <div class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+
+        </div>
+    </div>
+</nav>
+
 
 <div class="main">
 
     <div class="background">
         <img src="../Images/Storm.png" style="width: 100%;top:auto;">
     </div>
-    <div id="Projects" class="loader">
-        <div id="ProjectsHead"><p id="projectHeadTxt">My Projects</p></div>
+
+    <div class="panel panel-primary" id="Projects">
+        <div class="panel-heading">
+            <h3 id="ProjectsTitle" class="panel-title">My Projects</h3>
+        </div>
+        <div  class="loader panel-body" id="MyProjects"></div>
     </div>
 
     <div id="AddProjects" ><img id="AddProjectsImg" src="images/plus_button.png" height="100px"><br/>Add Projects</div>
