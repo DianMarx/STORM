@@ -5,7 +5,7 @@
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
 var testUser = false;
 var user;
-
+var collection = getParameterByName('collection');
 $(document).ready(function(e) {
 
 
@@ -48,7 +48,7 @@ $(document).ready(function(e) {
         $('</tr>').appendTo("#subjectsTable");
     }
 }
-    populateSubjectPool()
+
     $(".table").selectable();
     //Loads subject pool with first variable(name)
     function populateSubjectPool()
@@ -58,7 +58,11 @@ $(document).ready(function(e) {
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' ><td>"+sub[fields[0]]+"</td></tr>");
+            if(sub.group) {
+                $("#" + sub.group).append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
+            }
+            else
+                $("#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
         }
 
     }
@@ -83,7 +87,7 @@ $(document).ready(function(e) {
 
         var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_') {
+        if (fields[i][0] != '_' && fields[i] != 'previousGroups') {
 
         var temp = fields[i];
         div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
@@ -306,18 +310,55 @@ function updateTeams()
        exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
-        var temp = addGroupsToSubjects(subjects);
+
         for(var i = 0; i < subjects.length; i++) {
 
-            subjects[i].group = $('tr[id=' + temp[i].id+']').parent('tbody').attr('id');
+            subjects[i].group = $('tr[id=' + subjects[i].id+']').parent('tbody').attr('id');
 
         }
         fields.push("group");
         exportCSV(subjects, fields);
+        for(var p = 0; p < subjects.length; p++) {
+
+            delete subjects[p].group;
+
+        }
+        fields.pop();
+
     });
+    $("#saveIteration").click(function (e) {
+
+        for(var i = 0; i < subjects.length; i++) {
+
+            subjects[i].previousGroups.push($('tr[id=' + subjects[i].id+']').parent('tbody').attr('id'));
+
+        }
+
+
+        updateSubjects(subjects);
+    });
+    $("#returnSubjs").click(function(e){
+        $(".subject").detach().appendTo("#subjects table .subjBody");
+    });
+    populateSubjectPool();
 });
 
 //End of on document load
+function updateSubjects(subs)
+{
+    $.ajax({
+        type: "POST",
+        url: '/updateSubjs',
+        data: {data: JSON.stringify(subs), collection: collection},
+        success: function ()
+        {
+            window.location = "teamsetup" +"?collection="+ collection;
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
 function addGroupsToSubjects(subjects){
     var temp = subjects;
 
@@ -500,4 +541,11 @@ function dialogMessage(title,mesg, buttons) {
         show: { effect: "scale", duration: 250 },
         hide: { effect: "scale", duration: 250 }
     });
+}
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
