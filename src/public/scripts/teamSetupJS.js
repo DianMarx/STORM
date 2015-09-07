@@ -5,6 +5,7 @@
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
 var testUser = false;
 var user;
+
 $(document).ready(function(e) {
 
 
@@ -301,11 +302,44 @@ function updateTeams()
 
 
     }
+    $("#exportMasterTable").click(function (e) {
+       exportCSV(subjects, fields);
+    });
 });
 
 //End of on document load
 
+function exportCSV(subs, fields)
+{
+    var csvContent = '';
+    for(var i = 0; i < fields.length; i++)
+    {
 
+        csvContent += fields[i];
+        if(i != fields.length-1)
+        csvContent += ',';
+    }
+    csvContent += '\n';
+    for(var p = 0; p < subs.length; p++)
+    {
+        for(var k = 0; k < fields.length; k++)
+        {
+            csvContent+=subs[p][fields[k]];
+            if(k != fields.length-1)
+                csvContent += ',';
+        }
+        csvContent += '\n';
+    }
+
+
+    var link = document.createElement("a");
+    link.href        = 'data:attachment/csv,' + encodeURIComponent(csvContent);
+    link.target      = '_blank';
+    link.download    = 'myFile.csv';
+
+    document.body.appendChild(link);
+    link.click();
+}
 function fnOpenNormalDialog(element) {
 
     buttons = {

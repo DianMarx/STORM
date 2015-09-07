@@ -227,8 +227,7 @@ function LoadProjects(dat)
     for (var i = 0; i < dat.length; i++)
     {
         displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a></div>';
-    }
-
+    };
     $("#MyProjects").html(displayProjects);
 
     //Open manage projects section
