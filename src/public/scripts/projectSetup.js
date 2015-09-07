@@ -40,48 +40,55 @@ $(document).ready(function(e) {
         $('#AddProjectDetails').on('submit', function(e){
             e.preventDefault();
 
-            projectData = {
-                'projectName'  : $("#projectName").val(),
-                'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
-                'admin' : true
-            };
+            if($("#projectName").val().indexOf("$") > -1)
+            {
+                alert("Your project name cannot contain the $ character");
+            }
+            else
+            {
+                projectData = {
+                    'projectName'  : $("#projectName").val(),
+                    'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
+                    'admin' : true
+                };
 
-            $.ajax({
-                type: "POST",
-                url: '/projectStore',
-                data: projectData,
-                success: function (dat, testStatus)
-                {
-                    if(dat == 0)
-                        alert("You already have a project called " + projectData.projectName);
-                    else if(dat == 1)
-                        alert("Could not save project");
-                    else {
-                        user.projectID.push(dat);
-                        var userData =
-                        {
-                            'userID': user.id,
-                            'projectIDs': user.projectID
-                        };
+                $.ajax({
+                    type: "POST",
+                    url: '/projectStore',
+                    data: projectData,
+                    success: function (dat, testStatus)
+                    {
+                        if(dat == 0)
+                            alert("You already have a project called " + projectData.projectName);
+                        else if(dat == 1)
+                            alert("Could not save project");
+                        else {
+                            user.projectID.push(dat);
+                            var userData =
+                            {
+                                'userID': user.id,
+                                'projectIDs': user.projectID
+                            };
 
-                        //Update user to reflect new project created by him
-                        $.ajax({
-                            type: "POST",
-                            url: '/projToUser',
-                            data: {projectID: dat, id: user.id},
-                            success: function () {
-                                subjToDB(projectData.subjects);
-                            },
-                            error: function (e) {
-                                console.log(e);
-                            }
-                        });
+                            //Update user to reflect new project created by him
+                            $.ajax({
+                                type: "POST",
+                                url: '/projToUser',
+                                data: {projectID: dat, id: user.id},
+                                success: function () {
+                                    subjToDB(projectData.subjects);
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e);
                     }
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
+                });
+            }
         });
     });
 });
@@ -91,7 +98,7 @@ function init()
     $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
     user = JSON.parse(sessionStorage['User']);
     var projectIDs = JSON.stringify(user.projectID);
-    $("#righty").text(user.username);
+    $("#righty").prepend(user.username);
 
     //send project ids to server and get projects related to a user
 
@@ -177,44 +184,56 @@ function uploadCSV()
     }
 }
 
-function ManageProjects(project,dat)
+/*function ManageProjects(project,dat)
 {
-    $("#ProjectsTitle").html("<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px;'>" + 'Manage ' + project + "</h3><div id='back' class='btn-group pull-right'>"+
-                                            "<a href='#' id='loadProjects' class='btn btn-default btn-sm glyphicon glyphicon-menu-left'></a>"+
-                                    "</div>");
+    $("#ProjectsTitle").html(   "<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px;padding-bottom: 7.5px'>" + 'Manage ' + project + "</h3>"+
+                                "<div id='back' class='btn-group pull-right' data-toggle='tooltip' title='Back to My Projects'>"+
+                                    "<a href='#' id='loadProjects' class='btn btn-default btn-sm glyphicon glyphicon-menu-left'></a>"+
+                                "</div>");
 
+    //reload projects when back button pressed
     $("#loadProjects").click(function (e) {
         LoadProjects(dat);
     });
 
 
-
+    //add buttons to manage projects
     $("#MyProjects").html("<div class='btn-group' role='group' aria-label='...'>" +
                             "<a id='openProject' class='btn btn-default' href='/teamSetup?collection="+user.id +'_'+project+'_'+'Subjects'+"'>Open Project</a>"+
-                            "<a  class='btn btn-default'>Edit Project</button>"+
-                            "<a  class='btn btn-default'>Do Something</a>"+
+                            "<button id='editProject'  class='btn btn-default'>Edit Project</button>"+
                             "</div>");
 
+    //change project name and subjects collection associated to it
 
-}
+    $("#editProject").click(function(e){
+        $("#MyProjects").html('<div class="form-group">Project Name: <br/><input class="form-control" type="text" id="editProjectName" value="'+project+'" required></div>' +
+        '<button id="change" class="btn btn-default">Change</button>' +
+        '</form>' +
+        '</div>');
+    });
+
+
+
+}*/
+
 
 function LoadProjects(dat)
 {
-    $("#ProjectsTitle").html("<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px;'>" + 'My Projects');
+    //$("#ProjectsTitle").html("<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px; padding-bottom: 7.5px'>" + 'My Projects');
     var data = JSON.stringify(dat);
     var displayProjects = "";
 
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
     for (var i = 0; i < dat.length; i++)
     {
-        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to manage project"><a id="'+dat[i].projectName+'" class="projLink" type="submit" href="#">' + dat[i].projectName + '</a></div>';
+        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a></div>';
     }
 
     $("#MyProjects").html(displayProjects);
 
     //Open manage projects section
-    $(".singleProject").click(function (e) {
+/*    $(".singleProject").click(function (e) {
         ManageProjects($(this).children("a").attr("id"),dat);
-    });
+    });*/
 }
 

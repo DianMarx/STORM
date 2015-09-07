@@ -16,12 +16,14 @@
 <nav class="navbar navbar-default">
 
     <div class="container-fluid">
-        <div class=" navbar-form navbar-right" id="righty">
-            <a id="logOutBtn" href=""><button class="btn btn-default">Log Out</button> </a>
+        <div class="navbar-form navbar-right" id="righty">
+            <a id="logOutBtn" href="/"><button class="btn btn-default">Log Out</button> </a>
         </div>
-        <div class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
-
+        <div class="nav navbar-nav ">
+            <li ><a href="/">Home</a></li>
+            <li class="active"><a href="/">My Projects</a></li>
+            <li ><a href="/about">About</a></li>
+            <li ><a href="/contact">Contact</a></li>
         </div>
     </div>
 </nav>
@@ -35,7 +37,7 @@
 
     <div class="panel panel-primary" id="Projects">
         <div id="ProjectsTitle" class="panel-heading clearfix">
-            <h3  class="panel-title pull-left" style='padding-top: 7.5px;'>My Projects</h3>
+            <h3  class="panel-title pull-left" style='padding-top: 7.5px; padding-bottom: 7.5px'>My Projects</h3>
         </div>
         <div  class="loader panel-body" id="MyProjects"></div>
     </div>
@@ -44,20 +46,6 @@
     <div id="dialog-confirm"></div>
 
 </div>
-<footer class="footer">
-    <div class="footerMenu">
-        <table id="tableMenu">
-            <tr id="tableMenu">
-                <th id="tableMenu"><input id="homeButton" type="text" value="Home"
-                                          onclick="window.location='/';" /></th>
-                <th id="tableMenu"><input id="aboutButton" type="text" value="About"
-                                          onclick="window.location='/about';" /></th>
-                <th id="tableMenu"><input id="contactButton" type="text" value="Contact Us"
-                                          onclick="window.location='/contact';" /></th>
-            </tr>
-        </table>
-    </div>
-</footer>
 
 </body>
 </html>
