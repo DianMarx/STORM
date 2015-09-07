@@ -55,7 +55,7 @@
     </div>
 </div>
 <div class="algorithmBox panel panel-default" style="margin: 0;">
-    <div class="panel-heading" data-toggle="collapse" data-target="#shuffleSetup">Shuffle setup<button class="form-control" id="shuffle">Shuffle</button> </div>
+    <div class="panel-heading" data-toggle="collapse" data-target="#shuffleSetup">Shuffle setup </div>
     <div class="panel-body collapse container-fluid" id="shuffleSetup">
     <div class="row" id="shuffleRow">
     <div><button type='button' id='addAlg'><span aria-hidden='true'>+</span> </button></div>
@@ -65,7 +65,12 @@
 
 <div style="height: 100px;">
     <div style="text-align: left; margin:5px; position: absolute;" id="selectFields">Show fields: <br></div>
+
     <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
+</div>
+<div class="container">
+    <button style="width: 100px; float:left;" class="form-control" id="shuffle">Shuffle</button>
+    <button style="width: 125px; float:left;" class="form-control" id="exportGroups">Download CSV</button>
 </div>
     <div class="main">
 
