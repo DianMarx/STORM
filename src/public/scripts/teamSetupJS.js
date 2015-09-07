@@ -5,6 +5,7 @@
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
 var testUser = false;
 var user;
+
 $(document).ready(function(e) {
 
 
@@ -53,11 +54,11 @@ $(document).ready(function(e) {
     function populateSubjectPool()
     {
         $('#subjects').empty();
-        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody"></tbody></table>');
+        $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' ><td>"+sub[fields[0]]+"</td></tr>")
+            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' ><td>"+sub[fields[0]]+"</td></tr>");
         }
 
     }
@@ -159,7 +160,7 @@ function updateTeams()
 
     $("#plusButton").click(function(e){
 
-            var temp = '<table class="table" id="tables"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody"></tbody></table>';
+            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
             $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
@@ -301,11 +302,58 @@ function updateTeams()
 
 
     }
+    $("#exportMasterTable").click(function (e) {
+       exportCSV(subjects, fields);
+    });
+    $("#exportGroups").click(function (e) {
+        var temp = addGroupsToSubjects(subjects);
+        for(var i = 0; i < subjects.length; i++) {
+
+            subjects[i].group = $('tr[id=' + temp[i].id+']').parent('tbody').attr('id');
+
+        }
+        fields.push("group");
+        exportCSV(subjects, fields);
+    });
 });
 
 //End of on document load
+function addGroupsToSubjects(subjects){
+    var temp = subjects;
+
+    return temp;
+}
+function exportCSV(subs, fields)
+{
+    var csvContent = '';
+    for(var i = 0; i < fields.length; i++)
+    {
+
+        csvContent += fields[i];
+        if(i != fields.length-1)
+        csvContent += ',';
+    }
+    csvContent += '\n';
+    for(var p = 0; p < subs.length; p++)
+    {
+        for(var k = 0; k < fields.length; k++)
+        {
+            csvContent+=subs[p][fields[k]];
+            if(k != fields.length-1)
+                csvContent += ',';
+        }
+        csvContent += '\n';
+    }
 
 
+    var link = document.createElement("a");
+    link.href        = 'data:attachment/csv,' + encodeURIComponent(csvContent);
+    link.target      = '_blank';
+    link.download    = 'myFile.csv';
+
+    document.body.appendChild(link);
+    link.click();
+}
 function fnOpenNormalDialog(element) {
 
     buttons = {
