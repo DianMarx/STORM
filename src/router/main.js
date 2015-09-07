@@ -70,13 +70,13 @@ module.exports=function(app) {
         db.updateUser(req.body.id, req.body.projectID)
         //console.log("yolo");
         res.send("");
+
     });
 
     app.post('/subjToDB', function (req, res) {
 
-        console.log(req.body.data);
+        //console.log(req.body.data);
         db.subjToDB(req.body.data, req.body.collection);
-        //console.log("yolo");
         res.send("");
     });
 
@@ -132,12 +132,20 @@ module.exports=function(app) {
     {
 
         var projData = JSON.stringify(req.body);
-        db.insertProject(projData,function(newProjectID)
+        db.insertProject(projData,function(status)
         {
-            var newID = newProjectID._id;
-            res.send(newID);
+            if(status != 0 || status != 1) {
+                var newID = status._id;
+                res.send(newID);
+            }else
+                res.send(status);
+
+            //console.log(JSON.stringify(status));
         });
 
+        //0 Username exists
+        //1 failure
+        //2 success
         /*Insert Subject Data*/
 
 

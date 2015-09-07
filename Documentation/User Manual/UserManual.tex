@@ -1,0 +1,72 @@
+\documentclass[hidelinks, 12pt, oneside]{article}
+\usepackage{graphicx}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{wrapfig}
+\usepackage[margin=1in]{geometry}
+
+
+%\graphicspath{{}}
+\begin{document}
+ 
+%titlepage
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}{0.75\linewidth}
+    \centering
+%STORM logo
+    \includegraphics[width=14cm]{./graphics/Storm.png}
+%University logo
+    \includegraphics[width=7cm]{./graphics/universityLogo.jpg}
+    \rule{0\linewidth}{0.15\linewidth}\par
+    \vspace{0.9cm}
+%Thesis title
+    {\uppercase{\Large Project Storm \par}}
+   	
+	\vspace{0.7cm}
+	{\Large Team ``NAME" \par}
+	\vspace{0.7cm}
+%Author's name
+    {\normalsize Renaldo van Dyk 12204359\par}
+    {\normalsize Andreas du Preez 12207871\par}
+    {\normalsize Sean Hill 12221458\par}
+    {\normalsize Shaun Meintjes 133310896\par}
+    {\normalsize Johann Dian Marx 12105202\par}
+    
+    \vspace{1cm}
+    
+   % \href{https://github.com/DianMarx/STORM}{Click here to go to our GitHub}
+    \vspace{1cm}
+	
+\end{minipage}
+\end{center}
+\clearpage
+
+\tableofcontents
+\newpage
+\section{General Information}
+\subsection{System Overview}
+	\input{./GeneralInformation/SystemOverview}
+
+\subsection{System Configuration}
+	\input{./GeneralInformation/SystemConfiguration}
+\pagebreak
+\subsection{Installation}
+	\input{./GeneralInformation/Installation}
+	
+\newpage
+\section{Getting Started}
+	\input{./GettingStarted/GettingStarted}
+	
+\newpage
+\section{Using the system}
+	\input{./UsingTheSystem/UsingTheSystem}
+	
+\newpage
+\section{Troubleshooting}
+	\input{./Troubleshooting/Troubleshooting}
+	
+\end{document}
+

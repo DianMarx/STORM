@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>STORM</title>
+
+    <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style/css.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+    <script>
+
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+d.toUTCString();
+            document.cookie = cname + "=" + cvalue + "; " + expires;
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1);
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+            return "";
+        }
+
+        function errorBox(message){
+            $("#errorDialog").html("An error has occured: <br> " + message);
+            $("#errorDialog").dialog({
+                resizable: false,
+                modal: true,
+                title: "Password Mismatch",
+                height: 250,
+                width: 400,
+                buttons: {
+                    "Ok": function () {
+                        $(this).dialog('close');
+                        confirmDeleteTeamTable(element);
+                    }
+                }
+
+            });
+        }
+        $(document).ready(function(e) {
+            sessionStorage.clear();
+
+            $("#loginForm").submit(function (event) {
+                event.preventDefault();
+
+                var $form = $(this),
+                        user = $form.find("input[name='username']").val(),
+                        pass = $form.find("input[name='password']").val();
+
+
+                $.ajax({
+                    type: "POST",
+                    url: '/login',
+                    data: {username: user},
+                    dataType: "json",
+                    success: function (dat, testStatus) {
+                        if (dat.length == 0) {
+                            $("#loginUser").css("border-color", "red");
+                            $(".sign").effect('shake');
+                        }
+                        else {
+
+                            var data = JSON.stringify(dat);
+                            data = JSON.parse(data.substring(1, data.length - 1));
+                            //alert(JSON.stringify(data));
+
+
+                            if (data.password != pass) {
+                                $("#loginPass").css("border-color", "red");
+                                $(".sign").effect('shake');
+                            }
+                            else {
+                                sessionStorage['User'] = JSON.stringify(data);
+                                window.location.href = "/projectHome";
+                            }
+                        }
+
+                    },
+
+                    error: function()
+                    {
+                        $("#errorDialog").html("An error has occured: <br> Could not connect to database");
+                        $("#errorDialog").dialog({
+                            resizable: false,
+                            modal: true,
+                            title: "Error",
+                            height: 250,
+                            width: 400,
+                            buttons: {
+                                "Ok": function () {
+                                    $(this).dialog('close');
+                                    confirmDeleteTeamTable(element);
+                                }
+                            }
+
+                        });
+                    }
+                });
+
+
+            });
+
+            $("#signUpForm").submit(function (event) {
+                event.preventDefault();
+
+                var $form = $(this),
+                        name = $form.find("input[name='name']").val(),
+                        user = $form.find("input[name='username']").val(),
+                        pass = $form.find("input[name='password']").val(),
+                        confirm = $form.find("input[name='confirm']").val(),
+                        email = $form.find("input[name='email']").val();
+
+                if(pass != confirm) {
+                    errorBox("Passwords do not match, please retype them");
+                }
+                else {
+                    $.ajax({
+                        type: "POST",
+                        url: '/signUp',
+                        data: {name: name, username: user, password: pass, projectID: [], email: email},
+                        dataType: "json",
+                        success: function (dat, testStatus) {
+
+
+                            switch (dat.code)
+                            {
+                                case 0:
+                                    errorBox("Username is not available");
+                                    break;
+                                case 1:
+                                    errorBox("Something went wrong while trying to write to the database");
+                                    break;
+                                case 2:
+                                    sessionStorage['User'] = JSON.stringify(dat.user);
+                                    window.location.href = "/projectHome";
+                                    break;
+
+                            }
+                            //data = JSON.parse(data.substring(1,data.length-1));
+
+                        },
+
+                        error: function () {
+                            $("#errorDialog").html("An error has occured: <br> Could not connect to database");
+                            $("#errorDialog").dialog({
+                                resizable: false,
+                                modal: true,
+                                title: "Error",
+                                height: 250,
+                                width: 400,
+                                buttons: {
+                                    "Ok": function () {
+                                        $(this).dialog('close');
+                                        confirmDeleteTeamTable(element);
+                                    }
+                                }
+
+                            });
+                        }
+                    });
+                }
+
+            });
+
+            $( "input[type=submit], a, button, input[type=file]" ).button();
+        });
+        /**
+        $.ajax({
+            url: '/index', complete: function(data){
+                //alert(data);
+            }
+        });
+        $(function() {
+            $( "input[type=submit], a, button" ).button();
+        });**/
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-default">
+
+    <div class="container-fluid">
+        <div class=" navbar-form navbar-right" >
+            <form id="loginForm">
+                    <div class="form-group"><input class="form-control" id="loginUser" name="username" type="text" required/></div>
+                    <div class="form-group"><input class="form-control" id="loginPass" name="password" type="password" required/></div>
+                    <input class="btn btn-default" type="submit" value="Sign In"/>
+            </form>
+        </div>
+        <div class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="/demo">Try it out</a></li>
+        </div>
+    </div>
+</nav>
+
+
+    <div class="main">
+
+        <div class="background">
+        <img src="../Images/Storm.png" style="width: 100%;top:auto;">
+        </div>
+        <div class="container">
+        <div class="jumbotron">
+            <h1>Welcome to STORM</h1>
+                <p class="signHeadings">Don't have an account?<br>Sign up here.</p>
+                <form id="signUpForm">
+                            Name:<input class="form-control" name="name" type="text" required/>
+                            Username:<input class="form-control" name="username" type="text" required/>
+                            Email:<input class="form-control" name="email" type="email" required/>
+                            Password:<input class="form-control" name="password" type="password" required/></td>
+
+                            Retype Password:<input class="form-control" name="confirm" type="password" required/></td>
+                            <input class="btn btn-default"  type="submit" value="Sign Up"/>
+                </form>
+        </div>
+        </div>
+
+    <div class="PlaceHolder">
+
+    </div>
+</div>
+<div id="errorDialog"></div>
+</body>
+</html>

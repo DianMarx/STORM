@@ -1,0 +1,217 @@
+\documentclass[hidelinks, 12pt, oneside]{article}
+\usepackage{graphicx}
+\usepackage{bookmark}
+\usepackage{hyperref}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\usepackage{tabu}
+
+\begin{document}
+ 
+%titlepage
+\thispagestyle{empty}
+\begin{center}
+\begin{minipage}{0.75\linewidth}
+    \centering
+%University logo
+    \includegraphics[width=13cm]{./graphics/universityLogo.jpg}
+    \rule{0\linewidth}{0.15\linewidth}\par
+
+%Thesis title
+    {\uppercase{\Large Project Storm Test Cases\par}}
+   	{\uppercase{\Large Team NAME \par}}
+    \vspace{1cm}
+%Author's name
+    {\normalsize Renaldo van Dyk 12204359\par}
+    {\normalsize Andreas du Preez 12207871\par}
+    {\normalsize Sean Hill 12221458\par}
+    {\normalsize Shaun Meintjes 133310896\par}
+    {\normalsize Johann Dian Marx 12105202\par}
+    
+	
+\end{minipage}
+\end{center}
+\clearpage
+
+\tableofcontents
+\newpage
+
+\section{Use Case Test Cases}
+\subsection{User Access Module}
+\subsubsection{Sign Up}
+\begin{enumerate}
+\item Scenarios
+
+\begin{center}
+ \begin{tabu}to 0.8\textwidth{|X[l]| X|X|} 
+ \hline
+ Scenario Name & Starting Flow & Alternate \\ [1ex]
+ \hline
+ Scenario 1 - Successful sign up & Basic Flow &\\ [1ex]
+ \hline
+Scenario 2 - Username unavailable & Basic Flow & A1  \\[1ex]
+ \hline
+ Scenario 3 - Email already registered & Basic Flow & A2  \\[1ex]
+ \hline
+ Scenario 4 - Password incorrect format & Basic Flow & A4  \\ [1ex] 
+ \hline
+ Scenario 5 - Passwords don't match & Basic Flow & A5  \\ [1ex] 
+ \hline
+\end{tabu}
+\end{center}
+
+\item Test Cases\\
+\\V - Valid\\ I - Invalid\\ n/a - not applicable
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Username & Password & Confirm Password & Email & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1 Successful sign up & V & V & V & V & Project setup screan displayed\\ [0.1ex]
+ \hline
+ RC 2 & Scenario2 Username unavailable & I&V&V&V&Error; Username taken \\[0.1ex]
+ \hline
+  RC 3 & Scenario3 Email already registered & V&V&V&I&Error; Email already registered\\[0.1ex]
+ \hline
+ RC 4 &  Scenario5 Password incorrect format & V&I&I&V&Error; Password incorrect format\\[0.1ex]
+ \hline
+ RC 5 &  Scenario 6 Passwords don't match & V&V&I&V&Error; Passwords don't match  \\ [0.1ex]
+ \hline
+\end{tabu}
+\end{center}
+
+
+\item Data Values
+
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Username & Password & Confirm Password & Email & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1 Successful sign up & Ronnie & abcdeF1 & abcdeF1 & r@up.co.za & Project setup screan displayed\\ [0.1ex]
+ \hline
+ RC 2 & Scenario2 Username unavailable & Vreda&abcdeF1&abcdeF1&v@up.co.za&Error; Username taken \\[0.1ex]
+ \hline
+  RC 3 & Scenario3 Email already registered &Ronnie&abcdeF1&abcdeF1&r@up.co.za&Error; Email already registered\\[0.1ex]
+ \hline
+\end{tabu}
+
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|X|X|} 
+ \hline
+ RC 4 &  Scenario5 Password incorrect format & Ronnie&12&12&r@up.co.za&Error; Password incorrect format\\[0.1ex]
+ \hline
+ RC 5 &  Scenario 6 Passwords don't match & Ronnie&abcdeF1&abcdeF2&r@up.ac.za&Error; Passwords don't match  \\ [0.1ex]
+ \hline
+\end{tabu}
+\end{center}
+
+\end{enumerate}
+\subsubsection{Login}
+\begin{enumerate}
+\item Scenarios
+
+\begin{center}
+ \begin{tabu}to 0.8\textwidth{|X[l]| X|X|} 
+ \hline
+ Scenario Name & Starting Flow & Alternate \\ [1ex]
+ \hline
+ Scenario 1 - Successful login & Basic Flow &\\ [1ex]
+ \hline
+ Scenario 2 - Username invalid & Basic Flow & A1  \\[1ex]
+ \hline
+ Scenario 3 - Password invalid & Basic Flow & A2  \\[1ex]
+ \hline
+\end{tabu}
+\end{center}
+
+\item Test Cases\\
+\\V - Valid\\ I - Invalid\\ n/a - not applicable
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Username & Password & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1 Successful login & V & V & Projects screen displayed\\ [0.1ex]
+ \hline
+ RC 2 & Scenario2 Username invalid & I&V&Error; No such user \\[0.1ex]
+ \hline
+  RC 3 & Scenario3 Password invalid & V&I&Error; Password invalid\\[0.1ex]
+ \hline
+
+\end{tabu}
+\end{center}
+\item Data Values
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Username & Password & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1 Successful login & Ronnie & abcdeF1 & Project screan displayed\\ [0.1ex]
+ \hline
+ RC 2 & Scenario2 Username invalid & Vreda&abcdeF1&Error; Username invalid \\[0.1ex]
+ \hline
+  RC 3 & Scenario3 Password invalid &Ronnie&abcdeF5&Error; Password invalid\\[0.1ex]
+ \hline
+\end{tabu}
+\end{center}
+\end{enumerate}
+
+\subsection{Algorithm Module}
+\subsubsection{Randomize}
+\begin{enumerate}
+\item Scenarios
+
+\begin{center}
+ \begin{tabu}to 0.8\textwidth{|X[l]| X|X|} 
+ \hline
+ Scenario Name & Starting Flow & Alternate \\ [1ex]
+ \hline
+ Scenario 1 - \newline Successful randomisation & Basic Flow &\\ [1ex]
+ \hline
+ Scenario 2 - \newline No subjects to randomise & Basic Flow & A1  \\[1ex]
+ \hline
+ Scenario 3 - \newline No groups created to randomise to & Basic Flow & A2  \\[1ex]
+ \hline
+ Scenario 4 - \newline No groups created or subjects to randomise & Basic Flow & A2  \\[1ex]
+ \hline
+\end{tabu}
+\end{center}
+
+\item Test Cases\\
+\\V - Valid\\ I - Invalid\\ n/a - not applicable
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Subjects & Groups & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1\newline Successful randomisation & V & V & Show randomised teams\\ [0.1ex]
+ \hline
+  RC 2 & Scenario2\newline No subjects to randomise & I&V&Error;\newline No input subjects \\[0.1ex]
+ \hline
+  RC 3 & Scenario3\newline No groups created to randomise to & V&I&Error;\newline No groups created\\[0.1ex]
+ \hline
+  RC 4 & Scenario4\newline No groups created to randomise to & I&I&Error;\newline No input subjects or groups\\[0.1ex]
+ \hline
+
+\end{tabu}
+\end{center}
+\item Data Values
+\begin{center}
+\begin{tabu}to 1.1\textwidth{|X[l]|X|X|X|X|} 
+ \hline
+ Test Case ID & Scenario Name & Subjects & Groups & Expected Result \\ [0.1ex]
+ \hline
+  RC 1 & Scenario1\newline Successful randomisation & Mojo Jojo;\newline Joe Welsch;\newline Zoltan & Group 1;\newline Group 2;\newline Group3 & Show randomised teams\\ [0.1ex]
+ \hline
+  RC 2 & Scenario2\newline No subjects to randomise & & Group 1;\newline Group 2;\newline Group3 &Error;\newline No input subjects \\[0.1ex]
+ \hline
+  RC 3 & Scenario3\newline No groups created to randomise to & Mojo Jojo;\newline Joe Welsch; \newline Zoltan & &Error;\newline No groups created\\[0.1ex]
+ \hline
+  RC 4 & Scenario4\newline No groups created to randomise to & & &Error;\newline No input subjects or groups\\[0.1ex]
+ \hline
+\end{tabu}
+\end{center}
+\end{enumerate}
+
+
+\end{document}

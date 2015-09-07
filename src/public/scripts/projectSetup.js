@@ -1,70 +1,22 @@
 var Subjects; // Object that holds Subject data extracted from CSV
 var user; //logged in user
-var projectData;
+var projectData; // Data related to new project
+
 $(document).ready(function(e) {
 
+    //Tooltip for elements
+    $('[data-toggle="tooltip"]').tooltip();
+
+    //Check login status
     if (sessionStorage.length == 0) // no user logged on.
     {
         alert("Please log in");
         window.location.href = "/";
-
-        $("#errorDialog").html("You are not logged in. <br> Please go back and log in or sign up. ");
-        $("#errorDialog").dialog({
-            resizable: false,
-            modal: true,
-            title: "Error",
-            height: 250,
-            width: 400,
-            buttons: {
-                "Ok": function () {
-                    $(this).dialog('close');
-                    //return to login
-                }
-            }
-        });
     }
     else //user is logged on.
     {
-
-        $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
-        user = JSON.parse(sessionStorage['User']);
-        var projectIDs = JSON.stringify(user.projectID);
-        $("#user").text("User: " + user.username);
-
-        //send project ids to server and get projects related to a user
-        if (user.projectID.length === 0) {
-            $("#Projects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
-        }
-        else if (user.projectID.length > 0) {
-            $.ajax({
-                type: "POST",
-                url: '/projectSetup',
-                data: {"ids": projectIDs},
-                dataType: "json",
-                success: function (dat, testStatus) {
-
-                    var data = JSON.stringify(dat);
-                    var displayProjects = "";
-
-                    for (var i = 0; i < dat.length; i++) {
-                        displayProjects += '<div><a class="projLink" type="submit" href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'">' + dat[i].projectName + '</a></div><br/>';
-                    }
-                    $("#Projects").html(displayProjects);
-
-                    $(".projLink").click(function (e) {
-                        //$.get("/teamSetup",{collection:$(this).attr('id')});
-                        window.location.href="/teamSetup";
-                    });
-
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-        }
-
+        init();
     }
-
 
     //Animation for Add project image
     $("#AddProjectsImg").hover(
@@ -75,13 +27,12 @@ $(document).ready(function(e) {
     //Add form to enter project details
     $("#AddProjectsImg").click(function(){
         $("#AddProjects").html( '<div id="AddProjectDetails">' +
-        '<form id="addProjForm">' +
-        'Project Name: <br/><input type="text" id="projectName"><br/><br/>' +
-        'Import subjects from .CSV file: <br/><input type="file" id="CSVInput" name="file" accept=".csv"/>' +
-        '<input type="submit" value="Submit"/>' +
-        '</form>' +
-        '</div>');
-        $( "input[type=submit], button, input[type=file]" ).button();
+                                    '<form id="addProjForm">' +
+                                        '<div class="form-group">Project Name: <br/><input class="form-control" type="text" id="projectName" required></div>' +
+                                        '<div class="form-group">Import subjects from .CSV file: <br/><input class="form-control" type="file" id="CSVInput" name="file" accept=".csv" required/></div>' +
+                                        '<input class="btn btn-default" type="submit" value="Submit"/>' +
+                                    '</form>' +
+                                '</div>');
 
         $("#CSVInput").onclick = uploadCSV();
 
@@ -89,64 +40,90 @@ $(document).ready(function(e) {
         $('#AddProjectDetails').on('submit', function(e){
             e.preventDefault();
 
-            projectData = {
-                'projectName'  : $("#projectName").val(),
-                'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
-                'admin' : true
-            };
+            if($("#projectName").val().indexOf("$") > -1)
+            {
+                alert("Your project name cannot contain the $ character");
+            }
+            else
+            {
+                projectData = {
+                    'projectName'  : $("#projectName").val(),
+                    'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
+                    'admin' : true
+                };
 
-            $.ajax({
-                type: "POST",
-                url: '/projectStore',
-                data: projectData,
-                success: function (dat, testStatus)
-                {
-                    user.projectID.push(dat);
-                    var userData =
+                $.ajax({
+                    type: "POST",
+                    url: '/projectStore',
+                    data: projectData,
+                    success: function (dat, testStatus)
                     {
-                        'userID':user.id,
-                        'projectIDs': user.projectID
-                    };
+                        if(dat == 0)
+                            alert("You already have a project called " + projectData.projectName);
+                        else if(dat == 1)
+                            alert("Could not save project");
+                        else {
+                            user.projectID.push(dat);
+                            var userData =
+                            {
+                                'userID': user.id,
+                                'projectIDs': user.projectID
+                            };
 
-                    //Update user to reflect new project created by him
-                    $.ajax({
-                        type: "POST",
-                        url: '/projToUser',
-                        data: {projectID: dat, id: user.id},
-                        success: function ()
-                        {
-                            subjToDB(projectData.subjects);
-                        },
-                        error: function (e) {
-                            console.log(e);
+                            //Update user to reflect new project created by him
+                            $.ajax({
+                                type: "POST",
+                                url: '/projToUser',
+                                data: {projectID: dat, id: user.id},
+                                success: function () {
+                                    subjToDB(projectData.subjects);
+                                },
+                                error: function (e) {
+                                    console.log(e);
+                                }
+                            });
                         }
-                    });
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });
-
-            /*$.ajax({
-                type: "POST",
-                url: '/subjectsStore',
-                data: "subjectsName="+$("#projectName").val() + "_" + "Subjects"+"&subjects="+JSON.stringify(Subjects),
-                success: function (dat, testStatus) {
-
-
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            });*/
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
         });
     });
-
-
-
-
 });
-//sunjects Array to db
+//Load page elements and preferences
+function init()
+{
+    $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
+    user = JSON.parse(sessionStorage['User']);
+    var projectIDs = JSON.stringify(user.projectID);
+    $("#righty").prepend(user.username);
+
+    //send project ids to server and get projects related to a user
+
+    if (user.projectID == undefined || user.projectID.length == 0 ) {
+        $("#MyProjects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
+    }
+    else if (user.projectID.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: '/projectSetup',
+            data: {"ids": projectIDs},
+            dataType: "json",
+            success: function (dat, testStatus) {
+
+                LoadProjects(dat);
+
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+}
+
+//subjects Array to db
 function subjToDB(colName)
 {
     $.ajax({
@@ -177,23 +154,6 @@ function uploadCSV()
             reader.onload = function(e) {
 
                 var result = e.target.result;   // browser completed reading file
-                //$("#dialog-confirm").html("Successfully read the contents of the file.");
-
-                /*Define the Dialog and its properties.
-                $("#dialog-confirm").dialog({
-                    resizable: false,
-                    modal: true,
-                    title: "Success",
-                    height: 250,
-                    width: 400,
-                    buttons: {
-                        "Ok": function () {
-                            $(this).dialog('close');
-                        }
-                    },
-                    show: { effect: "scale", duration: 250 },
-                    hide: { effect: "scale", duration: 250 }
-                });*/
 
                 var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
                 var headings = arrayOfTheInput[0].split(",");
@@ -224,4 +184,56 @@ function uploadCSV()
     }
 }
 
+/*function ManageProjects(project,dat)
+{
+    $("#ProjectsTitle").html(   "<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px;padding-bottom: 7.5px'>" + 'Manage ' + project + "</h3>"+
+                                "<div id='back' class='btn-group pull-right' data-toggle='tooltip' title='Back to My Projects'>"+
+                                    "<a href='#' id='loadProjects' class='btn btn-default btn-sm glyphicon glyphicon-menu-left'></a>"+
+                                "</div>");
+
+    //reload projects when back button pressed
+    $("#loadProjects").click(function (e) {
+        LoadProjects(dat);
+    });
+
+
+    //add buttons to manage projects
+    $("#MyProjects").html("<div class='btn-group' role='group' aria-label='...'>" +
+                            "<a id='openProject' class='btn btn-default' href='/teamSetup?collection="+user.id +'_'+project+'_'+'Subjects'+"'>Open Project</a>"+
+                            "<button id='editProject'  class='btn btn-default'>Edit Project</button>"+
+                            "</div>");
+
+    //change project name and subjects collection associated to it
+
+    $("#editProject").click(function(e){
+        $("#MyProjects").html('<div class="form-group">Project Name: <br/><input class="form-control" type="text" id="editProjectName" value="'+project+'" required></div>' +
+        '<button id="change" class="btn btn-default">Change</button>' +
+        '</form>' +
+        '</div>');
+    });
+
+
+
+}*/
+
+
+function LoadProjects(dat)
+{
+    //$("#ProjectsTitle").html("<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px; padding-bottom: 7.5px'>" + 'My Projects');
+    var data = JSON.stringify(dat);
+    var displayProjects = "";
+
+    //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
+    for (var i = 0; i < dat.length; i++)
+    {
+        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a></div>';
+    }
+
+    $("#MyProjects").html(displayProjects);
+
+    //Open manage projects section
+/*    $(".singleProject").click(function (e) {
+        ManageProjects($(this).children("a").attr("id"),dat);
+    });*/
+}
 

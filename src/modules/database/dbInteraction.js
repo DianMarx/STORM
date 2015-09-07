@@ -100,13 +100,20 @@ module.exports = {
     {
         projectSchema.set('collection', "Projects");
         col = mongoose.model("Projects", projectSchema);
-        var insert = new col(JSON.parse(doc));
+        data = JSON.parse(doc);
+        col.findOne({subjects: data.subjects}, function(err, ret) // check if user has a project with the same name
+        {
+            if(ret == null)
+            {
+                    var insert = new col(JSON.parse(doc));
+                    insert.save(function (err,docsInserted) {
+                        if(err){callback(1);}
+                        else callback(docsInserted);
+                    });
+            } else callback(0);
 
-        insert.save(function (err,docsInserted) {
-            callback(docsInserted);
-            if(err){console.log("Save failed");}
-            else console.log("Saved!");
         });
+
     },
     removeDocument: function(colName, docId)
     {

@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     <script src="scripts/teamSetupJS.js"></script>
     <link rel="stylesheet" href="style/css.css">
-
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <script src="scripts/algorithm.js"></script>
     <script src="scripts/shuffling.js"></script>
     <script src="views/tests.js"></script>
@@ -19,57 +20,75 @@
 <script>$(document).ready(function(e){
     //array van subject objects
     var subjects = JSON.parse($('#jsondat').text());
-    for(var i = 0; i < subjects.length; i++)
-    {
-        if(subjects.name == undefined)
-        {
-            $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].Name + "<div style='float: right'>" + "|" + subjects[i].Mark + "</div>" + '</div>');
-        }
-        else
-            $('#subjects').append('<div class="subject" id="' + subjects[i].id + '" draggable="true" ondragstart="drag(event)">' + subjects[i].name + '</div>');
-    }
+
 
 });</script>
 <body>
-    <div class="header">
-        <h2 class="headerMessages">Team Setup</h2>
-        <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
+<nav class="navbar navbar-default">
 
+    <div class="container-fluid">
+        <div class=" navbar-form navbar-right" id="righty">
+
+            <a id="logOutBtn" href=""><button class="btn btn-default">Log Out</button> </a>
+        </div>
+        <div class="nav navbar-nav">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">My Projects</a></li>
+
+        </div>
     </div>
+</nav>
+<div class="subjectBox panel panel-default" style="margin: 0;">
+    <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
+    <div class="panel-body collapse" id="subjectSetup">
+        <table class="table" id="subjTable">
+            <thead><tr id="subjectFields">
+
+            </tr></thead>
+            <tbody id="subjectsTable">
+
+            </tbody>
+        </table>
+        <button class="btn btn-default">Save</button>
+        <button class="btn btn-default">Reload</button>
+    </div>
+</div>
+<div class="algorithmBox panel panel-default" style="margin: 0;">
+    <div class="panel-heading" data-toggle="collapse" data-target="#shuffleSetup">Shuffle setup<button class="form-control" id="shuffle">Shuffle</button> </div>
+    <div class="panel-body collapse container-fluid" id="shuffleSetup">
+    <div class="row" id="shuffleRow">
+    <div><button type='button' id='addAlg'><span aria-hidden='true'>+</span> </button></div>
+    </div>
+    </div>
+</div>
+
+<div style="height: 100px;">
+    <div style="text-align: left; margin:5px; position: absolute;" id="selectFields">Show fields: <br></div>
+    <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
+</div>
     <div class="main">
-        <div class="teamSetup">
+
             <div class="members">
                 <p style="font-size: large">Subject Pool</p>
-                <div id="subjects" class="names" ondrop="drop(event)" ondragover="allowDrop(event)">
+
+                <div id="subjects" class="names">
                     <!--<%for(var i = 0; i < subjects.length; i++){%>
                     <div class="subject" id=<%= subjects[i].id %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
                     </div> <% } %> -->
                 </div>
                 <br><br><br>
-                <div id="options">
-                    <p style="font-size:120%; padding:0; margin:0;">Options</p><hr><br>
-                    Number of teams:&nbsp;&nbsp;&nbsp;&nbsp;<input id="totalTeams" type="number" min="0"/><br><br>
-                    Import from .CSV file: <input type="file" id="CSVInput" name="file" accept=".csv"/>
-                </div>
+
 
             </div>
 
-            <div class="shuffling_selection">
-                <p id="shuffleHeading" style="font-size: large">Shuffling Method</p>
-                <button name="Randomize" id="randomize">Randomize</button><br><br>
-                <button name="Shuffle By" id="shuffle">Shuffle Teams By</button><br>
-
-                <input type="radio" name="shuffleRad" value="0" checked > Diverse <br>
-                <input type="radio" name="shuffleRad" value="1" > Similar
-            </div>
 
             <div class="teams">
-                <p style="font-size: large; text-align: center">Teams</p>
+                <p style="font-size: large; text-align: center">Sandbox</p>
                 <!-- This is how the team boxes will look like -->
                 <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
                 <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
             </div>
-        </div>
+
     </div>
 
 

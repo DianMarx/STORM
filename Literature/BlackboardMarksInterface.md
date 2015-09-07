@@ -1,0 +1,1 @@
+A document describing how this feature work in Blackboard can be found at https://help.blackboard.com/en-us/Learn/9.1_SP_10_and_SP_11/Instructor/080_Grade_Center/013_Uploading_or_Downloading_Grade_Center_Items_for_Working_Offline
