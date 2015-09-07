@@ -85,7 +85,36 @@ $(document).ready(function(e) {
         });
     });
 });
+//Load page elements and preferences
+function init()
+{
+    $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
+    user = JSON.parse(sessionStorage['User']);
+    var projectIDs = JSON.stringify(user.projectID);
+    $("#righty").text(user.username);
 
+    //send project ids to server and get projects related to a user
+
+    if (user.projectID == undefined || user.projectID.length == 0 ) {
+        $("#MyProjects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
+    }
+    else if (user.projectID.length > 0) {
+        $.ajax({
+            type: "POST",
+            url: '/projectSetup',
+            data: {"ids": projectIDs},
+            dataType: "json",
+            success: function (dat, testStatus) {
+
+                LoadProjects(dat);
+
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+}
 
 //subjects Array to db
 function subjToDB(colName)
@@ -148,56 +177,44 @@ function uploadCSV()
     }
 }
 
-function ManageProjects(project)
+function ManageProjects(project,dat)
 {
-    $("#ProjectsTitle").html("Manage " + project);
+    $("#ProjectsTitle").html("<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px;'>" + 'Manage ' + project + "</h3><div id='back' class='btn-group pull-right'>"+
+                                            "<a href='#' id='loadProjects' class='btn btn-default btn-sm glyphicon glyphicon-menu-left'></a>"+
+                                    "</div>");
+
+    $("#loadProjects").click(function (e) {
+        LoadProjects(dat);
+    });
+
+
+
+    $("#MyProjects").html("<div class='btn-group' role='group' aria-label='...'>" +
+                            "<a id='openProject' class='btn btn-default' href='/teamSetup?collection="+user.id +'_'+project+'_'+'Subjects'+"'>Open Project</a>"+
+                            "<a  class='btn btn-default'>Edit Project</button>"+
+                            "<a  class='btn btn-default'>Do Something</a>"+
+                            "</div>");
+
+
 }
 
 function LoadProjects(dat)
 {
+    $("#ProjectsTitle").html("<h3 id='ProjectsTitle' class='panel-title pull-left' style='padding-top: 7.5px;'>" + 'My Projects');
     var data = JSON.stringify(dat);
     var displayProjects = "";
 
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
-    for (var i = 0; i < dat.length; i++) {
+    for (var i = 0; i < dat.length; i++)
+    {
         displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to manage project"><a id="'+dat[i].projectName+'" class="projLink" type="submit" href="#">' + dat[i].projectName + '</a></div>';
     }
 
     $("#MyProjects").html(displayProjects);
+
+    //Open manage projects section
+    $(".singleProject").click(function (e) {
+        ManageProjects($(this).children("a").attr("id"),dat);
+    });
 }
 
-//Load page elements and preferences
-function init()
-{
-    $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
-    user = JSON.parse(sessionStorage['User']);
-    var projectIDs = JSON.stringify(user.projectID);
-    $("#righty").text(user.username);
-
-    //send project ids to server and get projects related to a user
-
-    if (user.projectID == undefined || user.projectID.length == 0 ) {
-        $("#MyProjects").html("You do not have any active projects.<br><br>Click the button below to start a new project.");
-    }
-    else if (user.projectID.length > 0) {
-        $.ajax({
-            type: "POST",
-            url: '/projectSetup',
-            data: {"ids": projectIDs},
-            dataType: "json",
-            success: function (dat, testStatus) {
-
-                LoadProjects(dat);
-
-                //Open manage projects section
-                $(".singleProject").click(function (e) {
-                    ManageProjects($(this).children("a").attr("id"));
-                });
-
-            },
-            error: function (e) {
-                console.log(e);
-            }
-        });
-    }
-}
