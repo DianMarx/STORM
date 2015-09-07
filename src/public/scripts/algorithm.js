@@ -3,14 +3,50 @@
 subs contains all subjects as an object array
 algs is an array specifying
         -field
-        -shuffleType
+        -type
+        -if type is matchGroup groupArray
         -rules
         -weight
 numGroups like numTeams
  */
 function goShuffle(subs, algs, numGroups)
 {
+    for(var i = 0; i < algs.length; i++)
+    {
+        switch(algs[i].type)
+        {
+            case 'Similar': similarShuffle(subs,numGroups, algs[i].field);
+                            break;
+            case 'Diverse': diverseShuffle(subs,numGroups, algs[i].field);
+                break;
+            case 'By Roles': alert("Has yet to be implemented");
+                break;
+        }
+    }
 
+}
+function diverseShuffle(subs,numGroups,field)
+{
+    function compare(a,b) {
+        if (a[field] < b[field])
+            return -1;
+        if (a[field] > b[field])
+            return 1;
+        return 0;
+    }
+    var numSubj = subs.length;
+    subs.sort(compare);
+
+    var allowed = getMaxes(numSubj, numGroups);
+    var a = 0;
+    for(var p = 0; p < subs.length; p++){
+        subs[p].group = ++a;
+        if(a == numGroups)
+        {
+            a = 0;
+        }
+    }
+    sendToTables(subs);
 }
 function similarShuffle(subs,numGroups,field)
 {
@@ -45,9 +81,9 @@ function sendToTables(subs)
 var numSubs = subs.length;
     for(var i = 0; i < numSubs; i++)
     {
-        var sub = $('#' + numSubs.id);
-        var to = $('.' + numSubs.group).find('.subjBody');
-        $(sub).appendTo(to); done = true;
+        var to = $('.' + subs[i].group).find('.subjBody');
+
+        $('#' + subs[i].id).appendTo(to);
     }
 }
 
@@ -55,17 +91,15 @@ var numSubs = subs.length;
 function getMaxes(numSubj, numGroups){
 
     var max = numSubj/numGroups;
-    alert(max);
+
     var remaining = 0;
     if(max % 2 != 0){
 
         var temp = max - Math.floor(max);
-
-        remaining = Math.ceil(temp * numGroups);
+        remaining = Math.floor(temp * numGroups);
 
     }
     max = Math.floor(max);
-
     var allowed = [numGroups];
     for(var i = 0; i < numGroups; i++)
     {

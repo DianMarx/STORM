@@ -226,7 +226,17 @@ BODY:last-child .signin {
     padding: 10px;
     z-index: 2;
 }
-
+.algPart{
+    width: 200px;
+    resize: horizontal;
+    margin: 15px;
+    border: 1px solid black;
+    float: left;
+    padding: 15px;
+}
+#closeAlg{
+    margin: -10px;
+}
 .teamAdd{
     width: 200px;
     height: 300px;
@@ -452,10 +462,15 @@ section {
     padding: 10px 10px 10px 10px;
 }
 
-#totalTeams{
+#totalTeams, #maxPerGroup{
     width:50px;
 }
-
+#shuffle{
+    width: 70px;
+    float: right;
+    margin-right: 15px;
+    margin-top: -5px;
+}
 #Projects{
     opacity: 0.8;
     margin-left: 30%;

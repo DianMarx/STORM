@@ -129,7 +129,10 @@ $(document).ready(function(e) {
         }
     });
 
+function updateTeams()
+{
 
+}
 
 
     $('#randomize').click(function(e) {
@@ -140,7 +143,18 @@ $(document).ready(function(e) {
         //var parameter = $(".shuffleBy:checked").val();
         //alert(parameter);
         //shuffle($('.names').find('.subjBody').children().length,numTeamGroups-1,subjects);
-        similarShuffle(subjects,numTeamGroups,'Name');
+
+        var algs = [];
+        var i = 0;
+        $('.algPart').each(function(){
+            var alg = new Object();
+            alg.field = $(this).find('#selectField option:selected').val();
+            alg.type = $(this).find('#shuffleSelect option:selected').val();
+            alg.weight = parseInt($(this).find('#weight').val());
+            algs.push(alg);
+        });
+
+        goShuffle(subjects,algs,numTeamGroups-1);
     });
 
     $("#plusButton").click(function(e){
@@ -255,6 +269,38 @@ $(document).ready(function(e) {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
         }
     });
+
+    addAlgorithmBox();
+    $('#addAlg').click(function (e) {
+       addAlgorithmBox();
+    });
+    //nog klaar maak
+    $("#maxPerGroup").change(function(e){
+
+        var groups = parseInt(Math.ceil(subjects.length/$(this).val()));
+        $("#totalTeams").val(groups);
+    });
+
+    function addAlgorithmBox()
+    {
+        //appendTO
+        var div = "<div class='algPart col-*-*'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+        for(var i = 0; i < fields.length; i++)
+        {
+         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+        }
+        div += "</select>";
+         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option><option value='By Roles'>By Roles</option></select>";
+         div += "<br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+        $("#shuffleRow").prepend(div);
+
+        //$('#closeAlg').unbind();
+        $('#closeAlg').click(function(e){
+           $(this).parent().detach();
+        });
+
+
+    }
 });
 
 //End of on document load
