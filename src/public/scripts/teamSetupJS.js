@@ -3,235 +3,188 @@
  */
 
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
-
+var testUser = false;
+var user;
 $(document).ready(function(e) {
 
-    $( "input[type=submit], a, button, input[type=file]" ).button();
 
-    document.getElementById("CSVInput").onchange = function(e){
+    if (typeof sessionStorage === 'undefined') {
+        testUser = true;
+    }
+    else {
+        var user = JSON.parse(sessionStorage['User']);
+        //Page Setup for user
+        $("#righty").prepend(user.username + '  ');
 
-        var myFileInput = document.getElementById('CSVInput');
-        var myFile = myFileInput.files[0];
+    }
+    $("input[type=submit], a, button, input[type=file]").button();
 
-        var file = document.getElementById('CSVInput').files[0];
-        if (file) {
-            // create reader
-            var reader = new FileReader();
-            reader.readAsText(file);
-            reader.onload = function(e) {
-                var result = e.target.result;   // browser completed reading file
-                $("#dialog-confirm").html("Successfully read the contents of the file.");
+    //Moved array van subject objects
+    var subjects = JSON.parse($('#jsondat').text());
 
-                // Define the Dialog and its properties.
-                $("#dialog-confirm").dialog({
-                    resizable: false,
-                    modal: true,
-                    title: "Success",
-                    height: 250,
-                    width: 400,
-                    buttons: {
-                        "Ok": function () {
-                            $(this).dialog('close');
-                        }
-                    },
-                    show: { effect: "scale", duration: 250 },
-                    hide: { effect: "scale", duration: 250 }
-                });
+    //gets all the subjects' fields
+    var fields = [];
+    for (var name in subjects[0]) {
 
-                var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
-                var headings = arrayOfTheInput[0].split(",");
-
-                document.getElementById("subjects").innerHTML = "";
-
-                var JSONObject = []; //Hierdie is die JSON object wat in die DB gestoor gaan word.
-
-                for(i = 1; i < arrayOfTheInput.length-1; i++)
-                {
-                    var line = arrayOfTheInput[i].split(",");
-
-                    tempObj = {};
-                    for (var k = 0; k < headings.length; k++)
-                    {
-                        if (typeof line[k] == 'undefined')
-                        {
-                            tempObj[headings[k]] = "";
-                        }
-                        else
-                            tempObj[headings[k]] = line[k];
-                    }
-                    JSONObject.push(tempObj);
-                }
-
-                for(i = 0; i < JSONObject.length; i++)
-                {
-                    document.getElementById("subjects").innerHTML += "<div class='subject' id='" + (i+1) + "' draggable='true' ondragstart='drag(event)'>"+ JSONObject[i]["Name"] +"</div>";
-                }
-
-                //alert(JSON.stringify(JSONObject));
-            };
+        if (name[0] != '_') {
+            fields.push(name);
+            $('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
+    populateTable();
 
-    $("#totalTeams").change(function(){
-        var empty = true;
-        $(".teams").find("div").each(function(){
+    //toSubjects table
+    function populateTable() {
 
-            if ($(this).find("div").length >= 1)
-            {
-                empty = false;
-            }
-        });
+    $('#subjectsTable').empty();
+    for (var i = 0; i < subjects.length; i++) {
+        var sub = subjects[i];
 
-        if (!empty)
+        $('<tr>').appendTo("#subjectsTable");
+        for (var p = 0; p < fields.length; p++) {
+            $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
+        }
+        $('</tr>').appendTo("#subjectsTable");
+    }
+}
+    populateSubjectPool()
+    $(".table").selectable();
+    //Loads subject pool with first variable(name)
+    function populateSubjectPool()
+    {
+        $('#subjects').empty();
+        $('#subjects').append('<table class="table"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody"></tbody></table>');
+        for(var i = 0; i < subjects.length; i++)
         {
-            buttons = {
-                "Yes": function () {
-                    var numTeams = numTeamGroups;
-                    for (var i = 1; i < numTeams; i++)
-                    {
-                        var element = $("."+ 1).find("img");
-                        confirmDeleteTeamTable(element);
-                    }
+            var sub = subjects[i];
+            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' ><td>"+sub[fields[0]]+"</td></tr>")
+        }
 
-                    for(var i = 0; i < $("#totalTeams").val(); i++)
-                    {
-                        if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                            $("<br><br>").insertBefore($("#teamAdd"));
-                            numTeamGroups++;
+    }
 
-                        }
-                        else{
-                            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                            numTeamGroups++;
-                        }
-                    }
 
-                    $(".minusButton").off();
+    //User selectable fields to view
+    function addField(field)
+    {
+        $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
+        for(var i = 0; i < subjects.length; i++)
+        {
+            var sub = subjects[i];
+            $("#"+sub.id).append("<td id='"+field +"'>"+sub[field]+"</td>");
+        }
+    }
+    //Removes from all records
+    function removeField(field)
+    {
+        $("th#"+ field).remove();
+        $("td#"+ field).remove();
+    }
 
-                    $(".minusButton").on("click", function(e){
-                        var parent = $(this).parent();
-                        if (parent.find("div").length >= 1){
-                            fnOpenNormalDialog($(this));
-                        }
-                        else
-                        {
-                            confirmDeleteTeamTable($(this));
-                            $("#totalTeams").val(numTeamGroups-1);
-                        }
-                    });
+        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i][0] != '_') {
 
-                    $(".leftArrow").off();
+        var temp = fields[i];
+        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+            if(fields[i].toLowerCase() != 'name')
+            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+    }
+    }
 
-                    $(".leftArrow").on("click", function(e){
-                        var parent = $(this).parent();
-                        if (parent.find("div").length >= 1){
-                            moveBackDialog($(this));
-                            $(".leftArrow").off();
-
-                            $(".leftArrow").on("click", function(e){
-                                var parent = $(this).parent();
-                                if (parent.find("div").length >= 1){
-                                    moveBackDialog($(this));
-                                }
-                            });
-                        }
-                    });
-
-                    $("#totalTeams").val(numTeamGroups-1);
-
-                    $(this).dialog('close');
-                },
-                "No": function () {
-                    $("#totalTeams").val((numTeamGroups-1));
-                    $(this).dialog('close');
-                }
-            };
-
-            dialogMessage("Change total team boxes", "There are subjects in some of the team boxes.<br>Changing this value will move all participants back to the spawn pool.<br><br>Are you sure you want to continue?<br>HINT: You can add and remove team boxes to the right.",buttons);
-            $("#dialog-confirm").html();
+    //user checks a checkbox
+    $(".viewBy").change(function()
+    {
+        if(this.checked) {
+            addField(this.value);
         }
         else
         {
-            var numTeams = numTeamGroups;
-            for (var i = 1; i < numTeams; i++)
-            {
-                var element = $("."+ 1).find("img");
-                confirmDeleteTeamTable(element);
-            }
-
-            for(var i = 0; i < $("#totalTeams").val(); i++)
-            {
-                if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                    $("<br><br>").insertBefore($("#teamAdd"));
-                    numTeamGroups++;
-
-                }
-                else{
-                    $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-                    numTeamGroups++;
-                }
-            }
-
-            $(".minusButton").off();
-
-            $(".minusButton").on("click", function(e){
-                var parent = $(this).parent();
-                if (parent.find("div").length >= 1){
-                    fnOpenNormalDialog($(this));
-                }
-                else
-                {
-                    confirmDeleteTeamTable($(this));
-                    $("#totalTeams").val(numTeamGroups-1);
-                }
-            });
-
-            $(".leftArrow").off();
-
-            $(".leftArrow").on("click", function(e){
-                var parent = $(this).parent();
-                if (parent.find("div").length >= 1){
-                    moveBackDialog($(this));
-                    $(".leftArrow").off();
-
-                    $(".leftArrow").on("click", function(e){
-                        var parent = $(this).parent();
-                        if (parent.find("div").length >= 1){
-                            moveBackDialog($(this));
-                        }
-                    });
-                }
-            });
-
-            $("#totalTeams").val(numTeamGroups-1);
+            removeField(this.value);
         }
     });
 
-    $("#totalTeams").val((numTeamGroups-1));
+
+
+//Change number of groups
+    $("#totalTeams").change(function() {
+        var empty = true;
+        $(".teams").find("div").each(function () {
+
+            if ($(this).find("tr").length >= 2) {
+                empty = false;
+            }
+        });
+        var c = false;
+        if(!empty)
+        {
+            c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
+        }
+        if(empty || c){
+            $(".subject").detach().appendTo("#subjects table .subjBody");
+            $(".teamTables").detach();
+            numTeamGroups = 1;
+            var temp = parseInt($("#totalTeams").val());
+            for(var r = 0; r < temp; r++){
+            $("#plusButton").click();}
+        }
+    });
+
+function updateTeams()
+{
+
+}
+
 
     $('#randomize').click(function(e) {
         randomize($('.names').children().length,numTeamGroups-1);
     });
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
-        shuffle($('.names').children().length,numTeamGroups-1);
+        //var parameter = $(".shuffleBy:checked").val();
+        //alert(parameter);
+        //shuffle($('.names').find('.subjBody').children().length,numTeamGroups-1,subjects);
+
+        var algs = [];
+        var i = 0;
+        $('.algPart').each(function(){
+            var alg = new Object();
+            alg.field = $(this).find('#selectField option:selected').val();
+            alg.type = $(this).find('#shuffleSelect option:selected').val();
+            alg.weight = parseInt($(this).find('#weight').val());
+            algs.push(alg);
+        });
+
+        goShuffle(subjects,algs,numTeamGroups-1);
     });
 
     $("#plusButton").click(function(e){
-        if(numTeamGroups % 3 == 0 && numTeamGroups != 0) {
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-            $("<br><br>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
-        }
-        else{
-            $("<div class='teamTables "+(numTeamGroups)+"' ondrop='drop(event)' ondragover='allowDrop(event)'><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'></div>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
-        }
 
+            var temp = '<table class="table" id="tables"><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody"></tbody></table>';
+            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+            numTeamGroups++;
+            $("#totalTeams").val(numTeamGroups-1);
+
+
+        $('.teamTables').dblclick(function(){
+
+            var isDisabled = $(this).draggable('option', 'disabled');
+            if(isDisabled)
+                makeDraggable(this);
+            else
+                disableDrag(this);
+        });
+
+        $(".teamTables").droppable({
+            accept: '.subject',
+            cursor: "normal",
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            }
+        });
+        $('.teamTables').draggable({
+            containment:'parent'
+        });
         $(".minusButton").off();
 
         $(".minusButton").on("click", function(e){
@@ -250,13 +203,13 @@ $(document).ready(function(e) {
 
         $(".leftArrow").on("click", function(e){
             var parent = $(this).parent();
-            if (parent.find("div").length >= 1){
+            if (parent.find("tr").length >= 2){
                 moveBackDialog($(this));
                 $(".leftArrow").off();
 
                 $(".leftArrow").on("click", function(e){
                     var parent = $(this).parent();
-                    if (parent.find("div").length >= 1){
+                    if (parent.find("tr").length >= 2){
                         moveBackDialog($(this));
                     }
                 });
@@ -266,7 +219,7 @@ $(document).ready(function(e) {
 
     $(".minusButton").on("click", function(e){
         var parent = $(this).parent();
-        if (parent.find("div").length >= 1){
+        if (parent.find("tr").length >= 2){
             fnOpenNormalDialog($(this));
         }
         else
@@ -278,13 +231,76 @@ $(document).ready(function(e) {
 
     $(".leftArrow").on("click", function(e){
         var parent = $(this).parent();
-        if (parent.find("div").length >= 1){
+        if (parent.find("tr").length >= 2){
             moveBackDialog($(this));
         }
     });
 
     $("#plusButton").click();
     $("#plusButton").click();
+
+    //dragable
+
+    var k = {};
+    $(".subject").draggable({
+
+        helper: "clone",
+        cursor: "move",
+        opacity: "0.5",
+        revert: "invalid",
+        start: function(){
+            k.tr = this;
+        }
+
+    });
+
+    $(".teamTables").droppable({
+        accept: '.subject',
+        cursor: "normal",
+        drop: function(event, ui) {
+            //var temp = alert();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+        }
+    });
+    $("#subjects").droppable({
+        accept: '.subject',
+        drop: function(event, ui) {
+            //var temp = alert();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+        }
+    });
+
+    addAlgorithmBox();
+    $('#addAlg').click(function (e) {
+       addAlgorithmBox();
+    });
+    //nog klaar maak
+    $("#maxPerGroup").change(function(e){
+
+        var groups = parseInt(Math.ceil(subjects.length/$(this).val()));
+        $("#totalTeams").val(groups);
+    });
+
+    function addAlgorithmBox()
+    {
+        //appendTO
+        var div = "<div class='algPart col-*-*'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+        for(var i = 0; i < fields.length; i++)
+        {
+         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+        }
+        div += "</select>";
+         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option><option value='By Roles'>By Roles</option></select>";
+         div += "<br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+        $("#shuffleRow").prepend(div);
+
+        //$('#closeAlg').unbind();
+        $('#closeAlg').click(function(e){
+           $(this).parent().detach();
+        });
+
+
+    }
 });
 
 //End of on document load
@@ -307,6 +323,16 @@ function fnOpenNormalDialog(element) {
     $("#dialog-confirm").html();
 }
 
+function makeDraggable(t){
+
+    $(t).draggable('enable');
+}
+function disableDrag(t)
+{
+
+    $(t).draggable("disable");
+}
+
 function confirmDeleteTeamTable(element)
 {
     var boxID = element.attr('class');
@@ -316,8 +342,8 @@ function confirmDeleteTeamTable(element)
 
     $(".teams br").remove();
 
-    $("."+boxID).find("div").each(function(){
-        $(".names").append($(this));
+    $("."+boxID).find(".subjBody tr").each(function(){
+        $(".names table tbody").append($(this));
     });
 
     $("."+boxID).remove();
@@ -326,10 +352,7 @@ function confirmDeleteTeamTable(element)
     var fromHere = false;
     $(".teams").find(".teamTables").each(function(){
         i++;
-        if (i % 3 == 0)
-        {
-            $("<br/><br/>").insertAfter($(this));
-        }
+
 
         if ((i) == boxID)
             fromHere = true;
@@ -367,11 +390,11 @@ function moveBack(element){
     var boxID = element.attr('class');
     boxID = boxID.replace("leftArrow lA", "");
 
-    $("."+boxID).find("div").each(function(){
-        $(".names").append($(this));
+    $("."+boxID).find(".subjBody tr").each(function(){
+        $(".names table tbody").append($(this));
     });
 
-    $("."+boxID).html('<img src="images/minus_button.png" class="minusButton mB'+boxID+'" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA'+boxID+'" alt="move back" height="25" width="25">');
+    $("."+boxID).find('.subject').detach();
 
     $(".minusButton").off();
 
@@ -391,13 +414,13 @@ function moveBack(element){
 
     $(".leftArrow").on("click", function(e){
         var parent = $(this).parent();
-        if (parent.find("div").length >= 1){
+        if (parent.find("tr").length >= 2){
             moveBackDialog($(this));
             $(".leftArrow").off();
 
             $(".leftArrow").on("click", function(e){
                 var parent = $(this).parent();
-                if (parent.find("div").length >= 1){
+                if (parent.find("tr").length >= 2){
                     moveBackDialog($(this));
                 }
             });
@@ -405,19 +428,8 @@ function moveBack(element){
     });
 }
 
-function allowDrop(ev) {
-    ev.preventDefault();
-}
 
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
 
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
-}
 
 if (window.File && window.FileReader && window.FileList && window.Blob) {
     // Great success! All the File APIs are supported.

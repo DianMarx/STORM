@@ -32,7 +32,11 @@ module.exports=function(app) {
     });
 
     app.get('/teamSetup', function (req, res) {
-        db.getCollection('testCol', function (data) {
+
+        if (req.query.collection === undefined) return;
+        var collection = req.query.collection;
+
+        db.getCollection(collection, function (data) {
             res.render('teamSetup', {subjects: data});
         });
     });
@@ -50,6 +54,30 @@ module.exports=function(app) {
         db.insertDocument(req.body.collection, req.body.data)
 
 
+    });
+
+    app.post('/update', function (req, res) {
+
+
+        db.updateDocument(req.body.collection, req.body.id, req.body.data)
+        //console.log("yolo");
+
+    });
+
+    app.post('/projToUser', function (req, res) {
+
+        //console.log(req.body.id + " "+req.body.projectID );
+        db.updateUser(req.body.id, req.body.projectID)
+        //console.log("yolo");
+        res.send("");
+
+    });
+
+    app.post('/subjToDB', function (req, res) {
+
+        //console.log(req.body.data);
+        db.subjToDB(req.body.data, req.body.collection);
+        res.send("");
     });
 
     app.post('/login', function (req, res) {
@@ -87,6 +115,39 @@ module.exports=function(app) {
         {
             res.send(data);
         });
+
+    });
+
+    app.post('/subjectsStore', function (req, res)
+    {
+        var subjects = req.body.subjects;
+        subjects = JSON.parse(subjects);
+        var SubjectsName =  req.body.subjectsName;
+
+        /*Insert Subject Data*/
+
+
+    });
+    app.post('/projectStore', function (req, res)
+    {
+
+        var projData = JSON.stringify(req.body);
+        db.insertProject(projData,function(status)
+        {
+            if(status != 0 || status != 1) {
+                var newID = status._id;
+                res.send(newID);
+            }else
+                res.send(status);
+
+            //console.log(JSON.stringify(status));
+        });
+
+        //0 Username exists
+        //1 failure
+        //2 success
+        /*Insert Subject Data*/
+
 
     });
 

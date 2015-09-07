@@ -13,6 +13,7 @@
     src: url(../fonts/OpenSans-Italic.ttf);
 }
 
+
 body{
     font-family: OpenSans;
     margin:0;
@@ -29,12 +30,19 @@ body{
     vertical-align:middle;
     border-bottom: 1px solid #e6e6e6;
 }
-
+.algorithBox
+{
+    width: 100%;
+}
+#shuffleSetup{
+    width: 100%;
+}
 .headerMessages{
     position:relative;
     padding-left:30px;
     top:30px;
     margin:0;
+    float: left;
 }
 
 hr {
@@ -66,8 +74,24 @@ hr:before {
     width:100%;
     text-align: center;
 }
+.vid
+{
+    text-align: left;
+    position: absolute;
+}
+.signup{
+    width: 250px;
+    float: right;
+    position: relative;
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 3px;
+    backface-visibility: hidden;
+    background-color: rgba(255, 255, 255, 0.75);
 
-.signup,.signin{
+}
+
+.signin{
     text-align: left;
     display: inline-block;
     padding: 20px;
@@ -126,11 +150,14 @@ BODY:last-child .signin {
     margin-top: auto;
     margin-top: 25%;
 }
-
+.logo{
+    right:10px;
+}
 #logo{
-    position: absolute;
+    float: right;
+    position: relative;
+    top: 10px;
     right: 10px;
-    top:10px;
 }
 
 .signHeadings{
@@ -146,20 +173,21 @@ BODY:last-child .signin {
     width: 100%;
 	vertical-align:top;
     margin-top:50px;
+
 }
 
-.members{
-    text-align: left;
-    height: 300px;
-    display: inline-block;
-	vertical-align:top;
-}
 
 .teams{
     text-align: left;
     display: inline-block;
     vertical-align:top;
-    margin-left:50px;
+    padding-left:400px;
+    width: 100%;
+    height: 100%;
+    resize: vertical;
+    position: relative;
+    z-index: 1;
+
 }
 
 .names{
@@ -172,24 +200,43 @@ BODY:last-child .signin {
 }
 
 .members{
-    width:200px;
-    height:300px;
+    position: absolute;
+    resize: horizontal;
+    width:300px;
     float:left;
-    margin-left:10%;
+    margin-left:15px;
     text-align: center;
+    z-index: 20;
 }
-
+.subjBody
+{
+    z-index: 100;
+    height: 80%;
+}
 .teamTables{
-    width: 200px;
+    resize: both;
+    width: 250px;
     height: 300px;
     display: inline-block;
 	vertical-align:top;
     background:#EAF2FE;
     border: solid 1pt;
     overflow:auto;
-    margin-left:5px;
+    margin:5px;
+    padding: 10px;
+    z-index: 2;
 }
-
+.algPart{
+    width: 200px;
+    resize: horizontal;
+    margin: 15px;
+    border: 1px solid black;
+    float: left;
+    padding: 15px;
+}
+#closeAlg{
+    margin: -10px;
+}
 .teamAdd{
     width: 200px;
     height: 300px;
@@ -415,36 +462,49 @@ section {
     padding: 10px 10px 10px 10px;
 }
 
-#totalTeams{
+#totalTeams, #maxPerGroup{
     width:50px;
 }
-
+#shuffle{
+    width: 70px;
+    float: right;
+    margin-right: 15px;
+    margin-top: -5px;
+}
 #Projects{
     opacity: 0.8;
     margin-left: 30%;
     margin-right: 30%;
-    padding-top: 20px;
     background-color: #EAF2FE;
     margin-top: 40px;
     position:relative;
     border-radius: 10px;
+    padding: 0%;
 }
 
 .projLink{
+    position:static;
     text-decoration: none;
     color: #000000;
     font-size: 20px;
 }
 
 .projLink:hover{
-    font-size: 25px;
-    color: #000099;
+    text-decoration: none;
 }
+.singleProject{
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
 
 #AddProjects
 {
+    margin-bottom:30px;
     position: relative;
     padding-top: 40px;
+    margin-left: 30%;
+    margin-right: 30%;
 }
 
 #AddProjectsImg{
