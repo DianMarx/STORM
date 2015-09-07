@@ -1,4 +1,85 @@
+//main shuffle function
+/*
+subs contains all subjects as an object array
+algs is an array specifying
+        -field
+        -shuffleType
+        -rules
+        -weight
+numGroups like numTeams
+ */
+function goShuffle(subs, algs, numGroups)
+{
 
+}
+function similarShuffle(subs,numGroups,field)
+{
+
+
+    //comparison function
+    function compare(a,b) {
+        if (a[field] < b[field])
+            return -1;
+        if (a[field] > b[field])
+            return 1;
+        return 0;
+    }
+    var numSubj = subs.length;
+    subs.sort(compare);
+
+    var allowed = getMaxes(numSubj, numGroups);
+    var q = 0, a=0;
+    for(var p = 0; p < subs.length; p++){
+        subs[p].group = a+1;
+        if(q < allowed[a]-1)
+        {
+            q++;
+        }
+        else {a++; q=0;}
+    }
+    sendToTables(subs);
+}
+//loads sorted to teams
+function sendToTables(subs)
+{
+var numSubs = subs.length;
+    for(var i = 0; i < numSubs; i++)
+    {
+        var sub = $('#' + numSubs.id);
+        var to = $('.' + numSubs.group).find('.subjBody');
+        $(sub).appendTo(to); done = true;
+    }
+}
+
+//helper function
+function getMaxes(numSubj, numGroups){
+
+    var max = numSubj/numGroups;
+    alert(max);
+    var remaining = 0;
+    if(max % 2 != 0){
+
+        var temp = max - Math.floor(max);
+
+        remaining = Math.ceil(temp * numGroups);
+
+    }
+    max = Math.floor(max);
+
+    var allowed = [numGroups];
+    for(var i = 0; i < numGroups; i++)
+    {
+        allowed[i] = max;
+        if(remaining > 0)
+        {
+            allowed[i]++;
+            remaining--;
+        }
+
+    }
+
+    return allowed;
+}
 function randomize(numSubj, numTeam){
 
     var totalSubj = $('.subject').length;

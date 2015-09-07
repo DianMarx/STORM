@@ -137,10 +137,10 @@ $(document).ready(function(e) {
     });
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
-        var parameter = $(".shuffleBy:checked").val();
+        //var parameter = $(".shuffleBy:checked").val();
         //alert(parameter);
-        shuffle($('.names').find('.subjBody').children().length,numTeamGroups-1,subjects);
-
+        //shuffle($('.names').find('.subjBody').children().length,numTeamGroups-1,subjects);
+        similarShuffle(subjects,numTeamGroups,'Name');
     });
 
     $("#plusButton").click(function(e){
