@@ -43,9 +43,7 @@ $(document).ready(function(e) {
                 height: "500px",
                 width: "100%",
 
-                filtering: true,
                 selecting: true,
-                editing: true,
                 sorting: true,
                 paging: true,
                 autoload: true,
@@ -55,13 +53,13 @@ $(document).ready(function(e) {
                 pageButtonCount: 5,
                 rowClick: function(a){ },
                 deleteConfirm: "Do you really want to delete the client?",
-
+                fields: getHeadings(fields, subjects[0]),
                 controller: {
                     loadData: function () {
                         return subjects
                     }
-                },
-                fields: getHeadings(fields, subjects[0])
+                }
+
             });
 
         });
@@ -322,8 +320,8 @@ function updateTeams()
          div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
-         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option><option value='By Roles'>By Roles</option></select>";
-         div += "<br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+        div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
+        div += "<br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
         $("#shuffleRow").prepend(div);
 
         //$('#closeAlg').unbind();
@@ -368,20 +366,74 @@ function updateTeams()
         $(".subject").detach().appendTo("#subjects table .subjBody");
     });
 
+    $("#selectField").change(function(){
+var field = $(this).val();
+
+       if(isDiscrete(field,subjects[0]))
+        {
+            
+            $(this).parent().find("#shuffleSelect").remove('#byRoles',false);
+            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+        }else {
+           $(this).parent().find("#shuffleSelect").remove('#byRoles',false);
+       }
+    });
+
     $("#shuffleSelect").change(function(){
-        alert($(this).parent().find("#selectField").val());
+
         if($(this).val() == "By Roles")
         {
-            //if(){}
+
         }
 
     });
+
+    $("#saveMasterToDB").click(function(e){
+            updateSubjects(subjects);
+        }
+    );
 
     $("#plusButton").click();
     $("#plusButton").click();
     populateSubjectPool();
 
+
 });
+
+function isDiscrete(field, sub){
+    if(field.toLowerCase() != "name" && field.toLowerCase() != 'id')
+    {
+        if(isNumerical(sub[field]))
+        {
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+function getDiscreteArr(field, subs)
+{
+    var arr = new Array();
+    arr.push(subs[0][field]);
+
+    for(var i = 1; i < subs.length; i++){
+        var sub = subs[i];
+        var b = true;
+        for(var p = 0; p < arr.length; p++){
+            if(arr[p] == sub[field])
+            {
+                b = false;
+                break;
+            }
+        }
+        if(b == true){
+            arr.push(sub[field]);
+        }
+
+    }
+    return arr;
+}
 
 function isNumerical(obj){
     return !isNaN(parseFloat(obj));
