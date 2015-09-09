@@ -87,6 +87,7 @@ $(document).ready(function(e) {
         $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
         for(var i = 0; i < subjects.length; i++)
         {
+            subjects[i].group = 0;
             var sub = subjects[i];
                 $("tbody#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
         }
@@ -371,11 +372,11 @@ var field = $(this).val();
 
        if(isDiscrete(field,subjects[0]))
         {
-            
-            $(this).parent().find("#shuffleSelect").remove('#byRoles',false);
+
+            $(this).parent().find("#byRoles").detach();
             $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
         }else {
-           $(this).parent().find("#shuffleSelect").remove('#byRoles',false);
+           $(this).parent().find("#byRoles").detach();
        }
     });
 
@@ -463,21 +464,24 @@ function addGroupsToSubjects(subjects){
 function exportCSV(subs, fields)
 {
     var csvContent = '';
-    for(var i = 0; i < fields.length; i++)
-    {
+
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i] != 'previousGroups') {
 
         csvContent += fields[i];
-        if(i != fields.length-1)
-        csvContent += ',';
+        if (i != fields.length - 1)
+            csvContent += ',';
+    }
     }
     csvContent += '\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
-        {
-            csvContent+=subs[p][fields[k]];
-            if(k != fields.length-1)
+        {   if(fields[k] != "previousGroups") {
+            csvContent += subs[p][fields[k]];
+            if (k != fields.length - 1)
                 csvContent += ',';
+        }
         }
         csvContent += '\n';
     }
