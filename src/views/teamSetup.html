@@ -9,7 +9,11 @@
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid-theme.min.css" />
+    <script src="APIs/jsgrid/jsgrid.min.js"></script>
     <script src="scripts/teamSetupJS.js"></script>
+
     <link rel="stylesheet" href="style/css.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <script src="scripts/algorithm.js"></script>
@@ -40,18 +44,9 @@
 </nav>
 <div class="subjectBox panel panel-default" style="margin: 0;">
     <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
-    <div class="panel-body collapse" id="subjectSetup">
-        <table class="table" id="subjTable">
-            <thead><tr id="subjectFields">
+    <div class="panel-body collapse" width="100%" id="subjectSetup">
+        <div id="subjTable" class="jsgrid" width=100%></div>
 
-            </tr></thead>
-            <tbody id="subjectsTable">
-
-            </tbody>
-        </table>
-        <button class="btn btn-default">Save</button>
-        <button class="btn btn-default">Reload</button>
-        <button id="exportMasterTable" class="btn btn-default">Export CSV</button>
     </div>
 </div>
 <div class="algorithmBox panel panel-default" style="margin: 0;">

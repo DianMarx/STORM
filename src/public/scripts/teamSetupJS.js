@@ -29,14 +29,44 @@ $(document).ready(function(e) {
 
         if (name[0] != '_') {
             fields.push(name);
-            $('<th>' + name + '</th>').appendTo("#subjectFields");
+            //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
     populateTable();
 
     //toSubjects table
     function populateTable() {
+        $(function() {
 
+
+            $("#subjTable").jsGrid({
+                height: "500px",
+                width: "100%",
+
+                filtering: true,
+                selecting: true,
+                editing: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                inserting: true,
+
+                pageSize: 15,
+                pageButtonCount: 5,
+                rowClick: function(a){ },
+                deleteConfirm: "Do you really want to delete the client?",
+
+                controller: {
+                    loadData: function () {
+                        return subjects
+                    }
+                },
+                fields: getHeadings(fields, subjects[0])
+            });
+
+        });
+        $('.jsgrid-header-sortable').first().click();
+     /*
     $('#subjectsTable').empty();
     for (var i = 0; i < subjects.length; i++) {
         var sub = subjects[i];
@@ -47,7 +77,9 @@ $(document).ready(function(e) {
         }
         $('</tr>').appendTo("#subjectsTable");
     }
+        */
 }
+
 
     $(".table").selectable();
     //Loads subject pool with first variable(name)
@@ -58,11 +90,7 @@ $(document).ready(function(e) {
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            if(sub.group) {
-                $("#" + sub.group).append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
-            }
-            else
-                $("#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
+                $("tbody#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
         }
 
     }
@@ -241,8 +269,7 @@ function updateTeams()
         }
     });
 
-    $("#plusButton").click();
-    $("#plusButton").click();
+
 
     //dragable
 
@@ -340,9 +367,25 @@ function updateTeams()
     $("#returnSubjs").click(function(e){
         $(".subject").detach().appendTo("#subjects table .subjBody");
     });
+
+    $("#shuffleSelect").change(function(){
+        alert($(this).parent().find("#selectField").val());
+        if($(this).val() == "By Roles")
+        {
+            //if(){}
+        }
+
+    });
+
+    $("#plusButton").click();
+    $("#plusButton").click();
     populateSubjectPool();
+
 });
 
+function isNumerical(obj){
+    return !isNaN(parseFloat(obj));
+}
 //End of on document load
 function updateSubjects(subs)
 {
@@ -352,7 +395,8 @@ function updateSubjects(subs)
         data: {data: JSON.stringify(subs), collection: collection},
         success: function ()
         {
-            window.location = "teamsetup" +"?collection="+ collection;
+            //this will eventually reload with new values
+            //window.location = "teamsetup" +"?collection="+ collection;
         },
         error: function (e) {
             console.log(e);
@@ -548,4 +592,36 @@ function getParameterByName(name) {
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+function getHeadings(fields, subj)
+{
+
+    //var test
+
+    var newFields = new Array();
+
+
+    for (var i = 0; i < fields.length; i++) {
+        var field = new Object();
+        if (fields[i] != "previousGroups" && fields[i] != "group") {
+
+            field.name = fields[i];
+
+            if (isNumerical(subj[field.name])) {
+
+                field.type = "number";
+            }
+            else {
+                field.type = "text";
+            }
+
+            newFields.push(field);
+        }
+    }
+    var field;
+    field.type = "control";
+    newFields.push(field);
+
+    return newFields;
 }
