@@ -270,6 +270,10 @@ function LoadProjects(dat)
     });*/
 }
 
+//cascading delete
+//deletes project from db
+//deletes subject collection associated
+//deletes users reference to project
 function deleteProject(p,id)
 {
     var subj = user.id + "_"+p+"_"+"Subjects";
