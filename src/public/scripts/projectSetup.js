@@ -4,6 +4,11 @@ var projectData; // Data related to new project
 
 $(document).ready(function(e) {
 
+    $("#logOutBtn").click(function(){
+        if (confirm('Are you sure you want to logout?'))
+            location.href = "/";
+    });
+
     //Tooltip for elements
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -64,6 +69,9 @@ $(document).ready(function(e) {
                             alert("Could not save project");
                         else {
                             user.projectID.push(dat);
+                            sessionStorage['User'] = JSON.stringify(user); //add new project to user session storage
+                            init(); // reload projects and "user" global variable
+
                             var userData =
                             {
                                 'userID': user.id,
@@ -226,7 +234,7 @@ function LoadProjects(dat)
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
     for (var i = 0; i < dat.length; i++)
     {
-        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a></div>';
+        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a><div hidden><span class="glyphicon glyphicon-trash delProj" hidden></span></div></div>';
     }
 
     $("#MyProjects").html(displayProjects);
