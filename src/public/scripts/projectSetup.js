@@ -70,7 +70,7 @@ $(document).ready(function(e) {
                         else {
                             user.projectID.push(dat);
                             sessionStorage['User'] = JSON.stringify(user); //add new project to user session storage
-                            init(); // reload projects and "user" global variable
+
 
                             var userData =
                             {
@@ -106,7 +106,8 @@ function init()
     $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
     user = JSON.parse(sessionStorage['User']);
     var projectIDs = JSON.stringify(user.projectID);
-    $("#righty").prepend(user.username);
+
+    $("#usernm").html(user.username);
 
     //send project ids to server and get projects related to a user
 
@@ -234,8 +235,32 @@ function LoadProjects(dat)
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
     for (var i = 0; i < dat.length; i++)
     {
-        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a><div hidden><span class="glyphicon glyphicon-trash delProj" hidden></span></div></div>';
+        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink '+i+'" type="submit">' + dat[i].projectName + '</a><div hidden class="pull-right"><span class="glyphicon glyphicon-trash delProj" data-toggle="tooltip" title="Click to delete project"></span></div></div>';
     }
+
+    //show hide delete glyph
+    $(document).on("mouseenter", ".singleProject", function() {
+        $(this).find("div").show();
+    });
+    $(document).on("mouseleave", ".singleProject", function() {
+        $(this).find("div").hide();
+    });
+
+    //change delete glyph color on hover
+    $(document).on("mouseenter", ".delProj", function() {
+        $(this).css("color","red");
+    });
+    $(document).on("mouseleave", ".delProj", function() {
+        $(this).css("color","black");
+    });
+
+    // add delete click event handler
+    $(document).on("click", ".delProj", function() {
+        var p = $(this).parent().parent().find(".projLink").attr("id");
+        var _id = $(this).parent().parent().find(".projLink").attr("class").split(' ')[1];
+        deleteProject(p,_id);
+
+    });
 
     $("#MyProjects").html(displayProjects);
 
@@ -245,3 +270,26 @@ function LoadProjects(dat)
     });*/
 }
 
+function deleteProject(p,id)
+{
+    var subj = user.id + "_"+p+"_"+"Subjects";
+    var uid = user.id;
+    var pid = user.projectID[id];
+
+    if (confirm('Are you sure you want to delete ' + p)) {
+        $.ajax({
+            type: "POST",
+            url: '/deleteProject',
+            data: {subjects: subj, UID: uid, PID: pid},
+            success: function (dat) {
+                alert(dat);
+                user.projectID.splice(id, 1);
+                sessionStorage['User'] = JSON.stringify(user);
+                init();
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+}
