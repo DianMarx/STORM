@@ -315,14 +315,14 @@ function updateTeams()
     function addAlgorithmBox()
     {
         //appendTO
-        var div = "<div class='algPart col-*-*'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+        var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
         {
          div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
-        div += "<br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+        div += "<br><div class='rules'></div><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
         $("#shuffleRow").prepend(div);
 
         //$('#closeAlg').unbind();
@@ -375,8 +375,10 @@ var field = $(this).val();
 
             $(this).parent().find("#byRoles").detach();
             $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
         }else {
            $(this).parent().find("#byRoles").detach();
+           $(this).parent().find('.roles').detach();
        }
     });
 
@@ -384,8 +386,36 @@ var field = $(this).val();
 
         if($(this).val() == "By Roles")
         {
+            var t = $(this).parent().find(".rules");
+            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+            var field = $(this).parent().find("#selectField").val();
 
-        }
+            var arr = getDiscreteArr(field, subjects);
+            var spinner = $("<input class='input-group' style='width:40px; float: right;' id='roleCount' type='number' value='1' min='1'>").appendTo(div);
+
+            var select = $("<select></select>").addClass('aRole').appendTo(div);
+            $(arr).each(function(){
+                select.append($("<option>").attr('value',this).text(this));
+            });
+            var numRoles = 1;
+            $(div).prepend("<h6>strict: <input type='checkbox' class='strict' name='strict value='strict></h6>");
+            $(spinner).change(function () {
+
+
+                while(numRoles < $(this).val()){
+                    select = $("<select></select>").addClass('aRole').appendTo(div);
+                    $(arr).each(function(){
+                        select.append($("<option>").attr('value',this).text(this));
+                    });
+                    numRoles++;
+                }
+                while(numRoles > $(this).val()) {
+                $(this).parent().find('.aRole').first().detach();
+                numRoles--;
+                }
+            });
+
+        }else {$(this).parent().find('.roles').detach();}
 
     });
 

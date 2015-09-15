@@ -5,7 +5,7 @@ algs is an array specifying
         -field
         -type {diverse, simmilar, byroles, sum}
             -if type is byRoles groupArray
-        -rules -numerical {max : amount} {min:amount} -strict(limits groups)
+        -rules -numerical {max : amount} {min:amount} -minimize -maximize -strict(limits groups)
         -weight
 numGroups like numTeams
  */
