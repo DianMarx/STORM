@@ -3,9 +3,9 @@
 subs contains all subjects as an object array
 algs is an array specifying
         -field
-        -type
-        -if type is matchGroup groupArray
-        -rules
+        -type {diverse, simmilar, byroles, sum}
+            -if type is byRoles groupArray
+        -rules -numerical {max : amount} {min:amount} -minimize -maximize -strict(limits groups)
         -weight
 numGroups like numTeams
  */

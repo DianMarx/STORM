@@ -9,7 +9,11 @@
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid-theme.min.css" />
+    <script src="APIs/jsgrid/jsgrid.min.js"></script>
     <script src="scripts/teamSetupJS.js"></script>
+
     <link rel="stylesheet" href="style/css.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <script src="scripts/algorithm.js"></script>
@@ -32,25 +36,23 @@
             <a id="logOutBtn" href=""><button class="btn btn-default">Log Out</button> </a>
         </div>
         <div class="nav navbar-nav">
+<<<<<<< HEAD
             <li><a id="MyProjectsPage" href="#">My Projects</a></li>
             <li ><a href="/about">About</a></li>
             <li ><a href="/contact">Contact</a></li>
+=======
+            <li><a href="/">Home</a></li>
+            <li><a href="/projectHome">My Projects</a></li>
+
+>>>>>>> 6a893631408515c345754de695e10ba293e93718
         </div>
     </div>
 </nav>
 <div class="subjectBox panel panel-default" style="margin: 0;">
     <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
     <div class="panel-body collapse" id="subjectSetup">
-        <table class="table" id="subjTable">
-            <thead><tr id="subjectFields">
-
-            </tr></thead>
-            <tbody id="subjectsTable">
-
-            </tbody>
-        </table>
-        <button class="btn btn-default">Save</button>
-        <button class="btn btn-default">Reload</button>
+        <div id="subjTable"></div>
+        <button id="saveMasterToDB" class="btn btn-default">Save</button>
         <button id="exportMasterTable" class="btn btn-default">Export CSV</button>
     </div>
 </div>
@@ -71,6 +73,8 @@
 <div class="container">
     <button style="width: 100px; float:left;" class="form-control" id="shuffle">Shuffle</button>
     <button style="width: 125px; float:left;" class="form-control" id="exportGroups">Download CSV</button>
+    <button style="width: 125px; float:left;" class="form-control" id="saveIteration">Save Iteration</button>
+    <button style="width: 125px; float:left;" class="form-control" id="returnSubjs">Return All</button>
 </div>
     <div class="main">
 

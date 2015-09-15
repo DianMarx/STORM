@@ -184,6 +184,7 @@ function uploadCSV()
                             tempObj[headings[k]] = line[k];
                         }
                     }
+                    tempObj['previousGroups'] = [];
                     JSONObject.push(tempObj);
                 }
                 Subjects = JSONObject;
