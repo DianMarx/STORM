@@ -79,6 +79,12 @@ module.exports=function(app) {
         db.subjToDB(req.body.data, req.body.collection);
         res.send("");
     });
+    app.post('/updateSubjs', function (req, res) {
+
+        //console.log(req.body.data);
+        db.updateSubjs(req.body.data, req.body.collection);
+        res.send("");
+    });
 
     app.post('/login', function (req, res) {
 
