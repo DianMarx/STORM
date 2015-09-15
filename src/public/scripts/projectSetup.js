@@ -236,12 +236,9 @@ function LoadProjects(dat)
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
     for (var i = 0; i < dat.length; i++)
     {
-<<<<<<< HEAD
-        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a></div>';
-    };
-=======
+
         displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink '+i+'" type="submit">' + dat[i].projectName + '</a><div hidden class="pull-right"><span class="glyphicon glyphicon-trash delProj" data-toggle="tooltip" title="Click to delete project"></span></div></div>';
-    }
+    };
 
     //show hide delete glyph
     $(document).on("mouseenter", ".singleProject", function() {
@@ -267,7 +264,6 @@ function LoadProjects(dat)
 
     });
 
->>>>>>> Design
     $("#MyProjects").html(displayProjects);
 
     //Open manage projects section
