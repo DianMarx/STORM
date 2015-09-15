@@ -4,6 +4,11 @@ var projectData; // Data related to new project
 
 $(document).ready(function(e) {
 
+    $("#logOutBtn").click(function(){
+        if (confirm('Are you sure you want to logout?'))
+            location.href = "/";
+    });
+
     //Tooltip for elements
     $('[data-toggle="tooltip"]').tooltip();
 
@@ -64,6 +69,9 @@ $(document).ready(function(e) {
                             alert("Could not save project");
                         else {
                             user.projectID.push(dat);
+                            sessionStorage['User'] = JSON.stringify(user); //add new project to user session storage
+
+
                             var userData =
                             {
                                 'userID': user.id,
@@ -98,7 +106,8 @@ function init()
     $('.loader').html('<img src="images/loader.gif"><br/> Loading Projects...');
     user = JSON.parse(sessionStorage['User']);
     var projectIDs = JSON.stringify(user.projectID);
-    $("#righty").prepend(user.username);
+
+    $("#usernm").html(user.username);
 
     //send project ids to server and get projects related to a user
 
@@ -226,8 +235,38 @@ function LoadProjects(dat)
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
     for (var i = 0; i < dat.length; i++)
     {
+<<<<<<< HEAD
         displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink" type="submit">' + dat[i].projectName + '</a></div>';
     };
+=======
+        displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink '+i+'" type="submit">' + dat[i].projectName + '</a><div hidden class="pull-right"><span class="glyphicon glyphicon-trash delProj" data-toggle="tooltip" title="Click to delete project"></span></div></div>';
+    }
+
+    //show hide delete glyph
+    $(document).on("mouseenter", ".singleProject", function() {
+        $(this).find("div").show();
+    });
+    $(document).on("mouseleave", ".singleProject", function() {
+        $(this).find("div").hide();
+    });
+
+    //change delete glyph color on hover
+    $(document).on("mouseenter", ".delProj", function() {
+        $(this).css("color","red");
+    });
+    $(document).on("mouseleave", ".delProj", function() {
+        $(this).css("color","black");
+    });
+
+    // add delete click event handler
+    $(document).on("click", ".delProj", function() {
+        var p = $(this).parent().parent().find(".projLink").attr("id");
+        var _id = $(this).parent().parent().find(".projLink").attr("class").split(' ')[1];
+        deleteProject(p,_id);
+
+    });
+
+>>>>>>> Design
     $("#MyProjects").html(displayProjects);
 
     //Open manage projects section
@@ -236,3 +275,30 @@ function LoadProjects(dat)
     });*/
 }
 
+//cascading delete
+//deletes project from db
+//deletes subject collection associated
+//deletes users reference to project
+function deleteProject(p,id)
+{
+    var subj = user.id + "_"+p+"_"+"Subjects";
+    var uid = user.id;
+    var pid = user.projectID[id];
+
+    if (confirm('Are you sure you want to delete ' + p)) {
+        $.ajax({
+            type: "POST",
+            url: '/deleteProject',
+            data: {subjects: subj, UID: uid, PID: pid},
+            success: function (dat) {
+                alert(dat);
+                user.projectID.splice(id, 1);
+                sessionStorage['User'] = JSON.stringify(user);
+                init();
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+}
