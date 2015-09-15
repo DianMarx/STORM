@@ -115,6 +115,36 @@ module.exports = {
         });
 
     },
+    deleteProject: function(subj,callback)
+    {
+        projectSchema.set('collection', 'Projects');
+        col = mongoose.model('Projects', projectSchema);
+        col.remove({subjects : subj}, function(err){
+            if(err) {callback(1);}
+            else {callback(0);}
+        });
+    },
+    dropSubjects: function(subj,callback)
+    {
+        db.collection(subj).drop(function(err){
+            if(err){callback(1);}
+            else{callback(0);}
+        })
+    },
+    removePIDfromUsers: function(uid,pid,callback)
+    {
+        userSchema.set('collection', 'Users');
+        col = mongoose.model('Users', userSchema);
+
+        col.update(
+            {id:uid},
+            {$pull: {projectID: {$in: [pid]}}},
+            function(err){
+                if(err){callback(1);}
+                else {callback(0);}
+            }
+        )
+    },
     removeDocument: function(colName, docId)
     {
         mySchema.set('collection', colName);
@@ -133,7 +163,7 @@ module.exports = {
         //stub
 
     },
-    updateUser: function(id, projID )
+    updateUser: function(id, projID)
     {
         userSchema.set('collection', 'Users');
         col = mongoose.model('Users', userSchema);

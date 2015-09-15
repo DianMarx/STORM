@@ -1,12 +1,17 @@
-/**
- * Created by Andreas on 2015/07/08.
- */
-
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
 var testUser = false;
 var user;
 $(document).ready(function(e) {
 
+    $("#logOutBtn").click(function(){
+        if (confirm('Are you sure you want to logout?'))
+            location.href = "/";
+    });
+
+    $("#MyProjectsPage").click(function(){
+        if (confirm('Quit without saving?'))
+            location.href = "/projectHome";
+    });
 
     if (typeof sessionStorage === 'undefined') {
         testUser = true;
