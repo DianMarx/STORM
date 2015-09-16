@@ -43,6 +43,7 @@ $(document).ready(function(e) {
     for (var name in subjects[0]) {
 
         if (name[0] != '_') {
+            name = name.replace(' ', '_');
             fields.push(name);
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
@@ -104,8 +105,37 @@ $(document).ready(function(e) {
         {
             subjects[i].group = 0;
             var sub = subjects[i];
-                $("tbody#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[fields[0]] + "</td></tr>");
+            if(sub['name']){var name= 'name';}else var name = 'Name';
+                $("tbody#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[name] + "</td></tr>");
         }
+
+        $(".subject").draggable({
+
+            helper: "clone",
+            cursor: "move",
+            opacity: "0.5",
+            revert: "invalid",
+            start: function(){
+                k.tr = this;
+            }
+
+        });
+
+        $(".teamTables").droppable({
+            accept: '.subject',
+            cursor: "normal",
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            }
+        });
+        $("#subjects").droppable({
+            accept: '.subject',
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            }
+        });
 
     }
 
@@ -113,16 +143,18 @@ $(document).ready(function(e) {
     //User selectable fields to view
     function addField(field)
     {
+        field = field.replace(' ','_');
         $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $("#"+sub.id).append("<td id='"+field +"'>"+sub[field]+"</td>");
+            $("tr#"+sub.id).closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
         }
     }
     //Removes from all records
     function removeField(field)
     {
+       
         $("th#"+ field).remove();
         $("td#"+ field).remove();
     }
@@ -212,14 +244,6 @@ function updateTeams()
             $("#totalTeams").val(numTeamGroups-1);
 
 
-        $('.teamTables').dblclick(function(){
-
-            var isDisabled = $(this).draggable('option', 'disabled');
-            if(isDisabled)
-                makeDraggable(this);
-            else
-                disableDrag(this);
-        });
 
         $(".teamTables").droppable({
             accept: '.subject',
@@ -229,9 +253,7 @@ function updateTeams()
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             }
         });
-        $('.teamTables').draggable({
-            containment:'parent'
-        });
+
         $(".minusButton").off();
 
         $(".minusButton").on("click", function(e){
@@ -288,33 +310,7 @@ function updateTeams()
     //dragable
 
     var k = {};
-    $(".subject").draggable({
 
-        helper: "clone",
-        cursor: "move",
-        opacity: "0.5",
-        revert: "invalid",
-        start: function(){
-            k.tr = this;
-        }
-
-    });
-
-    $(".teamTables").droppable({
-        accept: '.subject',
-        cursor: "normal",
-        drop: function(event, ui) {
-            //var temp = alert();
-            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
-        }
-    });
-    $("#subjects").droppable({
-        accept: '.subject',
-        drop: function(event, ui) {
-            //var temp = alert();
-            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
-        }
-    });
 
     addAlgorithmBox();
     $('#addAlg').click(function (e) {
@@ -399,6 +395,7 @@ var field = $(this).val();
 
     $("#shuffleSelect").change(function(){
 
+        $(this).parent().find('.roles').detach();
         if($(this).val() == "By Roles")
         {
             var t = $(this).parent().find(".rules");
@@ -430,7 +427,7 @@ var field = $(this).val();
                 }
             });
 
-        }else {$(this).parent().find('.roles').detach();}
+        }
 
     });
 
