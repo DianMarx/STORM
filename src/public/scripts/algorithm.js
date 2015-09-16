@@ -3,14 +3,23 @@
 subs contains all subjects as an object array
 algs is an array specifying
         -field
-        -type {diverse, simmilar, byroles, sum}
+        -type {diverse, similar, byroles, random}
             -if type is byRoles groupArray
-        -rules -numerical {max : amount} {min:amount} -minimize -maximize -strict(limits groups)
-        -weight
+        -rules -numerical range -discrete strict(limits groups)
 numGroups like numTeams
+        -weight
  */
 function goShuffle(subs, algs, numGroups)
 {
+    var totalWeight = 0;
+    for(var p = 0; p < subs.length; p++) {
+        subs[p].group = 0;
+    }
+    for(var z = 0; z < algs.length; z++)
+    {
+        totalWeight+= algs[z].weight;
+    }
+
     for(var i = 0; i < algs.length; i++)
     {
         switch(algs[i].type)
