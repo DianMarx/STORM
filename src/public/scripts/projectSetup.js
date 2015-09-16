@@ -179,8 +179,10 @@ function uploadCSV()
                         if (typeof line[k] == 'undefined')
                         {
                             tempObj[headings[k]] = "";
+                            //error hier
                         }
                         else {
+                            headings[k] = headings[k].replace(' ','_');
                             tempObj[headings[k]] = line[k];
                         }
                     }
