@@ -129,7 +129,7 @@ $(document).ready(function(e) {
 
         var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' && fields[i] != 'previousGroups') {
+        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
 
         var temp = fields[i];
         div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
