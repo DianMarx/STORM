@@ -2,7 +2,17 @@ var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop 
 var testUser = false;
 var user;
 var collection = getParameterByName('collection');
+var subjects;
+
 $(document).ready(function(e) {
+
+    $("#uploadCSV").click(function(){
+       $("#CSVInput").click();
+    });
+
+    $("#CSVInput").change(function(){
+        uploadCSV();
+    });
 
     $("#logOutBtn").click(function(){
         if (confirm('Are you sure you want to logout?'))
@@ -26,7 +36,7 @@ $(document).ready(function(e) {
     $("input[type=submit], a, button, input[type=file]").button();
 
     //Moved array van subject objects
-    var subjects = JSON.parse($('#jsondat').text());
+    subjects = JSON.parse($('#jsondat').text());
 
     //gets all the subjects' fields
     var fields = [];
@@ -715,4 +725,74 @@ function getHeadings(fields, subj)
     newFields.push(field);
 
     return newFields;
+}
+
+
+function uploadCSV()
+{
+    var file = document.getElementById('CSVInput').files[0];
+    if (file) {
+        // create reader
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e) {
+
+            var result = e.target.result;   // browser completed reading file
+            result = result.replace(/\r?\n|\r/g, "\r\n");
+
+            var obj = $.csv.toObjects(result);
+
+            //console.log(JSON.stringify(obj));
+            MergeSubjects(obj);
+        };
+    }
+}
+
+function MergeSubjects(newSubjects)
+{
+    //var sameIDs = false;
+    //
+    ////Loop through current students array and check that all ids are the sam
+    ////no student may be left out
+    //alert(JSON.stringify(newSubjects));
+    //if(newSubjects.length >= subjects.length)
+    //{
+    //    //sort both arrays
+    //    newSubjects.sort(function(a, b){
+    //        var keyA = new Date(a.id),
+    //            keyB = new Date(b.id);
+    //        if(keyA < keyB) return -1;
+    //        if(keyA > keyB) return 1;
+    //        return 0;
+    //    });
+    //
+    //    subjects.sort(function(a, b){
+    //        var keyA = new Date(a.id),
+    //            keyB = new Date(b.id);
+    //        if(keyA < keyB) return -1;
+    //        if(keyA > keyB) return 1;
+    //        return 0;
+    //    });
+    //
+    //    //console.log(JSON.stringify(subjects[i]['id']));
+    //    //
+    //    //console.log("");
+    //    //
+    //    //console.log(JSON.stringify(subjects));
+    //
+    //    for(i = 0; i < subjects.length; i++)
+    //    {
+    //        for(k = 0; k < newSubjects.length; k++)
+    //        {
+    //            sameIDs = false;
+    //            if(subjects[i]['id'] == newSubjects[k]['id'])
+    //            {
+    //                //found id move on..
+    //                sameIDs = true;
+    //            }
+    //        }
+    //    }
+    //    alert(sameIDs);
+    //
+    //}
 }

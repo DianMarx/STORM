@@ -13,6 +13,7 @@
     <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid-theme.min.css" />
     <script src="APIs/jsgrid/jsgrid.min.js"></script>
     <script src="scripts/teamSetupJS.js"></script>
+    <script src="scripts/jquery.csv-0.71.min.js"></script>
 
     <link rel="stylesheet" href="style/css.css">
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -46,11 +47,14 @@
 </nav>
 <div class="subjectBox panel panel-default" style="margin: 0;">
     <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
-    < class="panel-body collapse" id="subjectSetup">
+    <div class="panel-body collapse" id="subjectSetup">
         <div id="subjTable"></div>
         <button id="saveMasterToDB" class="btn btn-default">Save</button>
         <button id="exportMasterTable" class="btn btn-default">Export CSV</button>
         <button id='uploadCSV' class="btn btn-default">Upload CSV </button>
+        <div class="hidden">
+            <input class="form-control" type="file" id="CSVInput" name="file" accept=".csv" required/>
+        </div>
     </div>
 </div>
 <div class="algorithmBox panel panel-default" style="margin: 0;">
