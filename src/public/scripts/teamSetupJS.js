@@ -761,13 +761,12 @@ function MergeSubjects(newSubjects,Criteria)
     var numFieldsNew = Criteria.length;
     var counter = {};
 
-    newSubjects.forEach(function(sub){
+    newSubjects.forEach(function(sub){ //count duplicates
        var key = JSON.stringify(sub['id']);
         counter[key] = (counter[key] || 0) + 1;
+        if(counter[key] > 1)
+            duplicates = true;
     });
-
-
-    //alert(duplicates);
 
     for(i = 0; i < temp.length; i++)
     {
@@ -815,6 +814,10 @@ function MergeSubjects(newSubjects,Criteria)
     else if(!validNumSubs)
     {
         alert("Some subjects have been omitted. See user manual for correct upload formats");
+    }
+    else if(duplicates)
+    {
+        alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats");
     }
     else
     {
@@ -868,6 +871,7 @@ function MergeSubjects(newSubjects,Criteria)
                     temp.push(newSubjects[k]);
             }
         }
+        //console.log(JSON.stringify(temp));
     }
 }
 
