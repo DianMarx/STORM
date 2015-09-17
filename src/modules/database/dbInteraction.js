@@ -9,7 +9,32 @@ db.once('open', function (callback) {
 
 });
 
+function subjToDB(data, col)
+{
+    idSchema.set('collection', col);
+    coll = mongoose.model(col, idSchema);
+    var id = 0;
+    users = JSON.parse(data);
+    users.forEach(function(user)
+    {
+        for(field in user)
+        {
 
+            if(isNumber(user[field]) && field != 'previousGroups')
+            {
+                user[field] = parseInt(user[field]);
+            }
+
+        }
+
+        newUser = new coll(user);
+        newUser.save(function(err){
+            if(err) return next(err);
+        });
+    });
+}
+
+function isNumber(obj) { return !isNaN(parseFloat(obj)); }
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
 
@@ -115,6 +140,36 @@ module.exports = {
         });
 
     },
+    deleteProject: function(subj,callback)
+    {
+        projectSchema.set('collection', 'Projects');
+        col = mongoose.model('Projects', projectSchema);
+        col.remove({subjects : subj}, function(err){
+            if(err) {callback(1);}
+            else {callback(0);}
+        });
+    },
+    dropSubjects: function(subj,callback)
+    {
+        db.collection(subj).drop(function(err){
+            if(err){callback(1);}
+            else{callback(0);}
+        })
+    },
+    removePIDfromUsers: function(uid,pid,callback)
+    {
+        userSchema.set('collection', 'Users');
+        col = mongoose.model('Users', userSchema);
+
+        col.update(
+            {id:uid},
+            {$pull: {projectID: {$in: [pid]}}},
+            function(err){
+                if(err){callback(1);}
+                else {callback(0);}
+            }
+        )
+    },
     removeDocument: function(colName, docId)
     {
         mySchema.set('collection', colName);
@@ -133,7 +188,7 @@ module.exports = {
         //stub
 
     },
-    updateUser: function(id, projID )
+    updateUser: function(id, projID)
     {
         userSchema.set('collection', 'Users');
         col = mongoose.model('Users', userSchema);
@@ -157,13 +212,28 @@ module.exports = {
         users = JSON.parse(data);
         users.forEach(function(user)
         {
+            for(field in user)
+            {
 
-            user.id = parseInt(user.id);
+                if(isNumber(user[field]) && field != 'previousGroups')
+                {
+                    user[field] = parseInt(user[field]);
+                }
+
+            }
+
             newUser = new coll(user);
             newUser.save(function(err){
                 if(err) return next(err);
             });
         });
+    },
+    updateSubjs: function(data, col)
+    {
+        idSchema.set('collection', col);
+        var coll = mongoose.model(col, idSchema);
+        coll.remove({},function(err){});
+        subjToDB(data,col);
     },
 
     checkLogin: function(username, password, callback)

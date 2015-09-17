@@ -79,6 +79,12 @@ module.exports=function(app) {
         db.subjToDB(req.body.data, req.body.collection);
         res.send("");
     });
+    app.post('/updateSubjs', function (req, res) {
+
+        //console.log(req.body.data);
+        db.updateSubjs(req.body.data, req.body.collection);
+        res.send("");
+    });
 
     app.post('/login', function (req, res) {
 
@@ -139,16 +145,33 @@ module.exports=function(app) {
                 res.send(newID);
             }else
                 res.send(status);
-
-            //console.log(JSON.stringify(status));
         });
+    });
+    app.post('/deleteProject', function (req, res)
+    {
+        var subj = req.body.subjects;
+        db.dropSubjects(subj,function(status)
+        {
+            if(status == 1){
+                res.send("Project could not be deleted.");
+            }else{
+                db.deleteProject(subj,function(finalStatus){
+                    if(finalStatus == 1)
+                        res.send("Project could not be deleted.");
+                    else
+                    {
+                        db.removePIDfromUsers(req.body.UID,req.body.PID,function(stat){
+                            if(stat == 1)
+                                res.send("Project could not be deleted.");
+                            else
+                                res.send("Project was deleted successfully.");
+                        });
 
-        //0 Username exists
-        //1 failure
-        //2 success
-        /*Insert Subject Data*/
+                    }
 
-
+                });
+            }
+        });
     });
 
 }

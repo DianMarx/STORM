@@ -1,13 +1,18 @@
-/**
- * Created by Andreas on 2015/07/08.
- */
-
 var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop able groups.
 var testUser = false;
 var user;
-
+var collection = getParameterByName('collection');
 $(document).ready(function(e) {
 
+    $("#logOutBtn").click(function(){
+        if (confirm('Are you sure you want to logout?'))
+            location.href = "/";
+    });
+
+    $("#MyProjectsPage").click(function(){
+        if (confirm('Quit without saving?'))
+            location.href = "/projectHome";
+    });
 
     if (typeof sessionStorage === 'undefined') {
         testUser = true;
@@ -28,15 +33,44 @@ $(document).ready(function(e) {
     for (var name in subjects[0]) {
 
         if (name[0] != '_') {
+            name = name.replace(' ', '_');
             fields.push(name);
-            $('<th>' + name + '</th>').appendTo("#subjectFields");
+            //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
     populateTable();
 
     //toSubjects table
     function populateTable() {
+        $(function() {
 
+
+            $("#subjTable").jsGrid({
+                height: "500px",
+                width: "100%",
+
+                selecting: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                inserting: true,
+
+                pageSize: 15,
+                pageButtonCount: 5,
+                rowClick: function(a){ },
+                deleteConfirm: "Do you really want to delete the client?",
+                fields: getHeadings(fields, subjects[0]),
+                controller: {
+                    loadData: function () {
+                        return subjects
+                    }
+                }
+
+            });
+
+        });
+        $('.jsgrid-header-sortable').first().click();
+     /*
     $('#subjectsTable').empty();
     for (var i = 0; i < subjects.length; i++) {
         var sub = subjects[i];
@@ -47,8 +81,10 @@ $(document).ready(function(e) {
         }
         $('</tr>').appendTo("#subjectsTable");
     }
+        */
 }
-    populateSubjectPool()
+
+
     $(".table").selectable();
     //Loads subject pool with first variable(name)
     function populateSubjectPool()
@@ -57,9 +93,39 @@ $(document).ready(function(e) {
         $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
         for(var i = 0; i < subjects.length; i++)
         {
+            subjects[i].group = 0;
             var sub = subjects[i];
-            $(".subjBody").append("<tr class='subject' id='" + sub.id + "' ><td>"+sub[fields[0]]+"</td></tr>");
+            if(sub['name']){var name= 'name';}else var name = 'Name';
+                $("tbody#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[name] + "</td></tr>");
         }
+
+        $(".subject").draggable({
+
+            helper: "clone",
+            cursor: "move",
+            opacity: "0.5",
+            revert: "invalid",
+            start: function(){
+                k.tr = this;
+            }
+
+        });
+
+        $(".teamTables").droppable({
+            accept: '.subject',
+            cursor: "normal",
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            }
+        });
+        $("#subjects").droppable({
+            accept: '.subject',
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            }
+        });
 
     }
 
@@ -67,23 +133,25 @@ $(document).ready(function(e) {
     //User selectable fields to view
     function addField(field)
     {
+        field = field.replace(' ','_');
         $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $("#"+sub.id).append("<td id='"+field +"'>"+sub[field]+"</td>");
+            $("tr#"+sub.id).closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
         }
     }
     //Removes from all records
     function removeField(field)
     {
+       
         $("th#"+ field).remove();
         $("td#"+ field).remove();
     }
 
         var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_') {
+        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
 
         var temp = fields[i];
         div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
@@ -166,14 +234,6 @@ function updateTeams()
             $("#totalTeams").val(numTeamGroups-1);
 
 
-        $('.teamTables').dblclick(function(){
-
-            var isDisabled = $(this).draggable('option', 'disabled');
-            if(isDisabled)
-                makeDraggable(this);
-            else
-                disableDrag(this);
-        });
 
         $(".teamTables").droppable({
             accept: '.subject',
@@ -183,9 +243,7 @@ function updateTeams()
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             }
         });
-        $('.teamTables').draggable({
-            containment:'parent'
-        });
+
         $(".minusButton").off();
 
         $(".minusButton").on("click", function(e){
@@ -237,39 +295,12 @@ function updateTeams()
         }
     });
 
-    $("#plusButton").click();
-    $("#plusButton").click();
+
 
     //dragable
 
     var k = {};
-    $(".subject").draggable({
 
-        helper: "clone",
-        cursor: "move",
-        opacity: "0.5",
-        revert: "invalid",
-        start: function(){
-            k.tr = this;
-        }
-
-    });
-
-    $(".teamTables").droppable({
-        accept: '.subject',
-        cursor: "normal",
-        drop: function(event, ui) {
-            //var temp = alert();
-            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
-        }
-    });
-    $("#subjects").droppable({
-        accept: '.subject',
-        drop: function(event, ui) {
-            //var temp = alert();
-            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
-        }
-    });
 
     addAlgorithmBox();
     $('#addAlg').click(function (e) {
@@ -285,14 +316,14 @@ function updateTeams()
     function addAlgorithmBox()
     {
         //appendTO
-        var div = "<div class='algPart col-*-*'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+        var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
         {
          div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
-         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option><option value='By Roles'>By Roles</option></select>";
-         div += "<br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+        div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
+        div += "<br><div class='rules'></div><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
         $("#shuffleRow").prepend(div);
 
         //$('#closeAlg').unbind();
@@ -306,18 +337,157 @@ function updateTeams()
        exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
-        var temp = addGroupsToSubjects(subjects);
+
         for(var i = 0; i < subjects.length; i++) {
 
-            subjects[i].group = $('tr[id=' + temp[i].id+']').parent('tbody').attr('id');
+            subjects[i].group = $('tr[id=' + subjects[i].id+']').parent('tbody').attr('id');
 
         }
         fields.push("group");
         exportCSV(subjects, fields);
+        for(var p = 0; p < subjects.length; p++) {
+
+            delete subjects[p].group;
+
+        }
+        fields.pop();
+
     });
+    $("#saveIteration").click(function (e) {
+
+        for(var i = 0; i < subjects.length; i++) {
+
+            subjects[i].previousGroups.push($('tr[id=' + subjects[i].id+']').parent('tbody').attr('id'));
+
+        }
+
+
+        updateSubjects(subjects);
+    });
+    $("#returnSubjs").click(function(e){
+        $(".subject").detach().appendTo("#subjects table .subjBody");
+    });
+
+    $("#selectField").change(function(){
+var field = $(this).val();
+
+       if(isDiscrete(field,subjects[0]))
+        {
+
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
+        }else {
+           $(this).parent().find("#byRoles").detach();
+           $(this).parent().find('.roles').detach();
+       }
+    });
+
+    $("#shuffleSelect").change(function(){
+
+        $(this).parent().find('.roles').detach();
+        if($(this).val() == "By Roles")
+        {
+            var t = $(this).parent().find(".rules");
+            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+            var field = $(this).parent().find("#selectField").val();
+
+            var arr = getDiscreteArr(field, subjects);
+            var spinner = $("<input class='input-group' style='width:40px; float: right;' id='roleCount' type='number' value='1' min='1'>").appendTo(div);
+
+            var select = $("<select></select>").addClass('aRole').appendTo(div);
+            $(arr).each(function(){
+                select.append($("<option>").attr('value',this).text(this));
+            });
+            var numRoles = 1;
+            $(div).prepend("<h6>strict: <input type='checkbox' class='strict' name='strict value='strict></h6>");
+            $(spinner).change(function () {
+
+
+                while(numRoles < $(this).val()){
+                    select = $("<select></select>").addClass('aRole').appendTo(div);
+                    $(arr).each(function(){
+                        select.append($("<option>").attr('value',this).text(this));
+                    });
+                    numRoles++;
+                }
+                while(numRoles > $(this).val()) {
+                $(this).parent().find('.aRole').first().detach();
+                numRoles--;
+                }
+            });
+
+        }
+
+    });
+
+    $("#saveMasterToDB").click(function(e){
+            updateSubjects(subjects);
+        }
+    );
+
+    $("#plusButton").click();
+    $("#plusButton").click();
+    populateSubjectPool();
+
+
 });
 
+function isDiscrete(field, sub){
+    if(field.toLowerCase() != "name" && field.toLowerCase() != 'id')
+    {
+        if(isNumerical(sub[field]))
+        {
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+function getDiscreteArr(field, subs)
+{
+    var arr = new Array();
+    arr.push(subs[0][field]);
+
+    for(var i = 1; i < subs.length; i++){
+        var sub = subs[i];
+        var b = true;
+        for(var p = 0; p < arr.length; p++){
+            if(arr[p] == sub[field])
+            {
+                b = false;
+                break;
+            }
+        }
+        if(b == true){
+            arr.push(sub[field]);
+        }
+
+    }
+    return arr;
+}
+
+function isNumerical(obj){
+    return !isNaN(parseFloat(obj));
+}
 //End of on document load
+function updateSubjects(subs)
+{
+    $.ajax({
+        type: "POST",
+        url: '/updateSubjs',
+        data: {data: JSON.stringify(subs), collection: collection},
+        success: function ()
+        {
+            //this will eventually reload with new values
+            //window.location = "teamsetup" +"?collection="+ collection;
+        },
+        error: function (e) {
+            console.log(e);
+        }
+    });
+}
 function addGroupsToSubjects(subjects){
     var temp = subjects;
 
@@ -326,21 +496,24 @@ function addGroupsToSubjects(subjects){
 function exportCSV(subs, fields)
 {
     var csvContent = '';
-    for(var i = 0; i < fields.length; i++)
-    {
+
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i] != 'previousGroups') {
 
         csvContent += fields[i];
-        if(i != fields.length-1)
-        csvContent += ',';
+        if (i != fields.length - 1)
+            csvContent += ',';
+    }
     }
     csvContent += '\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
-        {
-            csvContent+=subs[p][fields[k]];
-            if(k != fields.length-1)
+        {   if(fields[k] != "previousGroups") {
+            csvContent += subs[p][fields[k]];
+            if (k != fields.length - 1)
                 csvContent += ',';
+        }
         }
         csvContent += '\n';
     }
@@ -500,4 +673,43 @@ function dialogMessage(title,mesg, buttons) {
         show: { effect: "scale", duration: 250 },
         hide: { effect: "scale", duration: 250 }
     });
+}
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+function getHeadings(fields, subj)
+{
+
+    //var test
+
+    var newFields = new Array();
+
+
+    for (var i = 0; i < fields.length; i++) {
+        var field = new Object();
+        if (fields[i] != "previousGroups" && fields[i] != "group") {
+
+            field.name = fields[i];
+
+            if (isNumerical(subj[field.name])) {
+
+                field.type = "number";
+            }
+            else {
+                field.type = "text";
+            }
+
+            newFields.push(field);
+        }
+    }
+    var field;
+    field.type = "control";
+    newFields.push(field);
+
+    return newFields;
 }
