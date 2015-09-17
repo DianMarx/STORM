@@ -509,28 +509,28 @@ function addGroupsToSubjects(subjects){
 function exportCSV(subs, fields)
 {
     var csvContent = '';
+    var index = 0;
 
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
 
         csvContent += fields[i];
-        if (i != fields.length - 1)
+        if (i != fields.length - 2)
             csvContent += ',';
     }
     }
-    csvContent += '\n';
+    csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
         {   if(fields[k] != "previousGroups") {
             csvContent += subs[p][fields[k]];
-            if (k != fields.length - 1)
+            if (k != fields.length - 2)
                 csvContent += ',';
         }
         }
-        csvContent += '\n';
+        csvContent += '\r\n';
     }
-
 
     var link = document.createElement("a");
     link.href        = 'data:attachment/csv,' + encodeURIComponent(csvContent);
@@ -741,58 +741,146 @@ function uploadCSV()
             result = result.replace(/\r?\n|\r/g, "\r\n");
 
             var obj = $.csv.toObjects(result);
+            var arr = $.csv.toArrays(result);
 
             //console.log(JSON.stringify(obj));
-            MergeSubjects(obj);
+            MergeSubjects(obj,arr[0]);
         };
     }
 }
 
-function MergeSubjects(newSubjects)
+function MergeSubjects(newSubjects,Criteria)
 {
-    //var sameIDs = false;
-    //
-    ////Loop through current students array and check that all ids are the sam
-    ////no student may be left out
-    //alert(JSON.stringify(newSubjects));
-    //if(newSubjects.length >= subjects.length)
-    //{
-    //    //sort both arrays
-    //    newSubjects.sort(function(a, b){
-    //        var keyA = new Date(a.id),
-    //            keyB = new Date(b.id);
-    //        if(keyA < keyB) return -1;
-    //        if(keyA > keyB) return 1;
-    //        return 0;
-    //    });
-    //
-    //    subjects.sort(function(a, b){
-    //        var keyA = new Date(a.id),
-    //            keyB = new Date(b.id);
-    //        if(keyA < keyB) return -1;
-    //        if(keyA > keyB) return 1;
-    //        return 0;
-    //    });
-    //
-    //    //console.log(JSON.stringify(subjects[i]['id']));
-    //    //
-    //    //console.log("");
-    //    //
-    //    //console.log(JSON.stringify(subjects));
-    //
-    //    for(i = 0; i < subjects.length; i++)
-    //    {
-    //        for(k = 0; k < newSubjects.length; k++)
-    //        {
-    //            sameIDs = false;
-    //            if(subjects[i]['id'] == newSubjects[k]['id'])
-    //            {
-    //                //found id move on..
-    //                sameIDs = true;
-    //            }
-    //        }
-    //    }
-    //    alert(sameIDs);
-    //
-    //}
+    var validNumSubs;
+    var duplicates = false;
+    var validCSV = true;
+    var newCriteria = false;
+    var moreSubs = false;
+    var temp = subjects;
+    var sameIDs = false;
+    var numFieldsNew = Criteria.length;
+    var counter = {};
+
+    newSubjects.forEach(function(sub){
+       var key = JSON.stringify(sub['id']);
+        counter[key] = (counter[key] || 0) + 1;
+    });
+
+
+    //alert(duplicates);
+
+    for(i = 0; i < temp.length; i++)
+    {
+        delete temp[i]["previousGroups"];
+        delete temp[i]["__v"];
+        delete temp[i]["group"];
+    }
+    var fields = Object.getOwnPropertyNames(temp[0]);
+
+    for(i = 0; i < newSubjects.length; i++)
+    {
+        if(Object.keys(newSubjects[i]).length != numFieldsNew) { // check if subjects have same number of attributes
+            validCSV = false;
+        }
+        else //check for null values
+        {
+
+            for(k = 0; k < numFieldsNew; k++)
+            {
+                if(newSubjects[i][Criteria[k]] == "")
+                {
+                    validCSV = false;
+                }
+            }
+        }
+    }
+    for(k = 0; k < temp.length; k++) // check if all subject ids are present
+    {
+        for(i = 0; i < newSubjects.length; i++)
+        {
+            validNumSubs = false;
+            if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+            {
+                validNumSubs = true;
+                break;
+            }
+        }
+        if(!validNumSubs)
+            break;
+    }
+    if(!validCSV)
+    {
+        alert("The file you uploaded is not in the correct format. See user manual for correct upload formats");
+    }
+    else if(!validNumSubs)
+    {
+        alert("Some subjects have been omitted. See user manual for correct upload formats");
+    }
+    else
+    {
+        if(newSubjects.length > temp.length) // User attempting to add new subject
+        {
+            moreSubs = true;
+        }
+
+        for(i = 0; i < Criteria.length; i++)
+        {
+            if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
+            {
+                newCriteria = true;
+            }
+        }
+
+        if(newCriteria)
+        {
+            for(k = 0; k < temp.length; k++) // for each object in temp merge with object in newSubject where ids are the same
+            {
+                for(i = 0; i < newSubjects.length; i++)
+                {
+                    validNumSubs = false;
+                    if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    {
+                        $.extend(temp[k],newSubjects[i]);
+                        //console.log(JSON.stringify(temp[k]));
+                        validNumSubs = true;
+                        break;
+                    }
+                }
+                if(!validNumSubs)
+                    break;
+            }
+
+        }
+        if(moreSubs)
+        {
+            for(k = 0; k < newSubjects.length; k++) // for each object in newSubjects not matching any subjects in temp, push to temp.
+            {
+                for(i = 0; i < temp.length; i++)
+                {
+                    validNumSubs = false;
+                    if(temp[i]['id'] == newSubjects[k]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    {
+                        validNumSubs = true;
+                        break;
+                    }
+                }
+                if(!validNumSubs)
+                    temp.push(newSubjects[k]);
+            }
+        }
+    }
 }
+
+
+function SortBy(arr,key)
+{
+    arr.sort(function(a, b){
+        var keyA = a.key,
+            keyB = b.key;
+        // Compare the 2 dates
+        if(keyA < keyB) return -1;
+        if(keyA > keyB) return 1;
+        return 0;
+    });
+}
+
