@@ -229,6 +229,10 @@ function updateTeams()
             var alg = new Object();
             alg.field = $(this).find('#selectField option:selected').val();
             alg.type = $(this).find('#shuffleSelect option:selected').val();
+            if(alg.type == 'By Roles'){
+                alert($(this).find('.strict').first().checked);
+                //alert(alg.strict);
+            }
             alg.weight = parseInt($(this).find('#weight').val());
             algs.push(alg);
         });
@@ -410,7 +414,7 @@ var field = $(this).val();
                 select.append($("<option>").attr('value',this).text(this));
             });
             var numRoles = 1;
-            $(div).prepend("<h6>strict: <input type='checkbox' class='strict' name='strict value='strict></h6>");
+            $(div).prepend("<h6>strict: <input type='checkbox' class='strict' name='strict' value='strict'></h6>");
             $(spinner).change(function () {
 
 
