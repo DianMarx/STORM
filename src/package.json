@@ -15,7 +15,7 @@
   },
   "scripts": {
     
-	"start": "node app.js"
+	"start": "nodejs app.js"
   },
   "preferGlobal": true,
   "repository": "https://github.com/DianMarx/STORM",
