@@ -9,7 +9,7 @@ algs is an array specifying
 numGroups like numTeams
         -weight
  */
-function goShuffle(subs, algs, numGroups)
+function goShuffle(subs, algs, nGroups)
 {
     var totalWeight = 0;
     for(var p = 0; p < subs.length; p++) {
@@ -22,25 +22,35 @@ function goShuffle(subs, algs, numGroups)
 
     for(var i = 0; i < algs.length; i++)
     {
-        switch(algs[i].type)
-        {
-            case 'Similar': if(algs[i].field == "previousGroups")
-            {
-                similarGroupings(subs,numGroups);
-            }else
-                            similarShuffle(subs,numGroups, algs[i].field);
+        var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
+        if(i == algs.length -1) numGroups = nGroups;
+        switch(algs[i].type) {
+            case 'Similar':
+                if (algs[i].field == "previousGroups") {
+
+                    similarGroupings(subs, numGroups);
+                } else {
+
+
+
+
+                    similarShuffle(subs, numGroups, algs[i].field);
+        }
                             break;
             case 'Diverse': if(algs[i].field == "previousGroups")
             {
                 diverseGroupings(subs,numGroups);
             }else
+
                 diverseShuffle(subs,numGroups, algs[i].field);
                 break;
             case 'By Roles': alert("Has yet to be implemented");
                 break;
 
         }
+        alert(JSON.stringify(subs));
     }
+    sendToTables(subs);
 
 }
 
@@ -55,7 +65,7 @@ function diverseGroupings(subs, numGroups){
             a = 0;
         }
     }
-    sendToTables(subs);
+
 
 }
 
@@ -76,7 +86,7 @@ function similarGroupings(subs, numGroups){
     }
 
 
-    sendToTables(subs);
+    
 }
 
 function sortByPrev(subs){
@@ -158,7 +168,7 @@ function diverseShuffle(subs,numGroups,field)
             a = 0;
         }
     }
-    sendToTables(subs);
+
 }
 function similarShuffle(subs,numGroups,field)
 {
@@ -166,10 +176,12 @@ function similarShuffle(subs,numGroups,field)
 
     //comparison function
     function compare(a,b) {
-        if (a[field] < b[field])
-            return -1;
-        if (a[field] > b[field])
-            return 1;
+        if(a.group == b.group) {
+            if (a[field] < b[field])
+                return -1;
+            if (a[field] > b[field])
+                return 1;
+        }
         return 0;
     }
     var numSubj = subs.length;
@@ -185,7 +197,7 @@ function similarShuffle(subs,numGroups,field)
         }
         else {a++; q=0;}
     }
-    sendToTables(subs);
+
 }
 //loads sorted to teams
 function sendToTables(subs)
