@@ -8,7 +8,12 @@ algs is an array specifying
         -rules -numerical range -discrete strict(limits groups)
 numGroups like numTeams
         -weight
+
+
+        TO DO:
+        UI - need at least 4 groups for 2 algs, 8 for 3, 16 for 4
  */
+
 function goShuffle(subs, algs, nGroups)
 {
     var totalWeight = 0;
@@ -55,51 +60,59 @@ function goShuffle(subs, algs, nGroups)
 }
 
 function diverseGroupings(subs, numGroups){
-    var arr = sortByPrev(subs);
-
-    var a = 0;
-    for(var p = 0; p < arr.length; p++){
-        subs[arr[p]].group = ++a;
-        if(a == numGroups)
-        {
-            a = 0;
-        }
+    sortByPrev(subs);
+    var t = 0;
+    for(var z = 0; z < subs.length; z++)
+    {
+        if(subs[z].group> t)t = subs[z].group;
     }
+
+
+    if(t == 0){t = numGroups;}
+    var multi = numGroups;
+    numGroups = t * numGroups;
+    var a = 0;
+
+    for(var p = 0; p < subs.length; p++){
+        var lim = t;
+        if(subs[p].group > lim){a=lim; lim +=t; }
+        alert(p);
+        subs[p].group = ++a;
+
+        if(a == lim)
+        {
+            a = lim - t;
+        }
+
+    }
+    merger(subs,multi);
 
 
 }
 
 function similarGroupings(subs, numGroups){
-    var arr = sortByPrev(subs);
-
-    var allowed = getMaxes(subs.length, numGroups);
-    var q = 0, a=0;
-    for(var p = 0; p < arr.length; p++){
-        subs[arr[p]].group = a+1;
-
-        if(q < allowed[a]-1)
-        {
-            q++;
-        }
-        else {a++; q=0;}
-
-    }
+    sortByPrev(subs);
+    merger(subs,numGroups);
 
 
     
 }
 
 function sortByPrev(subs){
-    //alert("Ja");
+
     var arr = [];
     var N = subs.length;
     arr.push(0);
     for(var i = 1; i < N; i++){
-        arr.push(findBest(arr,subs));
-    }
-    //arr is an array of indexes, sorted by cosine similarity
+        var best = findBest(arr,subs)
+        arr.push(best);
+        var temp = subs[i];
 
-    return arr;
+        subs[i] = subs[best];
+        subs[best] = temp;
+
+    }
+
 }
 
 
@@ -149,26 +162,63 @@ function similarity(arr,b, subs){
 function diverseShuffle(subs,numGroups,field)
 {
 
-    function compare(a,b) {
+    function compare(a,b){
+    if(a.group == b.group) {
         if (a[field] < b[field])
             return -1;
         if (a[field] > b[field])
             return 1;
+    }
+        return 0;
+    }
+    var numSubj = subs.length;
+    subs.sort(compare);
+    var t = subs[subs.length-1].group;
+    if(t == 0)t++;
+
+    var multi = numGroups;
+    numGroups = t * numGroups;
+    var allowed = getMaxes(numSubj, numGroups);
+    var a = 0;
+
+    for(var p = 0; p < subs.length; p++){
+        var lim = t;
+        if(subs[p].group > lim){a=lim; lim +=t; }
+        subs[p].group = ++a;
+        if(a == lim)
+        {
+            a = lim - t;
+        }
+    }
+    merger(subs, multi);
+
+
+}
+function merger(subs,numGroups){
+    var field = 'group';
+    //comparison function
+    function compare(a,b) {
+            if (a[field] < b[field])
+                return -1;
+            if (a[field] > b[field])
+                return 1;
+
         return 0;
     }
     var numSubj = subs.length;
     subs.sort(compare);
 
     var allowed = getMaxes(numSubj, numGroups);
-    var a = 0;
-    for(var p = 0; p < subs.length; p++){
-        subs[p].group = ++a;
-        if(a == numGroups)
-        {
-            a = 0;
-        }
-    }
+    var q = 0, a=0;
+    for(var p = 0; p < numSubj; p++){
 
+        subs[p].group = a+1;
+        if(q < allowed[a]-1)
+        {
+            q++;
+        }
+        else {a++; q=0;}
+    }
 }
 function similarShuffle(subs,numGroups,field)
 {
