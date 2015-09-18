@@ -95,7 +95,7 @@ function similarGroupings(subs, numGroups){
     merger(subs,numGroups);
 
 
-    
+
 }
 
 function sortByPrev(subs){
