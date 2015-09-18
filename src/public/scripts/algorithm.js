@@ -8,8 +8,16 @@ algs is an array specifying
         -rules -numerical range -discrete strict(limits groups)
 numGroups like numTeams
         -weight
+<<<<<<< HEAD
+=======
+
+
+        TO DO:
+        UI - need at least 4 groups for 2 algs, 8 for 3, 16 for 4
+>>>>>>> develop
  */
-function goShuffle(subs, algs, numGroups)
+
+function goShuffle(subs, algs, nGroups)
 {
     var totalWeight = 0;
     for(var p = 0; p < subs.length; p++) {
@@ -22,6 +30,7 @@ function goShuffle(subs, algs, numGroups)
 
     for(var i = 0; i < algs.length; i++)
     {
+<<<<<<< HEAD
         switch(algs[i].type)
         {
             case 'Similar': if(algs[i].field == "previousGroups")
@@ -29,21 +38,103 @@ function goShuffle(subs, algs, numGroups)
                 similarGroupings(subs,numGroups);
             }else
                             similarShuffle(subs,numGroups, algs[i].field);
+=======
+        var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
+        if(i == algs.length -1) numGroups = nGroups;
+        switch(algs[i].type) {
+            case 'Similar':
+                if (algs[i].field == "previousGroups") {
+
+                    similarGroupings(subs, numGroups);
+                } else {
+
+
+
+
+                    similarShuffle(subs, numGroups, algs[i].field);
+        }
+>>>>>>> develop
                             break;
             case 'Diverse': if(algs[i].field == "previousGroups")
             {
                 diverseGroupings(subs,numGroups);
             }else
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
                 diverseShuffle(subs,numGroups, algs[i].field);
                 break;
             case 'By Roles': alert("Has yet to be implemented");
                 break;
 
+<<<<<<< HEAD
+=======
         }
+        alert(JSON.stringify(subs));
+    }
+    sendToTables(subs);
+
+}
+
+function diverseGroupings(subs, numGroups){
+    sortByPrev(subs);
+    var t = 0;
+    for(var z = 0; z < subs.length; z++)
+    {
+        if(subs[z].group> t)t = subs[z].group;
+    }
+
+
+    if(t == 0){t = numGroups;}
+    var multi = numGroups;
+    numGroups = t * numGroups;
+    var a = 0;
+
+    for(var p = 0; p < subs.length; p++){
+        var lim = t;
+        if(subs[p].group > lim){a=lim; lim +=t; }
+        alert(p);
+        subs[p].group = ++a;
+
+        if(a == lim)
+        {
+            a = lim - t;
+>>>>>>> develop
+        }
+
+    }
+    merger(subs,multi);
+
+
+}
+
+function similarGroupings(subs, numGroups){
+    sortByPrev(subs);
+    merger(subs,numGroups);
+
+
+    
+}
+
+function sortByPrev(subs){
+
+    var arr = [];
+    var N = subs.length;
+    arr.push(0);
+    for(var i = 1; i < N; i++){
+        var best = findBest(arr,subs)
+        arr.push(best);
+        var temp = subs[i];
+
+        subs[i] = subs[best];
+        subs[best] = temp;
+
     }
 
 }
 
+<<<<<<< HEAD
 function diverseGroupings(subs, numGroups){
     var arr = sortByPrev(subs);
 
@@ -92,6 +183,8 @@ function sortByPrev(subs){
     return arr;
 }
 
+=======
+>>>>>>> develop
 
 function findBest(arr, subs){
 
@@ -139,26 +232,67 @@ function similarity(arr,b, subs){
 function diverseShuffle(subs,numGroups,field)
 {
 
+<<<<<<< HEAD
     function compare(a,b) {
+=======
+    function compare(a,b){
+    if(a.group == b.group) {
+>>>>>>> develop
         if (a[field] < b[field])
             return -1;
         if (a[field] > b[field])
             return 1;
+    }
+        return 0;
+    }
+    var numSubj = subs.length;
+    subs.sort(compare);
+    var t = subs[subs.length-1].group;
+    if(t == 0)t++;
+
+    var multi = numGroups;
+    numGroups = t * numGroups;
+    var allowed = getMaxes(numSubj, numGroups);
+    var a = 0;
+
+    for(var p = 0; p < subs.length; p++){
+        var lim = t;
+        if(subs[p].group > lim){a=lim; lim +=t; }
+        subs[p].group = ++a;
+        if(a == lim)
+        {
+            a = lim - t;
+        }
+    }
+    merger(subs, multi);
+
+
+}
+function merger(subs,numGroups){
+    var field = 'group';
+    //comparison function
+    function compare(a,b) {
+            if (a[field] < b[field])
+                return -1;
+            if (a[field] > b[field])
+                return 1;
+
         return 0;
     }
     var numSubj = subs.length;
     subs.sort(compare);
 
     var allowed = getMaxes(numSubj, numGroups);
-    var a = 0;
-    for(var p = 0; p < subs.length; p++){
-        subs[p].group = ++a;
-        if(a == numGroups)
+    var q = 0, a=0;
+    for(var p = 0; p < numSubj; p++){
+
+        subs[p].group = a+1;
+        if(q < allowed[a]-1)
         {
-            a = 0;
+            q++;
         }
+        else {a++; q=0;}
     }
-    sendToTables(subs);
 }
 function similarShuffle(subs,numGroups,field)
 {
@@ -166,10 +300,12 @@ function similarShuffle(subs,numGroups,field)
 
     //comparison function
     function compare(a,b) {
-        if (a[field] < b[field])
-            return -1;
-        if (a[field] > b[field])
-            return 1;
+        if(a.group == b.group) {
+            if (a[field] < b[field])
+                return -1;
+            if (a[field] > b[field])
+                return 1;
+        }
         return 0;
     }
     var numSubj = subs.length;
@@ -185,7 +321,7 @@ function similarShuffle(subs,numGroups,field)
         }
         else {a++; q=0;}
     }
-    sendToTables(subs);
+
 }
 //loads sorted to teams
 function sendToTables(subs)

@@ -2,7 +2,17 @@ var numTeamGroups = 1; //Including add div, so technically numTeamGroups-1 drop 
 var testUser = false;
 var user;
 var collection = getParameterByName('collection');
+var subjects;
+
 $(document).ready(function(e) {
+
+    $("#uploadCSV").click(function(){
+       $("#CSVInput").click();
+    });
+
+    $("#CSVInput").change(function(){
+        uploadCSV();
+    });
 
     $("#logOutBtn").click(function(){
         if (confirm('Are you sure you want to logout?'))
@@ -26,7 +36,7 @@ $(document).ready(function(e) {
     $("input[type=submit], a, button, input[type=file]").button();
 
     //Moved array van subject objects
-    var subjects = JSON.parse($('#jsondat').text());
+    subjects = JSON.parse($('#jsondat').text());
 
     //gets all the subjects' fields
     var fields = [];
@@ -500,28 +510,28 @@ function addGroupsToSubjects(subjects){
 function exportCSV(subs, fields)
 {
     var csvContent = '';
+    var index = 0;
 
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
 
         csvContent += fields[i];
-        if (i != fields.length - 1)
+        if (i != fields.length - 2)
             csvContent += ',';
     }
     }
-    csvContent += '\n';
+    csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
         {   if(fields[k] != "previousGroups") {
             csvContent += subs[p][fields[k]];
-            if (k != fields.length - 1)
+            if (k != fields.length - 2)
                 csvContent += ',';
         }
         }
-        csvContent += '\n';
+        csvContent += '\r\n';
     }
-
 
     var link = document.createElement("a");
     link.href        = 'data:attachment/csv,' + encodeURIComponent(csvContent);
@@ -717,3 +727,165 @@ function getHeadings(fields, subj)
 
     return newFields;
 }
+
+
+function uploadCSV()
+{
+    var file = document.getElementById('CSVInput').files[0];
+    if (file) {
+        // create reader
+        var reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = function(e) {
+
+            var result = e.target.result;   // browser completed reading file
+            result = result.replace(/\r?\n|\r/g, "\r\n");
+
+            var obj = $.csv.toObjects(result);
+            var arr = $.csv.toArrays(result);
+
+            //console.log(JSON.stringify(obj));
+            MergeSubjects(obj,arr[0]);
+        };
+    }
+}
+
+function MergeSubjects(newSubjects,Criteria)
+{
+    var validNumSubs;
+    var duplicates = false;
+    var validCSV = true;
+    var newCriteria = false;
+    var moreSubs = false;
+    var temp = subjects;
+    var sameIDs = false;
+    var numFieldsNew = Criteria.length;
+    var counter = {};
+
+    newSubjects.forEach(function(sub){ //count duplicates
+       var key = JSON.stringify(sub['id']);
+        counter[key] = (counter[key] || 0) + 1;
+        if(counter[key] > 1)
+            duplicates = true;
+    });
+
+    for(i = 0; i < temp.length; i++)
+    {
+        delete temp[i]["previousGroups"];
+        delete temp[i]["__v"];
+        delete temp[i]["group"];
+    }
+    var fields = Object.getOwnPropertyNames(temp[0]);
+
+    for(i = 0; i < newSubjects.length; i++)
+    {
+        if(Object.keys(newSubjects[i]).length != numFieldsNew) { // check if subjects have same number of attributes
+            validCSV = false;
+        }
+        else //check for null values
+        {
+
+            for(k = 0; k < numFieldsNew; k++)
+            {
+                if(newSubjects[i][Criteria[k]] == "")
+                {
+                    validCSV = false;
+                }
+            }
+        }
+    }
+    for(k = 0; k < temp.length; k++) // check if all subject ids are present
+    {
+        for(i = 0; i < newSubjects.length; i++)
+        {
+            validNumSubs = false;
+            if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+            {
+                validNumSubs = true;
+                break;
+            }
+        }
+        if(!validNumSubs)
+            break;
+    }
+    if(!validCSV)
+    {
+        alert("The file you uploaded is not in the correct format. See user manual for correct upload formats");
+    }
+    else if(!validNumSubs)
+    {
+        alert("Some subjects have been omitted. See user manual for correct upload formats");
+    }
+    else if(duplicates)
+    {
+        alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats");
+    }
+    else
+    {
+        if(newSubjects.length > temp.length) // User attempting to add new subject
+        {
+            moreSubs = true;
+        }
+
+        for(i = 0; i < Criteria.length; i++)
+        {
+            if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
+            {
+                newCriteria = true;
+            }
+        }
+
+        if(newCriteria)
+        {
+            for(k = 0; k < temp.length; k++) // for each object in temp merge with object in newSubject where ids are the same
+            {
+                for(i = 0; i < newSubjects.length; i++)
+                {
+                    validNumSubs = false;
+                    if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    {
+                        $.extend(temp[k],newSubjects[i]);
+                        //console.log(JSON.stringify(temp[k]));
+                        validNumSubs = true;
+                        break;
+                    }
+                }
+                if(!validNumSubs)
+                    break;
+            }
+
+        }
+        if(moreSubs)
+        {
+            for(k = 0; k < newSubjects.length; k++) // for each object in newSubjects not matching any subjects in temp, push to temp.
+            {
+                for(i = 0; i < temp.length; i++)
+                {
+                    validNumSubs = false;
+                    if(temp[i]['id'] == newSubjects[k]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    {
+                        validNumSubs = true;
+                        break;
+                    }
+                }
+                if(!validNumSubs)
+                    temp.push(newSubjects[k]);
+            }
+        }
+        //console.log(JSON.stringify(temp));
+    }
+}
+
+
+function SortBy(arr,key)
+{
+    arr.sort(function(a, b){
+        var keyA = a.key,
+            keyB = b.key;
+        // Compare the 2 dates
+        if(keyA < keyB) return -1;
+        if(keyA > keyB) return 1;
+        return 0;
+    });
+}
+
