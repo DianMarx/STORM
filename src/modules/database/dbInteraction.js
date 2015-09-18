@@ -9,7 +9,32 @@ db.once('open', function (callback) {
 
 });
 
+function subjToDB(data, col)
+{
+    idSchema.set('collection', col);
+    coll = mongoose.model(col, idSchema);
+    var id = 0;
+    users = JSON.parse(data);
+    users.forEach(function(user)
+    {
+        for(field in user)
+        {
 
+            if(isNumber(user[field]) && field != 'previousGroups')
+            {
+                user[field] = parseInt(user[field]);
+            }
+
+        }
+
+        newUser = new coll(user);
+        newUser.save(function(err){
+            if(err) return next(err);
+        });
+    });
+}
+
+function isNumber(obj) { return !isNaN(parseFloat(obj)); }
 //Loose schema
 var mySchema = new Schema({name : String}, {strict:false});
 
@@ -187,13 +212,28 @@ module.exports = {
         users = JSON.parse(data);
         users.forEach(function(user)
         {
+            for(field in user)
+            {
 
-            user.id = parseInt(user.id);
+                if(isNumber(user[field]) && field != 'previousGroups')
+                {
+                    user[field] = parseInt(user[field]);
+                }
+
+            }
+
             newUser = new coll(user);
             newUser.save(function(err){
                 if(err) return next(err);
             });
         });
+    },
+    updateSubjs: function(data, col)
+    {
+        idSchema.set('collection', col);
+        var coll = mongoose.model(col, idSchema);
+        coll.remove({},function(err){});
+        subjToDB(data,col);
     },
 
     checkLogin: function(username, password, callback)

@@ -1,0 +1,101 @@
+id,Name,Belvin Role,MBTI,Mark
+1,Kory Delapaz,Plant,ISTJ,14
+2,Monica Goodlow,Completer Finisher,ISTP,11
+3,Nakia Reinhardt,Completer Finisher,ISTP,35
+4,Tisha Diniz,Completer Finisher,ISTP,42
+5,Rueben Ruano,Completer Finisher,ISTP,41
+6,Armando Harrell,Completer Finisher,ISTP,10
+7,Sharolyn Jelley,Completer Finisher,ISTP,31
+8,Caryl Schwager,Completer Finisher,ISTJ,91
+9,Kandra Cavalieri,Completer Finisher,ISTJ,11
+10,Karmen Gamache,Completer Finisher,ISTJ,97
+11,Leilani Piehl,Co-ordinator,ISTJ,45
+12,Elizabeth Chaparro,Co-ordinator,ISTJ,49
+13,Catharine Penman,Co-ordinator,ISTJ,92
+14,Trudi Towry,Co-ordinator,ISFP,35
+15,Clint Mcgruder,Co-ordinator,ISFP,77
+16,Veronique Militello,Co-ordinator,ISFP,21
+17,Robbyn Parras,Co-ordinator,ISFP,60
+18,Dion Stauffer,Co-ordinator,ISFP,78
+19,Mikaela Mcgahan,Co-ordinator,ISFP,37
+20,Amanda Tillinghast,Co-ordinator,ISFJ,66
+21,Justina Jara,Co-ordinator,ISFJ,73
+22,Deana Sheppard,Co-ordinator,ISFJ,56
+23,Merideth Sessler,Implementer,ISFJ,4
+24,Gianna Arledge,Implementer,ISFJ,8
+25,Stefan Karn,Implementer,ISFJ,38
+26,Wilton Macgillivray,Implementer,ISFJ,32
+27,Jaimee Broaden,Implementer,INTP,52
+28,Delfina Hanlon,Implementer,INTP,32
+29,Nedra Stills,Implementer,INTP,56
+30,Spencer Doten,Implementer,INTP,47
+31,Rusty Mendes,Implementer,INTP,78
+32,Elroy Brignac,Implementer,INTP,35
+33,Ivy Riccardi,Implementer,INTJ,27
+34,Marget Midkiff,Implementer,INTJ,25
+35,Blanch Yoshida,Monitor Evaluator,INTJ,55
+36,Magan Fielding,Monitor Evaluator,INTJ,86
+37,Lavina Karl,Monitor Evaluator,INTJ,17
+38,Idell Self,Monitor Evaluator,INTJ,84
+39,Manda Nailor,Monitor Evaluator,INTJ,2
+40,Rickey Kierstead,Monitor Evaluator,INFP,68
+41,Ranae Temme,Monitor Evaluator,INFP,58
+42,Hildred Branham,Monitor Evaluator,INFP,5
+43,Patty Sturrock,Monitor Evaluator,INFP,72
+44,Celestine Gros,Monitor Evaluator,INFP,57
+45,Bernadette Corry,Monitor Evaluator,INFP,45
+46,Gilberto Deborde,Plant,INFJ,64
+47,Wes Strayhorn,Plant,INFJ,101
+48,Sanjuana Hertlein,Plant,INFJ,59
+49,Maurita Ehlert,Plant,INFJ,42
+50,Jolanda Usrey,Plant,INFJ,44
+51,Parker Labounty,Plant,INFJ,64
+52,Agustin Messenger,Plant,INFJ,74
+53,Olin Asmussen,Plant,ESTP,16
+54,Dudley Dieckman,Plant,ESTP,18
+55,Stephan Bramblett,Plant,ESTP,19
+56,Hugh Bogner,Plant,ESTP,13
+57,Jefferey Bellew,Plant,ESTP,43
+58,Shawn Simonton,Plant,ESTP,50
+59,Lawerence Juares,Resource Investigator,ESTJ,21
+60,Gil Gilkes,Resource Investigator,ESTJ,37
+61,Francisco Sones,Resource Investigator,ESTJ,49
+62,Claudio Villarreal,Resource Investigator,ESTJ,82
+63,Olen Roten,Resource Investigator,ESTJ,59
+64,Keenan Eliason,Resource Investigator,ESTJ,25
+65,Lynwood Gourdine,Resource Investigator,ESFP,40
+66,Carlos Billie,Resource Investigator,ESFP,88
+67,Gavin Whorley,Resource Investigator,ESFP,90
+68,Oliver Thong,Shaper,ESFP,35
+69,Karl Barsky,Shaper,ESFP,84
+70,Al Cavalier,Shaper,ESFP,7
+71,Moshe Millman,Shaper,ESFJ,54
+72,Rashad Gabrielson,Shaper,ESFJ,74
+73,Leonel Kisling,Shaper,ESFJ,5
+74,Jayson Swafford,Shaper,ESFJ,55
+75,Everette Cuadra,Shaper,ESFJ,92
+76,Augustine Brace,Shaper,ESFJ,63
+77,Rolf Lindsey,Shaper,ENTP,48
+78,Devin Hayles,Specialist,ENTP,91
+79,Heriberto Hartford,Specialist,ENTP,58
+80,Isreal Besaw,Specialist,ENTP,53
+81,Tristan Demille,Specialist,ENTP,9
+82,Toney Zuchowski,Specialist,ENTP,93
+83,Delbert Havis,Specialist,ENTJ,91
+84,Mary Kondo,Specialist,ENTJ,68
+85,Sherwood Pals,Teamworker,ENTJ,76
+86,Reinaldo Rhoda,Teamworker,ENTJ,27
+87,Dexter Coolidge,Teamworker,ENTJ,100
+88,Trevor Forti,Teamworker,ENTJ,41
+89,Jimmie Montag,Teamworker,ENFP,28
+90,Archie Tookes,Teamworker,ENFP,44
+91,Rudolph Cespedes,Teamworker,ENFP,17
+92,Darnell Peed,Teamworker,ENFP,52
+93,Owen Rivenburg,Teamworker,ENFP,14
+94,Hershel Hawbaker,Teamworker,ENFP,83
+95,Carter Hudkins,Teamworker,ENFJ,53
+96,Jarrod Gillen,Teamworker,ENFJ,76
+97,Randal Putz,Teamworker,ENFJ,30
+98,Palmer Wohlford,Teamworker,ENFJ,49
+99,Travis Shkreli,Teamworker,ENFJ,51
+100,Raymundo Cofield,Teamworker,ENFJ,44
