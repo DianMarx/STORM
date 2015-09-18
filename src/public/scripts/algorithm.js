@@ -8,13 +8,10 @@ algs is an array specifying
         -rules -numerical range -discrete strict(limits groups)
 numGroups like numTeams
         -weight
-<<<<<<< HEAD
-=======
 
 
         TO DO:
         UI - need at least 4 groups for 2 algs, 8 for 3, 16 for 4
->>>>>>> develop
  */
 
 function goShuffle(subs, algs, nGroups)
@@ -30,15 +27,6 @@ function goShuffle(subs, algs, nGroups)
 
     for(var i = 0; i < algs.length; i++)
     {
-<<<<<<< HEAD
-        switch(algs[i].type)
-        {
-            case 'Similar': if(algs[i].field == "previousGroups")
-            {
-                similarGroupings(subs,numGroups);
-            }else
-                            similarShuffle(subs,numGroups, algs[i].field);
-=======
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
         if(i == algs.length -1) numGroups = nGroups;
         switch(algs[i].type) {
@@ -53,23 +41,17 @@ function goShuffle(subs, algs, nGroups)
 
                     similarShuffle(subs, numGroups, algs[i].field);
         }
->>>>>>> develop
                             break;
             case 'Diverse': if(algs[i].field == "previousGroups")
             {
                 diverseGroupings(subs,numGroups);
             }else
-<<<<<<< HEAD
-=======
 
->>>>>>> develop
                 diverseShuffle(subs,numGroups, algs[i].field);
                 break;
             case 'By Roles': alert("Has yet to be implemented");
                 break;
 
-<<<<<<< HEAD
-=======
         }
         alert(JSON.stringify(subs));
     }
@@ -100,7 +82,6 @@ function diverseGroupings(subs, numGroups){
         if(a == lim)
         {
             a = lim - t;
->>>>>>> develop
         }
 
     }
@@ -114,7 +95,7 @@ function similarGroupings(subs, numGroups){
     merger(subs,numGroups);
 
 
-    
+
 }
 
 function sortByPrev(subs){
@@ -134,57 +115,6 @@ function sortByPrev(subs){
 
 }
 
-<<<<<<< HEAD
-function diverseGroupings(subs, numGroups){
-    var arr = sortByPrev(subs);
-
-    var a = 0;
-    for(var p = 0; p < arr.length; p++){
-        subs[arr[p]].group = ++a;
-        if(a == numGroups)
-        {
-            a = 0;
-        }
-    }
-    sendToTables(subs);
-
-}
-
-function similarGroupings(subs, numGroups){
-    var arr = sortByPrev(subs);
-
-    var allowed = getMaxes(subs.length, numGroups);
-    var q = 0, a=0;
-    for(var p = 0; p < arr.length; p++){
-        subs[arr[p]].group = a+1;
-
-        if(q < allowed[a]-1)
-        {
-            q++;
-        }
-        else {a++; q=0;}
-
-    }
-
-
-    sendToTables(subs);
-}
-
-function sortByPrev(subs){
-    //alert("Ja");
-    var arr = [];
-    var N = subs.length;
-    arr.push(0);
-    for(var i = 1; i < N; i++){
-        arr.push(findBest(arr,subs));
-    }
-    //arr is an array of indexes, sorted by cosine similarity
-
-    return arr;
-}
-
-=======
->>>>>>> develop
 
 function findBest(arr, subs){
 
@@ -232,12 +162,8 @@ function similarity(arr,b, subs){
 function diverseShuffle(subs,numGroups,field)
 {
 
-<<<<<<< HEAD
-    function compare(a,b) {
-=======
     function compare(a,b){
     if(a.group == b.group) {
->>>>>>> develop
         if (a[field] < b[field])
             return -1;
         if (a[field] > b[field])
