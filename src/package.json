@@ -15,9 +15,7 @@
   },
   "scripts": {
     
-	"start": "node app.js",
-   
-	"deploy": "gcloud preview app deploy app.yaml"
+	"start": "node app.js"
   },
   "preferGlobal": true,
   "repository": "https://github.com/DianMarx/STORM",
