@@ -378,6 +378,9 @@ function updateTeams()
     });
     $("#returnSubjs").click(function(e){
         $(".subject").detach().appendTo("#subjects table .subjBody");
+        for(var q = 0; q < subjects.length; q++){
+            subjects[q].group = 0;
+        }
     });
     $("#randomize").click(function(e){
         randomize(subjects, numTeamGroups-1);
