@@ -14,12 +14,12 @@
     "qunitjs": "^1.18.0"
   },
   "scripts": {
-    
+
 	"start": "nodejs app.js"
   },
   "preferGlobal": true,
   "repository": "https://github.com/DianMarx/STORM",
-  "author": "Sean Hill, Dian Marx, Renaldo van Dyk SHaun Meintjies",
+  "author": "Sean Hill, Dian Marx, Renaldo van Dyk, Shaun Meintjies",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DianMarx/STORM/issues"

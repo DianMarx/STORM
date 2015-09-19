@@ -906,13 +906,38 @@ function drawChart() {
         ['Pepperoni', 2]
     ]);
 
+
+    //PieChart
     // Set chart options
-    var options = {'title':'How Much Pizza I Ate Last Night',
+    var pieOptions = {'title':'How Much Pizza I Ate Last Night',
         'width':800,
         'height':600};
 
-    // Instantiate and draw our chart, passing in some options.
+    // Instantiate and draw our charts, passing in some options.
+
     var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
-    chart.draw(data, options);
+    chart.draw(data, pieOptions);
+
+    //Interval Chart
+    var options_lines = {
+        title: 'Line intervals, default',
+        curveType: 'function',
+        lineWidth: 4,
+        intervals: { 'style':'line' },
+        legend: 'none'
+    };
+
+    var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines'));
+    chart_lines.draw(data, options_lines);
+
+    //Line Chart
+    var lineOptions = {
+        title: 'Company Performance',
+        curveType: 'function',
+        legend: { position: 'bottom' }
+    };
+
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+    chart.draw(data, lineOptions);
 
 }
