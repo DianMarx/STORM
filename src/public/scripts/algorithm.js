@@ -31,25 +31,20 @@ function goShuffle(subs, algs, nGroups)
         if(i == algs.length -1) numGroups = nGroups;
         switch(algs[i].type) {
             case 'Similar':
-                if (algs[i].field == "previousGroups") {
-
+                if (algs[i].field == "previousGroups")
                     similarGroupings(subs, numGroups);
-                } else {
-
-
-
-
+                else
                     similarShuffle(subs, numGroups, algs[i].field);
-        }
-                            break;
-            case 'Diverse': if(algs[i].field == "previousGroups")
-            {
-                diverseGroupings(subs,numGroups);
-            }else
-
-                diverseShuffle(subs,numGroups, algs[i].field);
+                break;
+            case 'Diverse':
+                if(algs[i].field == "previousGroups")
+                    diverseGroupings(subs,numGroups);
+                else
+                    diverseShuffle(subs,numGroups, algs[i].field);
                 break;
             case 'By Roles': alert("Has yet to be implemented");
+                break;
+            case 'Randomize': randomize(subs,subs.length,numGroups);
                 break;
 
         }
@@ -294,9 +289,22 @@ function getMaxes(numSubj, numGroups){
 
     return allowed;
 }
-function randomize(numSubj, numTeam){
 
-    var totalSubj = $('.subject').length;
+function randomize(subs, numSubj, numTeam){
+
+
+    var t = 0;
+    for(var z = 0; z < subs.length; z++)
+    {
+        if(subs[z].group> t)t = subs[z].group;
+    }
+    var arr = [];
+    for(var w = 0; w < t; w++){
+        arr.push(0);
+    }
+    for(var i = 0; i < numSubj; i++){
+        arr[numSubj[i].group]++;
+    }
     //alert(numSubj + " teams: " + numTeam);
     var numSubjects = numSubj; var numTeams = numTeam;
     var max = totalSubj/numTeams;
@@ -313,23 +321,29 @@ function randomize(numSubj, numTeam){
 
     }
     var trueMax = max;
-alert(max);
-    $('.names').find('.subject').each(function(index, element) {
-//alert(index + " " + element);
+
+    for(var q = 0; q < numSubj; q++) {
+        if(numSubj[q].group == 0){
         var done = false;
-        while(!done){
+        while(!done) {
             var randm = Math.floor(Math.random() * (numTeams) + 1);
 
-            if($('.' + randm).find("tr").length-1 < max){
+            if ($(arr[randm] < max)) {
                 //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
-                var to = $('.' + randm).find('.subjBody');
-                $(element).appendTo(to); done = true;
+                subs[q].group = randm;
+                arr[randm]++;
+                done = true;
 
-                if($('.' + randm).find("tr").length-1 == max)
-                {if(!even){if(remaining > 0)remaining--; if(remaining ==0) max = trueMax-1;}}
+                if (arr[randm] == max) {
+                    if (!even) {
+                        if (remaining > 0)remaining--;
+                        if (remaining == 0) max = trueMax - 1;
+                    }
+                }
 
             }
-
         }
-    });
+        }
+        }
+
 }
