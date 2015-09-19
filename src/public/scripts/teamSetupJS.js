@@ -214,9 +214,7 @@ function updateTeams()
 }
 
 
-    $('#randomize').click(function(e) {
-        randomize($('.names').children().length,numTeamGroups-1);
-    });
+
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
         //var parameter = $(".shuffleBy:checked").val();
@@ -380,6 +378,9 @@ function updateTeams()
     });
     $("#returnSubjs").click(function(e){
         $(".subject").detach().appendTo("#subjects table .subjBody");
+    });
+    $("#randomize").click(function(e){
+        randomize(subjects, numTeamGroups-1);
     });
 
     $("#selectField").change(function(){

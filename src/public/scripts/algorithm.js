@@ -370,40 +370,39 @@ function getMaxes(numSubj, numGroups){
     return allowed;
 }
 
-function randomize(subs, numSubj, numTeam){
+function randomize(subs, numTeams){
 
 
-    var t = 0;
-    for(var z = 0; z < subs.length; z++)
-    {
-        if(subs[z].group> t)t = subs[z].group;
-    }
+
+    var numSubj = subs.length;
     var arr = [];
-    for(var w = 0; w < t; w++){
+    for(var w = 0; w < numTeams; w++){
         arr.push(0);
     }
     for(var i = 0; i < numSubj; i++){
-        arr[numSubj[i].group]++;
+        arr[subs[i].group]++;
     }
     //alert(numSubj + " teams: " + numTeam);
-    var numSubjects = numSubj; var numTeams = numTeam;
-    var max = totalSubj/numTeams;
+
+    var max = numSubj/numTeams;
     var even = false;
     var remaining = 0;
     if(max % 1 == 0)  even = true;
     else {
 
-        temp = max - Math.floor(max);
+        var temp = max - Math.floor(max);
 
         remaining = Math.ceil(temp * numTeams);
         //alert(temp + " " + remaining);
         max = Math.ceil(max);
 
     }
+
     var trueMax = max;
 
     for(var q = 0; q < numSubj; q++) {
-        if(numSubj[q].group == 0){
+
+        if(subs[q].group == 0){
         var done = false;
         while(!done) {
             var randm = Math.floor(Math.random() * (numTeams) + 1);
@@ -425,5 +424,6 @@ function randomize(subs, numSubj, numTeam){
         }
         }
         }
+    sendToTables(subs);
 
 }
