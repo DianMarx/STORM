@@ -258,9 +258,10 @@ var numSubs = subs.length;
     {
 
         var to = $('.' + subs[i].group).find('.subjBody');
-
         $('#' + subs[i].id).appendTo(to);
+        
     }
+
 }
 
 //helper function
