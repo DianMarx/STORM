@@ -1,0 +1,15 @@
+# [START runtime]
+runtime: custom
+vm: true
+api_version: 1
+# [END runtime]
+
+
+skip_files:
+ - ^(.*/)?#.*#$
+ - ^(.*/)?.*~$
+ - ^(.*/)?.*\.py[co]$
+ - ^(.*/)?.*/RCS/.*$
+ - ^(.*/)?\..*$
+ - ^(.*/)?.*/node_modules/.*$
+ - ^(.*/)?.*\.log$

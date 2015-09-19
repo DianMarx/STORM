@@ -53,7 +53,7 @@ function goShuffle(subs, algs, nGroups)
                 break;
 
         }
-        alert(JSON.stringify(subs));
+
     }
     sendToTables(subs);
 
@@ -76,7 +76,7 @@ function diverseGroupings(subs, numGroups){
     for(var p = 0; p < subs.length; p++){
         var lim = t;
         if(subs[p].group > lim){a=lim; lim +=t; }
-        alert(p);
+
         subs[p].group = ++a;
 
         if(a == lim)
@@ -173,8 +173,10 @@ function diverseShuffle(subs,numGroups,field)
     }
     var numSubj = subs.length;
     subs.sort(compare);
+    var lim;
     var t = subs[subs.length-1].group;
-    if(t == 0)t++;
+    if(t == 0) {lim = numGroups; t = 2;} else lim = t;
+    //t is amount groups from
 
     var multi = numGroups;
     numGroups = t * numGroups;
@@ -182,9 +184,11 @@ function diverseShuffle(subs,numGroups,field)
     var a = 0;
 
     for(var p = 0; p < subs.length; p++){
-        var lim = t;
+
+
         if(subs[p].group > lim){a=lim; lim +=t; }
         subs[p].group = ++a;
+        alert(subs[p].group);
         if(a == lim)
         {
             a = lim - t;
@@ -259,7 +263,7 @@ var numSubs = subs.length;
 
         var to = $('.' + subs[i].group).find('.subjBody');
 
-        $('#' + subs[i].id).appendTo(to);
+        $('#' + subs[i].id+"group").appendTo(to);
     }
 }
 
