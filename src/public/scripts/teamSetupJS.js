@@ -106,7 +106,7 @@ $(document).ready(function(e) {
             subjects[i].group = 0;
             var sub = subjects[i];
             if(sub['name']){var name= 'name';}else var name = 'Name';
-                $("tbody#0").append("<tr class='subject' id='" + sub.id + "' ><td>" + sub[name] + "</td></tr>");
+                $("tbody#0").append("<tr class='subject' id='" + sub.id+"group" + "' ><td>" + sub[name] + "</td></tr>");
         }
 
         $(".subject").draggable({
@@ -148,7 +148,7 @@ $(document).ready(function(e) {
         for(var i = 0; i < subjects.length; i++)
         {
             var sub = subjects[i];
-            $("tr#"+sub.id).closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
+            $("#"+sub.id+"group").closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
         }
     }
     //Removes from all records
