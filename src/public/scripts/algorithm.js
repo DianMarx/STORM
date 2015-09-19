@@ -188,7 +188,7 @@ function diverseShuffle(subs,numGroups,field)
 
         if(subs[p].group > lim){a=lim; lim +=t; }
         subs[p].group = ++a;
-        alert(subs[p].group);
+
         if(a == lim)
         {
             a = lim - t;
@@ -313,7 +313,7 @@ function randomize(numSubj, numTeam){
 
     }
     var trueMax = max;
-alert(max);
+
     $('.names').find('.subject').each(function(index, element) {
 //alert(index + " " + element);
         var done = false;
