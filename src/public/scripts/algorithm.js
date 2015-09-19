@@ -27,7 +27,12 @@ function goShuffle(subs, algs, nGroups)
 
     for(var i = 0; i < algs.length; i++)
     {
+
+        if(i < algs.length-1)
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
+        if((numGroups % 2 == 0) && (nGroups % 2 != 0))
+        numGroups+=1;
+
         if(i == algs.length -1) numGroups = nGroups;
         switch(algs[i].type) {
             case 'Similar':
@@ -57,30 +62,50 @@ function goShuffle(subs, algs, nGroups)
 function diverseGroupings(subs, numGroups){
     sortByPrev(subs);
     var t = 0;
-    for(var z = 0; z < subs.length; z++)
-    {
-        if(subs[z].group> t)t = subs[z].group;
+    function gComp(a,b){
+
+
+        if (a.group < b.group)
+            return -1;
+        if (a.group > b.group)
+            return 1;
+
+        return 0;
     }
 
 
-    if(t == 0){t = numGroups;}
-    var multi = numGroups;
-    numGroups = t * numGroups;
+
+    subs.sort(gComp);
+    var lim;
+
+    var t = subs[subs.length-1].group;
+
+    if(t == 0) t = 2;
+    lim = numGroups;
+    //t is amount groups from
+
+
+    var multi = t * numGroups;
+
+
     var a = 0;
-
+    var old = subs[0].group;
+    var cur = subs[0].group;
     for(var p = 0; p < subs.length; p++){
-        var lim = t;
-        if(subs[p].group > lim){a=lim; lim +=t; }
 
+        old = cur;
+        cur = subs[p].group;
+        if(cur > old){a=lim; lim +=numGroups; }
         subs[p].group = ++a;
 
         if(a == lim)
         {
-            a = lim - t;
+            a = lim - numGroups;
         }
-
     }
-    merger(subs,multi);
+
+
+    diverseMerger(subs, numGroups, multi );
 
 
 }
@@ -127,7 +152,7 @@ function findBest(arr, subs){
         }
         if(!skip){
 
-            var sim = similarity(arr, subs[i].previousGroups, subs);
+            var sim = similarity(arr, subs[i], subs);
             if(sim > topCompare){
                 topIndex = i;
                 topCompare = sim;
@@ -144,12 +169,16 @@ function similarity(arr,b, subs){
     //alert(b);
     for(var i = 0; i < arr.length; i++){
 
-        var temp = subs[arr[i]].previousGroups;
+        if(subs[arr[i]].group == b.group) {
+            var temp = subs[arr[i]].previousGroups;
 
-        for(var p = 0; p < b.length; p++){
-            //alert(temp[p] + " = " + b[p]);
-            if(temp[p] == b[p]){ c++;}
+            for (var p = 0; p < b.previousGroups.length; p++) {
+                //alert(temp[p] + " = " + b[p]);
+                if (temp[p] == b[p]) {
+                    c++;
+                }
 
+            }
         }
     }
     return c;
@@ -158,6 +187,7 @@ function diverseShuffle(subs,numGroups,field)
 {
 
     function compare(a,b){
+
     if(a.group == b.group) {
         if (a[field] < b[field])
             return -1;
@@ -166,32 +196,82 @@ function diverseShuffle(subs,numGroups,field)
     }
         return 0;
     }
-    var numSubj = subs.length;
+
+    function gComp(a,b){
+
+
+            if (a.group < b.group)
+                return -1;
+            if (a.group > b.group)
+                return 1;
+
+        return 0;
+    }
+
+
     subs.sort(compare);
+    subs.sort(gComp);
     var lim;
+
     var t = subs[subs.length-1].group;
-    if(t == 0) {lim = numGroups; t = 2;} else lim = t;
+
+
+    lim = numGroups;
     //t is amount groups from
 
-    var multi = numGroups;
-    numGroups = t * numGroups;
-    var allowed = getMaxes(numSubj, numGroups);
-    var a = 0;
+    var multi = t * numGroups;
+    if(t == 0)
+    multi = numGroups;
 
+
+
+    var a = 0;
+    var old = subs[0].group;
+    var cur = subs[0].group;
     for(var p = 0; p < subs.length; p++){
 
-
-        if(subs[p].group > lim){a=lim; lim +=t; }
+        old = cur;
+        cur = subs[p].group;
+        if(cur > old){a=lim; lim +=numGroups; }
         subs[p].group = ++a;
 
         if(a == lim)
         {
-            a = lim - t;
+            a = lim - numGroups;
         }
     }
-    merger(subs, multi);
+
+    diverseMerger(subs, numGroups, multi);
 
 
+}
+function diverseMerger(subs, numGroups, tempNum)
+{
+    var field = 'group';
+    //comparison function
+    function compare(a,b) {
+        if (a[field] < b[field])
+            return -1;
+        if (a[field] > b[field])
+            return 1;
+
+        return 0;
+    }
+    var numSubj = subs.length;
+    subs.sort(compare);
+
+    var t = tempNum/numGroups;
+
+    for(var p = 0; p< subs.length; p++)
+    {
+        var temp = t;
+        var g = 1;
+        while(temp < subs[p].group)
+        {temp += t; g++;}
+
+        subs[p].group = g;
+
+    }
 }
 function merger(subs,numGroups){
     var field = 'group';
