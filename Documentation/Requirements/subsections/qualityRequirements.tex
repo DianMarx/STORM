@@ -1,36 +1,24 @@
 The quality requirements are the requirements around the quality attributes of the system and
 the services it provides. Quality requirements relevant to project STORM are listed below in order of priority. \par
 
-\subsubsection{Usability}
+\subsubsection{Usability} \label{3.2.1}
 Usability is one of the most important quality attributes. Usability tests should be performed to check whether:
 \begin{itemize}
 \item users find any aspects of the system cumbersome, non-intuitive or frustrating.
 \item the user has a positive experience and finds the functionality easy to use and learn.
 \end{itemize}
 
-\subsubsection{Scalability}
+\subsubsection{Scalability} \label{3.2.2}
 The system must implement a very generic optimization algorithm in order to be used by different parties in different contexts. In addition to different environments the system should be able to optimize groups for an extremely large number of subjects.
 
-\subsubsection{Performance}
+\subsubsection{Performance} \label{3.2.3}
 \begin{itemize}
 \item The optimization algorithm should be able to sort a maximum of 10 000 subjects into groups and respond within 10 seconds.
 \item Reporting queries should respond within 15 seconds. \par
 \textit {*The above figures does not include the network round-trip which is outside the control of the system.}
 \end{itemize}
 
-\subsubsection{Maintainability} 
-Amongst the most important quality requirements for the system is maintainability which includes flexibility and extensibility. It should be easy to maintain the system in the future. To this end
-\begin{itemize}
-\item future developers should be able to easily understand the system,
-\item the technologies chosen for the system and be reasonably expected to be available for a long time,
-\item and developers should be able to easily and relatively quickly
-\begin{itemize}
-\item change aspects of the functionality the system provides, and
-\item add new functionality to the system.
-\end{itemize}
-\end{itemize}
-
-\subsubsection{Reliability}
+\subsubsection{Reliability} \label{3.2.4}
 The system should provide by default a reasonable level of reliability and should be deployable within configurations which provide a high level of availability, supporting
 \begin{itemize}
 \item fail-over safety of all components and
@@ -38,31 +26,16 @@ The system should provide by default a reasonable level of reliability and shoul
 \end{itemize}
 Hot deployment of new or changing functionality is not required for this system.
 
-\subsubsection{Deployability}
+\subsubsection{Deployability} \label{3.2.5}
 The system must be deployable
 \begin{itemize}
 \item on Linux servers,
 \item and in environments using different databases for persistence of the STORM data.
 \end{itemize}
 
-\subsubsection{Security}
+\subsubsection{Security} \label{3.2.6}
 Security is a fairly important aspect of the system in order to protect sensitive project and subject data.
 The system should also allow users that are logged on to the system, to assign collaborators
 to a project. 
 
-
-\subsubsection{Testability}
-All services offered by the system must be testable through
-\begin{enumerate}
-\item unit tests, testing components in isolation using mock objects, and
-\item integration tests where components are integrated within the actual environment.
-\end{enumerate}
-In either case, these functional tests should verify that
-\begin{itemize}
-\item the service is provided if all pre-conditions are met (i.e. that no exception is raised except
-if one of the pre-conditions for the service is not met), and
-\item that all post-conditions hold true once the service has been provided.
-\end{itemize}
-In addition to functional testing, the quality requirements like scalability, usability, auditability,
-performance and so on should also be tested.
 

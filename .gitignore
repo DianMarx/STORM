@@ -1,25 +1,17 @@
-<<<<<<< HEAD
 src/node_modules/
-<<<<<<< HEAD
 src/.idea/
 src/.idea/workspace.xml
 src/.idea/workspace.xml
-=======
-=======
->>>>>>> origin/UserManual
 .idea/encodings.xml
 .idea/misc.xml
 .idea/modules.xml
 .idea/STORM.iml
 .idea/vcs.xml
 .idea/scopes/scope_settings.xml
-<<<<<<< HEAD
->>>>>>> origin/Documentation
-=======
 Documentation/User Manual/UserManual.aux
 Documentation/User Manual/UserManual.log
 Documentation/User Manual/UserManual.pdf
 Documentation/User Manual/UserManual.synctex.gz
 Documentation/User Manual/UserManual.toc
 src/node_modules
->>>>>>> origin/UserManual
+
