@@ -39,7 +39,6 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
-    alert(JSON.stringify(subjects));
     init();
 
 
@@ -840,7 +839,7 @@ function init()
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
-    alert(fields);
+
     populateTable();
 
 
