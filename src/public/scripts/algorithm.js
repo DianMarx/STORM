@@ -28,6 +28,16 @@ function goShuffle(subs, algs, nGroups)
     for(var i = 0; i < algs.length; i++)
     {
 
+        function compareWeight(a,b){
+            var field = 'weight';
+
+                if (a[field] < b[field])
+                    return 1;
+                if (a[field] > b[field])
+                    return -1;
+            return 0;
+        }
+        algs.sort(compareWeight);
         if(i < algs.length-1)
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
         if((numGroups % 2 == 0) && (nGroups % 2 != 0))
@@ -48,8 +58,6 @@ function goShuffle(subs, algs, nGroups)
                     diverseShuffle(subs,numGroups, algs[i].field);
                 break;
             case 'By Roles': alert("Has yet to be implemented");
-                break;
-            case 'Randomize': randomize(subs,subs.length,numGroups);
                 break;
 
         }
