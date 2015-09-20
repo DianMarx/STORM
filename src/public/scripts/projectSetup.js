@@ -168,6 +168,7 @@ function uploadCSV()
 
                 var result = e.target.result;   // browser completed reading file
                 result = result.replace(/\r?\n|\r/g, "\r\n");
+                result = result.replace(/\;/g, ",");
 
                 var obj = $.csv.toObjects(result);
                 var arr = $.csv.toArrays(result);
@@ -190,7 +191,6 @@ function uploadCSV()
                 Subjects = obj;
                 //console.log(JSON.stringify(Subjects));
                 //console.log(JSON.stringify(fields));
-
             };
         }
     }
