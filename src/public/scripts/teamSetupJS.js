@@ -38,8 +38,8 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
+    init();
 
-    // Place holder for code in init
 
 
     $(".table").selectable();
@@ -841,6 +841,7 @@ function init()
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
+    alert(JSON.stringify(subjects));
     populateTable();
 
 
