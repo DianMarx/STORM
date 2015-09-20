@@ -841,7 +841,7 @@ function init()
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
-    alert(JSON.stringify(subjects));
+
     populateTable();
 
 
