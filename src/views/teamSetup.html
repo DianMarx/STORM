@@ -71,9 +71,9 @@
 <div class="algorithmBox panel panel-default" style="margin: 0;">
     <div class="panel-heading" data-toggle="collapse" data-target="#shuffleSetup">Shuffle setup </div>
     <div class="panel-body collapse container-fluid" id="shuffleSetup">
-    <div class="row" id="shuffleRow">
-    <div><button type='button' id='addAlg'><span aria-hidden='true'>+</span> </button></div>
-    </div>
+        <div class="row" id="shuffleRow">
+            <div><button type='button' id='addAlg'><span aria-hidden='true'>+</span> </button></div>
+        </div>
     </div>
 </div>
 
@@ -88,48 +88,48 @@
     <button style="width: 125px; float:left;" class="form-control" id="saveIteration">Save Iteration</button>
     <button style="width: 125px; float:left;" class="form-control" id="returnSubjs">Return All</button>
 </div>
-    <div class="main">
+<div class="main">
 
-            <div class="members">
-                <p style="font-size: large">Subject Pool</p>
+    <div class="members">
+        <p style="font-size: large">Subject Pool</p>
 
-                <div id="subjects" class="names">
-                    <!--<%for(var i = 0; i < subjects.length; i++){%>
-                    <div class="subject" id=<%= subjects[i].id %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
-                    </div> <% } %> -->
+        <div id="subjects" class="names">
+            <!--<%for(var i = 0; i < subjects.length; i++){%>
+            <div class="subject" id=<%= subjects[i].id %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
+            </div> <% } %> -->
 
-                </div>
-                <div id="poolChart" class="names">
+        </div>
+        <div id="poolChart" class="names">
 
-                </div>
-                <br><br><br>
+        </div>
+        <br><br><br>
 
-
-            </div>
-
-            <div class="teams">
-                <p style="font-size: large; text-align: center">Sandbox</p>
-                <!-- This is how the team boxes will look like -->
-                <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
-                <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
-            </div>
-
-       <!-- <div class="mainChart">
-            <p style="font-size: large; text-align: center">Chart Test</p>
-            <!-- Testing Chart implementation
-
-            <div class="pieChart" id="chartDiv"  style="width:400; height:300"> </div>
-            <div id="chart_lines" style="width: 900px; height: 500px;"></div>
-            <div id="curve_chart" style="width: 900px; height: 500px"></div>
-            <div id="curve_chart2" style="width: 900px; height: 500px"></div>
-
-        </div>-->
 
     </div>
 
+    <div class="teams">
+        <p style="font-size: large; text-align: center">Sandbox</p>
+        <!-- This is how the team boxes will look like -->
+        <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
+        <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
+    </div>
 
-    <br>
-    <div id="dialog-confirm"></div>
+    <!-- <div class="mainChart">
+         <p style="font-size: large; text-align: center">Chart Test</p>
+         <!-- Testing Chart implementation
+
+         <div class="pieChart" id="chartDiv"  style="width:400; height:300"> </div>
+         <div id="chart_lines" style="width: 900px; height: 500px;"></div>
+         <div id="curve_chart" style="width: 900px; height: 500px"></div>
+         <div id="curve_chart2" style="width: 900px; height: 500px"></div>
+
+     </div>-->
+
+</div>
+
+
+<br>
+<div id="dialog-confirm"></div>
 
 </body>
 

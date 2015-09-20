@@ -3,14 +3,14 @@ var testUser = false;
 var user;
 var collection = getParameterByName('collection');
 var subjects;
+var fields = [];
 
 $(document).ready(function(e) {
     var dataTest = new google.visualization.DataTable();
-     dataTest.addColumn('string','Name');
-     dataTest.addColumn('number','Grade');
-
+    dataTest.addColumn('string','Name');
+    dataTest.addColumn('number','Grade');
     $("#uploadCSV").click(function(){
-       $("#CSVInput").click();
+        $("#CSVInput").click();
     });
 
     $("#CSVInput").change(function(){
@@ -40,83 +40,25 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
+    init();
 
-    //gets all the subjects' fields
-    var fields = [];
-    for (var name in subjects[0]) {
-
-        if (name[0] != '_') {
-            name = name.replace(' ', '_');
-            fields.push(name);
-            //$('<th>' + name + '</th>').appendTo("#subjectFields");
-        }
-    }
-    populateTable();
-
-    //toSubjects table
-    function populateTable() {
-        $(function() {
-
-
-            $("#subjTable").jsGrid({
-                height: "500px",
-                width: "100%",
-
-                selecting: true,
-                sorting: true,
-                paging: true,
-                autoload: true,
-                inserting: true,
-
-                pageSize: 15,
-                pageButtonCount: 5,
-                rowClick: function(a){ },
-                deleteConfirm: "Do you really want to delete the client?",
-                fields: getHeadings(fields, subjects[0]),
-                controller: {
-                    loadData: function () {
-                        return subjects
-                    }
-                }
-
-            });
-
-        });
-        $('.jsgrid-header-sortable').first().click();
-     /*
-    $('#subjectsTable').empty();
-    for (var i = 0; i < subjects.length; i++) {
-        var sub = subjects[i];
-
-        $('<tr>').appendTo("#subjectsTable");
-        for (var p = 0; p < fields.length; p++) {
-            $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
-        }
-        $('</tr>').appendTo("#subjectsTable");
-    }
-        */
-}
 
 
     $(".table").selectable();
     //Loads subject pool with first variable(name)
     function populateSubjectPool()
     {
-        alert('1');
         $('#subjects').empty();
         $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
-        alert('2');
         dataTest.addRows(subjects.length);
-        alert(subjects.length);
         for(var i = 0; i < subjects.length; i++)
         {
-            alert('4');
             subjects[i].group = 0;
             var sub = subjects[i];
             if(sub['name']){var name= 'name';}else var name = 'Name';
-                $("tbody#0").append("<tr class='subject' id='" + sub.id+"group" + "' ><td>" + sub[name] + "</td></tr>");
-          //  dataTest.setCell(i,0,sub[name]);
-          //  dataTest.setCell(i,1,subjects[i].id);
+            $("tbody#0").append("<tr class='subject' id='" + sub.id+"group" + "' ><td>" + sub[name] + "</td></tr>");
+            dataTest.setCell(i,0,sub[name]);
+            dataTest.setCell(i,1,subjects[i].Mark);
         }
 
         $(".subject").draggable({
@@ -146,13 +88,13 @@ $(document).ready(function(e) {
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             }
         });
-      /*  var pieOptions = {'title':'Marks Test',
+        $('#poolChart').append('<div class="pieChart" id="chartDiv"  style="width:300; height:300"> </div>');
+        var pieOptions = {'title':'Marks Test',
             'width':300,
             'height':400,
             'pieSliceText':'value'};
         var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
         chart.draw(dataTest, pieOptions);
-        $('#poolChart').append('<div class="pieChart" id="chartDiv"  style="width:300; height:300"> </div>');*/
 
 
     }
@@ -172,20 +114,20 @@ $(document).ready(function(e) {
     //Removes from all records
     function removeField(field)
     {
-       
+
         $("th#"+ field).remove();
         $("td#"+ field).remove();
     }
 
-        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
         if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
 
-        var temp = fields[i];
-        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+            var temp = fields[i];
+            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
             if(fields[i].toLowerCase() != 'name')
-            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
-    }
+                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+        }
     }
 
     //user checks a checkbox
@@ -222,19 +164,17 @@ $(document).ready(function(e) {
             numTeamGroups = 1;
             var temp = parseInt($("#totalTeams").val());
             for(var r = 0; r < temp; r++){
-            $("#plusButton").click();}
+                $("#plusButton").click();}
         }
     });
 
-function updateTeams()
-{
+    function updateTeams()
+    {
 
-}
+    }
 
 
-    $('#randomize').click(function(e) {
-        randomize($('.names').children().length,numTeamGroups-1);
-    });
+
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
         //var parameter = $(".shuffleBy:checked").val();
@@ -260,10 +200,10 @@ function updateTeams()
 
     $("#plusButton").click(function(e){
 
-            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
-            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
+        var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
+        $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+        numTeamGroups++;
+        $("#totalTeams").val(numTeamGroups-1);
 
 
 
@@ -336,7 +276,7 @@ function updateTeams()
 
     addAlgorithmBox();
     $('#addAlg').click(function (e) {
-       addAlgorithmBox();
+        addAlgorithmBox();
     });
     //nog klaar maak
     $("#maxPerGroup").change(function(e){
@@ -351,7 +291,7 @@ function updateTeams()
         var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
         {
-         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
@@ -360,13 +300,13 @@ function updateTeams()
 
         //$('#closeAlg').unbind();
         $('#closeAlg').click(function(e){
-           $(this).parent().detach();
+            $(this).parent().detach();
         });
 
 
     }
     $("#exportMasterTable").click(function (e) {
-       exportCSV(subjects, fields);
+        exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
 
@@ -398,21 +338,27 @@ function updateTeams()
     });
     $("#returnSubjs").click(function(e){
         $(".subject").detach().appendTo("#subjects table .subjBody");
+        for(var q = 0; q < subjects.length; q++){
+            subjects[q].group = 0;
+        }
+    });
+    $("#randomize").click(function(e){
+        randomize(subjects, numTeamGroups-1);
     });
 
     $("#selectField").change(function(){
-var field = $(this).val();
+        var field = $(this).val();
 
-       if(isDiscrete(field,subjects[0]))
+        if(isDiscrete(field,subjects[0]))
         {
 
             $(this).parent().find("#byRoles").detach();
             $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
 
         }else {
-           $(this).parent().find("#byRoles").detach();
-           $(this).parent().find('.roles').detach();
-       }
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find('.roles').detach();
+        }
     });
 
     $("#shuffleSelect").change(function(){
@@ -444,8 +390,8 @@ var field = $(this).val();
                     numRoles++;
                 }
                 while(numRoles > $(this).val()) {
-                $(this).parent().find('.aRole').first().detach();
-                numRoles--;
+                    $(this).parent().find('.aRole').first().detach();
+                    numRoles--;
                 }
             });
 
@@ -533,10 +479,10 @@ function exportCSV(subs, fields)
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
 
-        csvContent += fields[i];
-        if (i != fields.length - 2)
-            csvContent += ',';
-    }
+            csvContent += fields[i];
+            if (i != fields.length - 2)
+                csvContent += ',';
+        }
     }
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
@@ -779,9 +725,10 @@ function MergeSubjects(newSubjects,Criteria)
     var sameIDs = false;
     var numFieldsNew = Criteria.length;
     var counter = {};
+    var id = Criteria[0];
 
     newSubjects.forEach(function(sub){ //count duplicates
-       var key = JSON.stringify(sub['id']);
+        var key = JSON.stringify(sub[id]);
         counter[key] = (counter[key] || 0) + 1;
         if(counter[key] > 1)
             duplicates = true;
@@ -793,6 +740,7 @@ function MergeSubjects(newSubjects,Criteria)
         delete temp[i]["__v"];
         delete temp[i]["group"];
     }
+
     var fields = Object.getOwnPropertyNames(temp[0]);
 
     for(i = 0; i < newSubjects.length; i++)
@@ -817,7 +765,7 @@ function MergeSubjects(newSubjects,Criteria)
         for(i = 0; i < newSubjects.length; i++)
         {
             validNumSubs = false;
-            if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+            if(temp[k][id] == newSubjects[i][id])
             {
                 validNumSubs = true;
                 break;
@@ -860,7 +808,7 @@ function MergeSubjects(newSubjects,Criteria)
                 for(i = 0; i < newSubjects.length; i++)
                 {
                     validNumSubs = false;
-                    if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    if(temp[k][id] == newSubjects[i][id])
                     {
                         $.extend(temp[k],newSubjects[i]);
                         //console.log(JSON.stringify(temp[k]));
@@ -880,7 +828,7 @@ function MergeSubjects(newSubjects,Criteria)
                 for(i = 0; i < temp.length; i++)
                 {
                     validNumSubs = false;
-                    if(temp[i]['id'] == newSubjects[k]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    if(temp[i][id] == newSubjects[k][id]) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
                     {
                         validNumSubs = true;
                         break;
@@ -894,6 +842,69 @@ function MergeSubjects(newSubjects,Criteria)
     }
 }
 
+function init()
+{
+    //gets all the subjects' fields
+    fields = [];
+    for (var name in subjects[0]) {
+
+        if (name[0] != '_') {
+            name = name.replace(' ', '_');
+            fields.push(name);
+            //$('<th>' + name + '</th>').appendTo("#subjectFields");
+        }
+    }
+    alert(JSON.stringify(subjects));
+    populateTable();
+
+
+}
+
+//toSubjects table
+function populateTable() {
+    $(function () {
+
+
+        $("#subjTable").jsGrid({
+            height: "500px",
+            width: "100%",
+
+            selecting: true,
+            sorting: true,
+            paging: true,
+            autoload: true,
+            inserting: true,
+
+            pageSize: 15,
+            pageButtonCount: 5,
+            rowClick: function (a) {
+            },
+            deleteConfirm: "Do you really want to delete the client?",
+            fields: getHeadings(fields, subjects[0]),
+            controller: {
+                loadData: function () {
+                    return subjects
+                }
+            }
+
+        });
+
+    });
+    $('.jsgrid-header-sortable').first().click();
+
+    /*
+     $('#subjectsTable').empty();
+     for (var i = 0; i < subjects.length; i++) {
+     var sub = subjects[i];
+
+     $('<tr>').appendTo("#subjectsTable");
+     for (var p = 0; p < fields.length; p++) {
+     $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
+     }
+     $('</tr>').appendTo("#subjectsTable");
+     }
+     */
+}
 
 function SortBy(arr,key)
 {
@@ -911,87 +922,87 @@ function SortBy(arr,key)
 
 /*function drawChart() {
 
-    //Create the data table
-    var dataPie = new google.visualization.DataTable();
-    dataPie.addColumn('string', 'Names');
-    dataPie.addColumn('number', 'Grade');
-    dataPie.addRows([
-        ['Dorme', 90],
-        ['Hendrik', 98],
-        ['Piet', 19],
-        ['Jason', 71],
-        ['Ang', 28],
-        ['Shaun', 60],
-        ['SD', 55],
-        ['Karien', 63],
-        ['Suanne', 71]
-    ]);
+ //Create the data table
+ var dataPie = new google.visualization.DataTable();
+ dataPie.addColumn('string', 'Names');
+ dataPie.addColumn('number', 'Grade');
+ dataPie.addRows([
+ ['Dorme', 90],
+ ['Hendrik', 98],
+ ['Piet', 19],
+ ['Jason', 71],
+ ['Ang', 28],
+ ['Shaun', 60],
+ ['SD', 55],
+ ['Karien', 63],
+ ['Suanne', 71]
+ ]);
 
-    var dataLine = new google.visualization.DataTable();
-    dataLine.addColumn('string', 'Names');
-    dataLine.addColumn('number', 'Grade');
-    dataLine.addColumn('number', 'Participation');
-    dataLine.addRows([
-        ['Dorme', 90, 70],
-        ['Hendrik', 98, 60],
-        ['Piet', 19, 75],
-        ['Jason', 71, 30],
-        ['Ang', 28, 35],
-        ['Shaun', 60, 58],
-        ['SD', 55, 87],
-        ['Karien', 63, 98],
-        ['Suanne', 71, 48]
-    ]);
-    var dataLineHistory = new google.visualization.DataTable();
-    dataLineHistory.addColumn('string', 'Team');
-    dataLineHistory.addColumn('number', 'Average1');
-    dataLineHistory.addColumn('number', 'Average2');
-    dataLineHistory.addColumn('number', 'Average3');
-    dataLineHistory.addColumn('number', 'Average4');
-    dataLineHistory.addColumn('number', 'StdDev1');
-    dataLineHistory.addColumn('number', 'StdDev2');
-    dataLineHistory.addColumn('number', 'StdDev3');
-    dataLineHistory.addColumn('number', 'StdDev4');
-    dataLineHistory.addRows([
-        ['One', 55, 59, 51, 55, 2.4, 2.6, 2.1, 2.3],
-        ['Two', 98, 60, 90, 70, 3.6, 3.6, 3.1, 3.3],
-        ['Three', 19, 75, 90, 70, 4.4, 4.6, 4.1, 4.3],
+ var dataLine = new google.visualization.DataTable();
+ dataLine.addColumn('string', 'Names');
+ dataLine.addColumn('number', 'Grade');
+ dataLine.addColumn('number', 'Participation');
+ dataLine.addRows([
+ ['Dorme', 90, 70],
+ ['Hendrik', 98, 60],
+ ['Piet', 19, 75],
+ ['Jason', 71, 30],
+ ['Ang', 28, 35],
+ ['Shaun', 60, 58],
+ ['SD', 55, 87],
+ ['Karien', 63, 98],
+ ['Suanne', 71, 48]
+ ]);
+ var dataLineHistory = new google.visualization.DataTable();
+ dataLineHistory.addColumn('string', 'Team');
+ dataLineHistory.addColumn('number', 'Average1');
+ dataLineHistory.addColumn('number', 'Average2');
+ dataLineHistory.addColumn('number', 'Average3');
+ dataLineHistory.addColumn('number', 'Average4');
+ dataLineHistory.addColumn('number', 'StdDev1');
+ dataLineHistory.addColumn('number', 'StdDev2');
+ dataLineHistory.addColumn('number', 'StdDev3');
+ dataLineHistory.addColumn('number', 'StdDev4');
+ dataLineHistory.addRows([
+ ['One', 55, 59, 51, 55, 2.4, 2.6, 2.1, 2.3],
+ ['Two', 98, 60, 90, 70, 3.6, 3.6, 3.1, 3.3],
+ ['Three', 19, 75, 90, 70, 4.4, 4.6, 4.1, 4.3],
 
-    ]);
-    //PieChart
-    // Set chart options
-/*    var pieOptions = {'title':'Marks Test',
+ ]);
+ //PieChart
+ // Set chart options
+ /*    var pieOptions = {'title':'Marks Test',
  'width':300,
  'height':400,
  'pieSliceText':'value'};*/
 
-    // Instantiate and draw our charts, passing in some options.
+// Instantiate and draw our charts, passing in some options.
 
 //    var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
-  //  chart.draw(dataTest, pieOptions);
+//  chart.draw(dataTest, pieOptions);
 
-    //Interval Chart
-   /* var options_lines = {
-        title: 'Line intervals, default',
-        curveType: 'function',
-        lineWidth: 4,
-        intervals: { 'style':'line' },
-        legend: 'none'
-    };
+//Interval Chart
+/* var options_lines = {
+ title: 'Line intervals, default',
+ curveType: 'function',
+ lineWidth: 4,
+ intervals: { 'style':'line' },
+ legend: 'none'
+ };
 
-    var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines'));
-    chart_lines.draw(dataLine, options_lines);
+ var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines'));
+ chart_lines.draw(dataLine, options_lines);
 
-    //Line Chart
-    var lineOptions = {
-        title: 'Company Performance',
-        curveType: 'function',
-        legend: { position: 'bottom' }
-    };
+ //Line Chart
+ var lineOptions = {
+ title: 'Company Performance',
+ curveType: 'function',
+ legend: { position: 'bottom' }
+ };
 
-    var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-    chart.draw(dataLine, lineOptions);
-    var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
-    chart.draw(dataLineHistory, lineOptions);
+ var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+ chart.draw(dataLine, lineOptions);
+ var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+ chart.draw(dataLineHistory, lineOptions);
 
-}*/
+ }*/
