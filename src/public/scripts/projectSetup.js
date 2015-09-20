@@ -172,9 +172,24 @@ function uploadCSV()
                 var obj = $.csv.toObjects(result);
                 var arr = $.csv.toArrays(result);
                 fields = arr[0];
+
+                fields.forEach(function(field){
+                    if(field.indexOf(" ") > -1)
+                    {
+                        var temp = field;
+                        field = field.replace(/\ /g, "_");
+                        alert(temp + " " + field);
+                        for(i = 0; i<obj.length; i++)
+                        {
+                            obj[i][field] = obj[i][temp];
+                            delete obj[i][temp];
+                        }
+                    }
+                });
+
                 Subjects = obj;
-                console.log(JSON.stringify(Subjects))
-                console.log(JSON.stringify(fields))
+                //console.log(JSON.stringify(Subjects));
+                //console.log(JSON.stringify(fields));
 
             };
         }
