@@ -895,28 +895,48 @@ function SortBy(arr,key)
 function drawChart() {
 
     //Create the data table
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
-    data.addRows([
-        ['Mushrooms', 3],
-        ['Onions', 1],
-        ['Olives', 1],
-        ['Zucchini', 1],
-        ['Pepperoni', 2]
+    var dataPie = new google.visualization.DataTable();
+    dataPie.addColumn('string', 'Names');
+    dataPie.addColumn('number', 'Grade');
+    dataPie.addRows([
+        ['Dorme', 90],
+        ['Hendrik', 98],
+        ['Piet', 19],
+        ['Jason', 71],
+        ['Ang', 28],
+        ['Shaun', 60],
+        ['SD', 55],
+        ['Karien', 63],
+        ['Suanne', 71]
     ]);
 
+    var dataLine = new google.visualization.DataTable();
+    dataLine.addColumn('string', 'Names');
+    dataLine.addColumn('number', 'Grade');
+    dataLine.addColumn('number', 'Participation');
+    dataLine.addRows([
+        ['Dorme', 90, 70],
+        ['Hendrik', 98, 60],
+        ['Piet', 19, 75],
+        ['Jason', 71, 30],
+        ['Ang', 28, 35],
+        ['Shaun', 60, 58],
+        ['SD', 55, 87],
+        ['Karien', 63, 98],
+        ['Suanne', 71, 48]
+    ]);
 
     //PieChart
     // Set chart options
-    var pieOptions = {'title':'How Much Pizza I Ate Last Night',
+    var pieOptions = {'title':'Marks Test',
         'width':800,
-        'height':600};
+        'height':600,
+    'pieSliceText':'value'};
 
     // Instantiate and draw our charts, passing in some options.
 
     var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
-    chart.draw(data, pieOptions);
+    chart.draw(dataPie, pieOptions);
 
     //Interval Chart
     var options_lines = {
@@ -928,7 +948,7 @@ function drawChart() {
     };
 
     var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines'));
-    chart_lines.draw(data, options_lines);
+    chart_lines.draw(dataLine, options_lines);
 
     //Line Chart
     var lineOptions = {
@@ -938,6 +958,6 @@ function drawChart() {
     };
 
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-    chart.draw(data, lineOptions);
+    chart.draw(dataLine, lineOptions);
 
 }
