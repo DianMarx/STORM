@@ -1,4 +1,5 @@
 var Subjects; // Object that holds Subject data extracted from CSV
+var fields;
 var user; //logged in user
 var projectData; // Data related to new project
 
@@ -39,7 +40,9 @@ $(document).ready(function(e) {
                                     '</form>' +
                                 '</div>');
 
-        $("#CSVInput").onclick = uploadCSV();
+        $("#CSVInput").on('click',function(e){
+            uploadCSV();
+        });
 
         //Submit project details and create new project in database
         $('#AddProjectDetails').on('submit', function(e){
@@ -56,46 +59,48 @@ $(document).ready(function(e) {
                     'subjects' : user.id+"_"+$("#projectName").val()+"_"+"Subjects",
                     'admin' : true
                 };
+                if(correctFormat()) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/projectStore',
+                        data: projectData,
+                        success: function (dat, testStatus) {
+                            if (dat == 0)
+                                alert("You already have a project called " + projectData.projectName);
+                            else if (dat == 1)
+                                alert("Could not save project");
+                            else {
+                                user.projectID.push(dat);
+                                sessionStorage['User'] = JSON.stringify(user); //add new project to user session storage
 
-                $.ajax({
-                    type: "POST",
-                    url: '/projectStore',
-                    data: projectData,
-                    success: function (dat, testStatus)
-                    {
-                        if(dat == 0)
-                            alert("You already have a project called " + projectData.projectName);
-                        else if(dat == 1)
-                            alert("Could not save project");
-                        else {
-                            user.projectID.push(dat);
-                            sessionStorage['User'] = JSON.stringify(user); //add new project to user session storage
 
+                                var userData =
+                                {
+                                    'userID': user.id,
+                                    'projectIDs': user.projectID
+                                };
 
-                            var userData =
-                            {
-                                'userID': user.id,
-                                'projectIDs': user.projectID
-                            };
-
-                            //Update user to reflect new project created by him
-                            $.ajax({
-                                type: "POST",
-                                url: '/projToUser',
-                                data: {projectID: dat, id: user.id},
-                                success: function () {
-                                    subjToDB(projectData.subjects);
-                                },
-                                error: function (e) {
-                                    console.log(e);
-                                }
-                            });
+                                //Update user to reflect new project created by him
+                                $.ajax({
+                                    type: "POST",
+                                    url: '/projToUser',
+                                    data: {projectID: dat, id: user.id},
+                                    success: function () {
+                                        subjToDB(projectData.subjects);
+                                    },
+                                    error: function (e) {
+                                        console.log(e);
+                                    }
+                                });
+                            }
+                        },
+                        error: function (e) {
+                            console.log(e);
                         }
-                    },
-                    error: function (e) {
-                        console.log(e);
-                    }
-                });
+                    });
+                }
+                else
+                    clearInput();
             }
         });
     });
@@ -139,9 +144,8 @@ function subjToDB(colName)
         type: "POST",
         url: '/subjToDB',
         data: {data: JSON.stringify(Subjects), collection: colName},
-        success: function ()
-        {
-            window.location = "teamsetup" +"?collection="+ projectData.subjects;
+        success: function () {
+            window.location = "teamsetup" + "?collection=" + projectData.subjects;
         },
         error: function (e) {
             console.log(e);
@@ -163,34 +167,30 @@ function uploadCSV()
             reader.onload = function(e) {
 
                 var result = e.target.result;   // browser completed reading file
+                result = result.replace(/\r?\n|\r/g, "\r\n");
+                result = result.replace(/\;/g, ",");
 
-                var arrayOfTheInput = result.split("\r\n");       //Splits the values from file into array
-                var headings = arrayOfTheInput[0].split(",");
+                var obj = $.csv.toObjects(result);
+                var arr = $.csv.toArrays(result);
+                fields = arr[0];
 
-                var JSONObject = []; //Hierdie is die JSON object wat in die DB gestoor gaan word.
-
-                for(i = 1; i < arrayOfTheInput.length-1; i++)
-                {
-                    var line = arrayOfTheInput[i].split(",");
-
-                    tempObj = {};
-                    for (var k = 0; k < headings.length; k++)
+                fields.forEach(function(field){
+                    if(field.indexOf(" ") > -1)
                     {
-                        if (typeof line[k] == 'undefined')
+                        var temp = field;
+                        field = field.replace(/\ /g, "_");
+                        alert(temp + " " + field);
+                        for(i = 0; i<obj.length; i++)
                         {
-                            tempObj[headings[k]] = "";
-                            //error hier
-                        }
-                        else {
-                            headings[k] = headings[k].replace(' ','_');
-                            tempObj[headings[k]] = line[k];
+                            obj[i][field] = obj[i][temp];
+                            delete obj[i][temp];
                         }
                     }
-                    tempObj['previousGroups'] = [];
-                    JSONObject.push(tempObj);
-                }
-                Subjects = JSONObject;
+                });
 
+                Subjects = obj;
+                //console.log(JSON.stringify(Subjects));
+                //console.log(JSON.stringify(fields));
             };
         }
     }
@@ -300,4 +300,63 @@ function deleteProject(p,id)
             }
         });
     }
+}
+ function correctFormat()
+ {
+     var validNumSubs;
+     var duplicates = false;
+     var counter = {};
+     var id = fields[0];
+     var nulls = false;
+
+     Subjects.forEach(function(sub){ //count duplicates
+         var key = JSON.stringify(sub[id]);
+         counter[key] = (counter[key] || 0) + 1;
+         if(counter[key] > 1)
+             duplicates = true;
+     });
+
+     Subjects.forEach(function(sub){
+        for(i = 0; i < fields.length; i++)
+        {
+            if(sub[fields[i]] == "")
+            {
+                nulls = true;
+            }
+        }
+     });
+
+
+     if($.isEmptyObject(Subjects))
+     {
+         alert("The file cannot be empty. See user manual for correct upload formats.");
+         return false;
+     }
+     else if(Subjects.length < 2 || fields.length < 2)
+     {
+         alert("A minimum of 2 columns and 2 subjects are required. See user manual for correct upload formats.");
+         return false;
+     }
+     else if(nulls)
+     {
+         alert("Subjects cannot have null values. See user manual for correct upload formats.");
+         return false;
+     }
+     else if(fields[1] != 'Name' && fields[1] != 'name')
+     {
+         alert("Column 2 must contain name values. See user manual for correct upload formats.");
+         return false;
+     }
+     else if(duplicates)
+     {
+         alert("The file cannot contain duplicate unique identifiers. See user manual for correct upload formats.");
+         return false;
+     }
+     return true;
+ }
+
+function clearInput()
+{
+    var control = $("#CSVInput");
+    control.replaceWith( control = control.clone( true ) );
 }

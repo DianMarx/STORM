@@ -58,6 +58,16 @@
 \subsection{Reporting Module}
 \input{./subsections/reporting.tex}
 \section{Architectural Requirements}
+This section discusses the software architecture requirements — that is the requirements around the
+software infrastructure within which the application functionality is to be developed. The purpose
+of this infrastructure is to address the non-functional requirements. In particular, the architecture
+requirements specify
+\begin{itemize}
+	\item the architectural responsibilities which need to be addressed,
+	\item the access and integration requirements for the system,
+	\item the quality requirements, and
+	\item the architecture constraints specified by the client
+\end{itemize}
 \subsection{Access and Integration Requirements}
 \input{./subsections/accessAndIntegrationRequirements.tex}
 \subsection{Quality Requirements}
@@ -66,4 +76,17 @@
 \input{./subsections/architecturalResponsibilities.tex}
 \subsection{Architecture Constraints}
 \input{./subsections/architectureConstraints.tex}
+\section{Architecture design}
+\subsection{Overview}
+MVC architecture - using express.js framework
+\begin {enumerate}
+\item Model - Database connection and access done via mongoose, requests handeled by AJAX.
+\item View - ExpressJS defines a response object for rendering html views and serving the view with JSON data.
+\item Controller - Defined in form of routes. ExpressJS routes  are middleware functions which accepts request and result objects used to route data.
+\end {enumerate}
+\subsection{Modularization}
+\input{./subsections/modularization.tex}
+\subsection{Architectural tactics addressing quality requirements}
+\input{./subsections/architecturalTactics.tex}
+
 \end{document}

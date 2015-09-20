@@ -46,7 +46,7 @@
 </nav>
 <div class="subjectBox panel panel-default" style="margin: 0;">
     <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
-    <div class="panel-body collapse" id="subjectSetup">
+    <div class="panel-body collapse in" id="subjectSetup">
         <div id="subjTable"></div>
         <button id="saveMasterToDB" class="btn btn-default">Save</button>
         <button id="exportMasterTable" class="btn btn-default">Export CSV</button>
@@ -68,13 +68,14 @@
 <div style="height: 100px;">
     <div style="text-align: left; margin:5px; position: absolute;" id="selectFields">Show fields: <br></div>
 
-    <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
+    <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" readonly min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
 </div>
 <div class="container">
     <button style="width: 100px; float:left;" class="form-control" id="shuffle">Shuffle</button>
     <button style="width: 125px; float:left;" class="form-control" id="exportGroups">Download CSV</button>
     <button style="width: 125px; float:left;" class="form-control" id="saveIteration">Save Iteration</button>
     <button style="width: 125px; float:left;" class="form-control" id="returnSubjs">Return All</button>
+    <button style="width: 125px; float:left;" class="form-control" id="randomize">Randomize</button>
 </div>
     <div class="main">
 
