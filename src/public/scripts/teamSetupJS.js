@@ -5,6 +5,9 @@ var collection = getParameterByName('collection');
 var subjects;
 
 $(document).ready(function(e) {
+    var dataTest = new google.visualization.DataTable();
+     dataTest.addColumn('string','Name');
+     dataTest.addColumn('number','Grade');
 
     $("#uploadCSV").click(function(){
        $("#CSVInput").click();
@@ -99,14 +102,21 @@ $(document).ready(function(e) {
     //Loads subject pool with first variable(name)
     function populateSubjectPool()
     {
+        alert('1');
         $('#subjects').empty();
         $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
+        alert('2');
+        dataTest.addRows(subjects.length);
+        alert(subjects.length);
         for(var i = 0; i < subjects.length; i++)
         {
+            alert('4');
             subjects[i].group = 0;
             var sub = subjects[i];
             if(sub['name']){var name= 'name';}else var name = 'Name';
                 $("tbody#0").append("<tr class='subject' id='" + sub.id+"group" + "' ><td>" + sub[name] + "</td></tr>");
+          //  dataTest.setCell(i,0,sub[name]);
+          //  dataTest.setCell(i,1,subjects[i].id);
         }
 
         $(".subject").draggable({
@@ -136,6 +146,14 @@ $(document).ready(function(e) {
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             }
         });
+      /*  var pieOptions = {'title':'Marks Test',
+            'width':300,
+            'height':400,
+            'pieSliceText':'value'};
+        var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
+        chart.draw(dataTest, pieOptions);
+        $('#poolChart').append('<div class="pieChart" id="chartDiv"  style="width:300; height:300"> </div>');*/
+
 
     }
 
@@ -925,18 +943,33 @@ function drawChart() {
         ['Karien', 63, 98],
         ['Suanne', 71, 48]
     ]);
+    var dataLineHistory = new google.visualization.DataTable();
+    dataLineHistory.addColumn('string', 'Team');
+    dataLineHistory.addColumn('number', 'Average1');
+    dataLineHistory.addColumn('number', 'Average2');
+    dataLineHistory.addColumn('number', 'Average3');
+    dataLineHistory.addColumn('number', 'Average4');
+    dataLineHistory.addColumn('number', 'StdDev1');
+    dataLineHistory.addColumn('number', 'StdDev2');
+    dataLineHistory.addColumn('number', 'StdDev3');
+    dataLineHistory.addColumn('number', 'StdDev4');
+    dataLineHistory.addRows([
+        ['One', 55, 59, 51, 55, 2.4, 2.6, 2.1, 2.3],
+        ['Two', 98, 60, 90, 70, 3.6, 3.6, 3.1, 3.3],
+        ['Three', 19, 75, 90, 70, 4.4, 4.6, 4.1, 4.3],
 
+    ]);
     //PieChart
     // Set chart options
-    var pieOptions = {'title':'Marks Test',
-        'width':800,
-        'height':600,
-    'pieSliceText':'value'};
+/*    var pieOptions = {'title':'Marks Test',
+ 'width':300,
+ 'height':400,
+ 'pieSliceText':'value'};*/
 
     // Instantiate and draw our charts, passing in some options.
 
-    var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
-    chart.draw(dataPie, pieOptions);
+//    var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
+  //  chart.draw(dataTest, pieOptions);
 
     //Interval Chart
     var options_lines = {
@@ -959,5 +992,7 @@ function drawChart() {
 
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
     chart.draw(dataLine, lineOptions);
+    var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+    chart.draw(dataLineHistory, lineOptions);
 
 }
