@@ -262,7 +262,6 @@ function updateTeams()
 
             var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
             $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
-            $('.teamTables 1 ui-droppable').add('<div>Insert Div Content</div>');
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
 
@@ -910,7 +909,7 @@ function SortBy(arr,key)
 
 //Function to Draw the Chart
 
-function drawChart() {
+/*function drawChart() {
 
     //Create the data table
     var dataPie = new google.visualization.DataTable();
@@ -972,7 +971,7 @@ function drawChart() {
   //  chart.draw(dataTest, pieOptions);
 
     //Interval Chart
-    var options_lines = {
+   /* var options_lines = {
         title: 'Line intervals, default',
         curveType: 'function',
         lineWidth: 4,
@@ -995,4 +994,4 @@ function drawChart() {
     var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
     chart.draw(dataLineHistory, lineOptions);
 
-}
+}*/
