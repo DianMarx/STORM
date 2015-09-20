@@ -3,7 +3,8 @@ var testUser = false;
 var user;
 var collection = getParameterByName('collection');
 var subjects;
-var numAlgs = 0;
+var fields = [];
+
 $(document).ready(function(e) {
 
     $("#uploadCSV").click(function(){
@@ -37,62 +38,8 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
+    init();
 
-    //gets all the subjects' fields
-    var fields = [];
-    for (var name in subjects[0]) {
-
-        if (name[0] != '_') {
-            name = name.replace(' ', '_');
-            fields.push(name);
-            //$('<th>' + name + '</th>').appendTo("#subjectFields");
-        }
-    }
-    populateTable();
-
-    //toSubjects table
-    function populateTable() {
-        $(function() {
-
-
-            $("#subjTable").jsGrid({
-                height: "500px",
-                width: "100%",
-
-                selecting: true,
-                sorting: true,
-                paging: true,
-                autoload: true,
-                inserting: true,
-
-                pageSize: 15,
-                pageButtonCount: 5,
-                rowClick: function(a){ },
-                deleteConfirm: "Do you really want to delete the client?",
-                fields: getHeadings(fields, subjects[0]),
-                controller: {
-                    loadData: function () {
-                        return subjects
-                    }
-                }
-
-            });
-
-        });
-        $('.jsgrid-header-sortable').first().click();
-     /*
-    $('#subjectsTable').empty();
-    for (var i = 0; i < subjects.length; i++) {
-        var sub = subjects[i];
-
-        $('<tr>').appendTo("#subjectsTable");
-        for (var p = 0; p < fields.length; p++) {
-            $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
-        }
-        $('</tr>').appendTo("#subjectsTable");
-    }
-        */
-}
 
 
     $(".table").selectable();
@@ -185,31 +132,29 @@ $(document).ready(function(e) {
 
 
 //Change number of groups
-
     $("#totalTeams").change(function() {
-
         var empty = true;
-        if(getNumTeams(subjects) == 0)
-        empty = false;
+        $(".teams").find("div").each(function () {
 
+            if ($(this).find("tr").length >= 2) {
+                empty = false;
+            }
+        });
         var c = false;
         if(!empty)
         {
             c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
         }
         if(empty || c){
-            returnToPool();
+            $(".subject").detach().appendTo("#subjects table .subjBody");
+            $(".teamTables").detach();
+            numTeamGroups = 1;
             var temp = parseInt($("#totalTeams").val());
-            $("#maxPerGroup").val(Math.ceil(subjects.length/temp));
             for(var r = 0; r < temp; r++){
             $("#plusButton").click();}
         }
     });
-    function returnToPool(){
-        $(".subject").detach().appendTo("#subjects table .subjBody");
-        $(".teamTables").detach();
-        numTeamGroups = 1;
-    }
+
 function updateTeams()
 {
 
@@ -318,17 +263,17 @@ function updateTeams()
 
     addAlgorithmBox();
     $('#addAlg').click(function (e) {
-
-
-        if(Math.pow(2,numAlgs+1) <= numTeamGroups -1)
        addAlgorithmBox();
-        else alert("You need at least " + Math.pow(2,numAlgs+1) + " groups to shuffle by " + (numAlgs+1) + " fields." );
     });
+    //nog klaar maak
+    $("#maxPerGroup").change(function(e){
 
+        var groups = parseInt(Math.ceil(subjects.length/$(this).val()));
+        $("#totalTeams").val(groups);
+    });
 
     function addAlgorithmBox()
     {
-        numAlgs++;
         //appendTO
         var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
@@ -343,7 +288,6 @@ function updateTeams()
         //$('#closeAlg').unbind();
         $('#closeAlg').click(function(e){
            $(this).parent().detach();
-            numAlgs--;
         });
 
 
@@ -451,7 +395,6 @@ var field = $(this).val();
     $("#plusButton").click();
     populateSubjectPool();
 
-    $("#maxPerGroup").val(Math.ceil(subjects.length/2));
 
 });
 
@@ -769,9 +712,10 @@ function MergeSubjects(newSubjects,Criteria)
     var sameIDs = false;
     var numFieldsNew = Criteria.length;
     var counter = {};
+    var id = Criteria[0];
 
     newSubjects.forEach(function(sub){ //count duplicates
-       var key = JSON.stringify(sub['id']);
+       var key = JSON.stringify(sub[id]);
         counter[key] = (counter[key] || 0) + 1;
         if(counter[key] > 1)
             duplicates = true;
@@ -783,6 +727,7 @@ function MergeSubjects(newSubjects,Criteria)
         delete temp[i]["__v"];
         delete temp[i]["group"];
     }
+
     var fields = Object.getOwnPropertyNames(temp[0]);
 
     for(i = 0; i < newSubjects.length; i++)
@@ -807,7 +752,7 @@ function MergeSubjects(newSubjects,Criteria)
         for(i = 0; i < newSubjects.length; i++)
         {
             validNumSubs = false;
-            if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+            if(temp[k][id] == newSubjects[i][id])
             {
                 validNumSubs = true;
                 break;
@@ -850,7 +795,7 @@ function MergeSubjects(newSubjects,Criteria)
                 for(i = 0; i < newSubjects.length; i++)
                 {
                     validNumSubs = false;
-                    if(temp[k]['id'] == newSubjects[i]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    if(temp[k][id] == newSubjects[i][id])
                     {
                         $.extend(temp[k],newSubjects[i]);
                         //console.log(JSON.stringify(temp[k]));
@@ -870,7 +815,7 @@ function MergeSubjects(newSubjects,Criteria)
                 for(i = 0; i < temp.length; i++)
                 {
                     validNumSubs = false;
-                    if(temp[i]['id'] == newSubjects[k]['id']) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    if(temp[i][id] == newSubjects[k][id]) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
                     {
                         validNumSubs = true;
                         break;
@@ -884,6 +829,69 @@ function MergeSubjects(newSubjects,Criteria)
     }
 }
 
+function init()
+{
+    //gets all the subjects' fields
+    fields = [];
+    for (var name in subjects[0]) {
+
+        if (name[0] != '_') {
+            name = name.replace(' ', '_');
+            fields.push(name);
+            //$('<th>' + name + '</th>').appendTo("#subjectFields");
+        }
+    }
+    alert(JSON.stringify(subjects));
+    populateTable();
+
+
+}
+
+//toSubjects table
+function populateTable() {
+    $(function () {
+
+
+        $("#subjTable").jsGrid({
+            height: "500px",
+            width: "100%",
+
+            selecting: true,
+            sorting: true,
+            paging: true,
+            autoload: true,
+            inserting: true,
+
+            pageSize: 15,
+            pageButtonCount: 5,
+            rowClick: function (a) {
+            },
+            deleteConfirm: "Do you really want to delete the client?",
+            fields: getHeadings(fields, subjects[0]),
+            controller: {
+                loadData: function () {
+                    return subjects
+                }
+            }
+
+        });
+
+    });
+    $('.jsgrid-header-sortable').first().click();
+
+    /*
+     $('#subjectsTable').empty();
+     for (var i = 0; i < subjects.length; i++) {
+     var sub = subjects[i];
+
+     $('<tr>').appendTo("#subjectsTable");
+     for (var p = 0; p < fields.length; p++) {
+     $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
+     }
+     $('</tr>').appendTo("#subjectsTable");
+     }
+     */
+}
 
 function SortBy(arr,key)
 {
@@ -897,10 +905,3 @@ function SortBy(arr,key)
     });
 }
 
-function getNumTeams(subs){
-    var temp = 0;
-    for(var i = 0; i < subs.length; i++){
-        if(subs[i].group > temp)
-        temp = subs[i].group;
-    }
-}
