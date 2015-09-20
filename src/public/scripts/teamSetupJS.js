@@ -3,6 +3,7 @@ var testUser = false;
 var user;
 var collection = getParameterByName('collection');
 var subjects;
+var numAlgs = 0;
 var fields = [];
 
 $(document).ready(function(e) {
@@ -38,6 +39,7 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
+    alert(JSON.stringify(subjects));
     init();
 
 
@@ -90,6 +92,7 @@ $(document).ready(function(e) {
     //User selectable fields to view
     function addField(field)
     {
+        
         field = field.replace(' ','_');
         $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
         for(var i = 0; i < subjects.length; i++)
@@ -101,7 +104,7 @@ $(document).ready(function(e) {
     //Removes from all records
     function removeField(field)
     {
-       
+        field = field.replace(' ','_');
         $("th#"+ field).remove();
         $("td#"+ field).remove();
     }
@@ -133,28 +136,27 @@ $(document).ready(function(e) {
 
 //Change number of groups
     $("#totalTeams").change(function() {
-        var empty = true;
-        $(".teams").find("div").each(function () {
-
-            if ($(this).find("tr").length >= 2) {
-                empty = false;
-            }
-        });
+        var empty = false;
+        if(getNumTeams(subjects) == 0)
+            empty = true;
         var c = false;
         if(!empty)
         {
             c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
         }
         if(empty || c){
-            $(".subject").detach().appendTo("#subjects table .subjBody");
-            $(".teamTables").detach();
-            numTeamGroups = 1;
+            returnToPool();
             var temp = parseInt($("#totalTeams").val());
+            $("#maxPerGroup").val(Math.ceil(subjects.length/temp));
             for(var r = 0; r < temp; r++){
             $("#plusButton").click();}
         }
     });
-
+    function returnToPool(){
+        $(".subject").detach().appendTo("#subjects table .subjBody");
+        $(".teamTables").detach();
+        numTeamGroups = 1;
+    }
 function updateTeams()
 {
 
@@ -263,17 +265,14 @@ function updateTeams()
 
     addAlgorithmBox();
     $('#addAlg').click(function (e) {
-       addAlgorithmBox();
-    });
-    //nog klaar maak
-    $("#maxPerGroup").change(function(e){
-
-        var groups = parseInt(Math.ceil(subjects.length/$(this).val()));
-        $("#totalTeams").val(groups);
+        if(Math.pow(2,numAlgs+1) <= numTeamGroups -1)
+            addAlgorithmBox();
+        else alert("You need at least " + Math.pow(2,numAlgs+1) + " groups to shuffle by " + (numAlgs+1) + " fields." );
     });
 
     function addAlgorithmBox()
     {
+        numAlgs++;
         //appendTO
         var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
@@ -288,6 +287,7 @@ function updateTeams()
         //$('#closeAlg').unbind();
         $('#closeAlg').click(function(e){
            $(this).parent().detach();
+            numAlgs--;
         });
 
 
@@ -394,7 +394,7 @@ var field = $(this).val();
     $("#plusButton").click();
     $("#plusButton").click();
     populateSubjectPool();
-
+    $("#maxPerGroup").val(Math.ceil(subjects.length/2));
 
 });
 
@@ -836,12 +836,11 @@ function init()
     for (var name in subjects[0]) {
 
         if (name[0] != '_') {
-            name = name.replace(' ', '_');
             fields.push(name);
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
-
+    alert(fields);
     populateTable();
 
 
@@ -905,3 +904,11 @@ function SortBy(arr,key)
     });
 }
 
+function getNumTeams(subs){
+    var temp = 0;
+    for(var i = 0; i < subs.length; i++){
+        if(subs[i].group > temp)
+            temp = subs[i].group;
+    }
+    return temp;
+}
