@@ -49,8 +49,8 @@ $(document).ready(function(e) {
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
-    alert(JSON.stringify(fields));
-    alert(JSON.stringify(subjects));
+    //alert(JSON.stringify(fields));
+    //alert(JSON.stringify(subjects));
     populateTable();
     //toSubjects table
     function populateTable() {
