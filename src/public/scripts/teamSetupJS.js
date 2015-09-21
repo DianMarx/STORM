@@ -88,15 +88,6 @@ $(document).ready(function(e) {
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             }
         });
-        $('#poolChart').append('<div class="pieChart" id="chartDiv"  style="width:300; height:300"> </div>');
-        var pieOptions = {'title':'Marks Test',
-            'width':300,
-            'height':400,
-            'pieSliceText':'value'};
-        var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
-        chart.draw(dataTest, pieOptions);
-
-
     }
 
 
@@ -109,6 +100,19 @@ $(document).ready(function(e) {
         {
             var sub = subjects[i];
             $("#"+sub.id+"group").closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
+        }
+
+        for(var k = 1;k < numTeamGroups;k++)
+        {
+            $('#poolChart').append("<div class='charts "+(k)+"' id='chartDiv "+(k)+"'  style='width:300; height:300'>TestDiv </div>");
+
+            var pieOptions = {'title':'Marks Test',
+                'width':300,
+                'height':400,
+                'pieSliceText':'value'};
+            var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
+            chart.draw(dataTest, pieOptions);
+
         }
     }
     //Removes from all records
@@ -141,7 +145,6 @@ $(document).ready(function(e) {
             removeField(this.value);
         }
     });
-
 
 
 //Change number of groups
@@ -188,7 +191,7 @@ $(document).ready(function(e) {
             alg.field = $(this).find('#selectField option:selected').val();
             alg.type = $(this).find('#shuffleSelect option:selected').val();
             if(alg.type == 'By Roles'){
-                alert($(this).find('.strict').first().checked);
+                //  alert($(this).find('.strict').first().checked);
                 //alert(alg.strict);
             }
             alg.weight = parseInt($(this).find('#weight').val());
@@ -854,7 +857,7 @@ function init()
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
-    alert(JSON.stringify(subjects));
+    //  alert(JSON.stringify(subjects));
     populateTable();
 
 
