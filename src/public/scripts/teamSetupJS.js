@@ -865,19 +865,45 @@ function MergeSubjects(newSubjects,Criteria)
         }
         if(moreSubs)
         {
-            for(k = 0; k < newSubjects.length; k++) // for each object in newSubjects not matching any subjects in temp, push to temp.
+            for(k = 0; k < newSubjects.length; k++) //for each object in newSubjects not matching any subjects in temp, push to temp.
             {
                 for(i = 0; i < temp.length; i++)
                 {
                     validNumSubs = false;
-                    if(temp[i][id] == newSubjects[k][id]) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
+                    if(temp[i][id] == newSubjects[k][id])
                     {
                         validNumSubs = true;
                         break;
                     }
                 }
                 if(!validNumSubs)
-                    temp.push(newSubjects[k]);
+                {
+                    var correctCrit = false;
+                    fields.forEach(function(field)
+                    {
+                        Criteria.forEach(function(newField)
+                        {
+                            if(field == newField)
+                            {
+                                correctCrit = true;
+                                break;
+                            }
+                        });
+                        if(!correctCrit)
+                            break;
+                    });
+
+                    if(!correctCrit)
+                        alert("Could not add new subjects, all criteria should be included");
+                    else
+                    {
+                        newSubjects[k].previousGroups = [];
+                        newSubjects[k].group = 0;
+                        temp.push(newSubjects[k]);
+                    }
+
+                }
+
             }
         }
         //console.log(JSON.stringify(temp));
