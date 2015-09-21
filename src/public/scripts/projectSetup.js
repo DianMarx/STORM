@@ -179,7 +179,6 @@ function uploadCSV()
                     {
                         var temp = field;
                         field = field.replace(/\ /g, "_");
-                        alert(temp + " " + field);
                         for(i = 0; i<obj.length; i++)
                         {
                             obj[i][field] = obj[i][temp];

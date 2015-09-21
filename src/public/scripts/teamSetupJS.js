@@ -39,8 +39,63 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
-    init();
 
+    //gets all the subjects' fields
+    fields = [];
+    for (var name in subjects[0]) {
+
+        if (name[0] != '_') {
+            fields.push(name);
+            //$('<th>' + name + '</th>').appendTo("#subjectFields");
+        }
+    }
+    alert(JSON.stringify(fields));
+    alert(JSON.stringify(subjects));
+    populateTable();
+    //toSubjects table
+    function populateTable() {
+        $(function () {
+
+
+            $("#subjTable").jsGrid({
+                height: "500px",
+                width: "100%",
+
+                selecting: true,
+                sorting: true,
+                paging: true,
+                autoload: true,
+                inserting: true,
+
+                pageSize: 15,
+                pageButtonCount: 5,
+                rowClick: function (a) {
+                },
+                deleteConfirm: "Do you really want to delete the client?",
+                fields: getHeadings(fields, subjects[0]),
+                controller: {
+                    loadData: function () {
+                        return subjects
+                    }
+                }
+            });
+
+        });
+        $('.jsgrid-header-sortable').first().click();
+
+        /*
+         $('#subjectsTable').empty();
+         for (var i = 0; i < subjects.length; i++) {
+         var sub = subjects[i];
+
+         $('<tr>').appendTo("#subjectsTable");
+         for (var p = 0; p < fields.length; p++) {
+         $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
+         }
+         $('</tr>').appendTo("#subjectsTable");
+         }
+         */
+    }
 
 
     $(".table").selectable();
@@ -491,6 +546,7 @@ function exportCSV(subs, fields)
     document.body.appendChild(link);
     link.click();
 }
+
 function fnOpenNormalDialog(element) {
 
     buttons = {
@@ -828,68 +884,6 @@ function MergeSubjects(newSubjects,Criteria)
     }
 }
 
-function init()
-{
-    //gets all the subjects' fields
-    fields = [];
-    for (var name in subjects[0]) {
-
-        if (name[0] != '_') {
-            fields.push(name);
-            //$('<th>' + name + '</th>').appendTo("#subjectFields");
-        }
-    }
-
-    populateTable();
-
-
-}
-
-//toSubjects table
-function populateTable() {
-    $(function () {
-
-
-        $("#subjTable").jsGrid({
-            height: "500px",
-            width: "100%",
-
-            selecting: true,
-            sorting: true,
-            paging: true,
-            autoload: true,
-            inserting: true,
-
-            pageSize: 15,
-            pageButtonCount: 5,
-            rowClick: function (a) {
-            },
-            deleteConfirm: "Do you really want to delete the client?",
-            fields: getHeadings(fields, subjects[0]),
-            controller: {
-                loadData: function () {
-                    return subjects
-                }
-            }
-
-        });
-
-    });
-    $('.jsgrid-header-sortable').first().click();
-
-    /*
-     $('#subjectsTable').empty();
-     for (var i = 0; i < subjects.length; i++) {
-     var sub = subjects[i];
-
-     $('<tr>').appendTo("#subjectsTable");
-     for (var p = 0; p < fields.length; p++) {
-     $('<td>' + sub[fields[p]] + '</td>').appendTo("#subjectsTable");
-     }
-     $('</tr>').appendTo("#subjectsTable");
-     }
-     */
-}
 
 function SortBy(arr,key)
 {
