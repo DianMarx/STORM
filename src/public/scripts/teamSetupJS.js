@@ -750,7 +750,6 @@ function uploadCSV()
             var obj = $.csv.toObjects(result);
             var arr = $.csv.toArrays(result);
 
-            //console.log(JSON.stringify(obj));
             MergeSubjects(obj,arr[0]);
         };
     }
@@ -758,23 +757,12 @@ function uploadCSV()
 
 function MergeSubjects(newSubjects,Criteria)
 {
-    var validNumSubs;
-    var duplicates = false;
-    var validCSV = true;
-    var newCriteria = false;
-    var moreSubs = false;
-    var temp = subjects;
-    var sameIDs = false;
-    var numFieldsNew = Criteria.length;
-    var counter = {};
-    var id = Criteria[0];
-
-    newSubjects.forEach(function(sub){ //count duplicates
-       var key = JSON.stringify(sub[id]);
-        counter[key] = (counter[key] || 0) + 1;
-        if(counter[key] > 1)
-            duplicates = true;
-    });
+    var temp = [];
+    for(i = 0; i < subjects.length; i++) // make deep copy of subjects to reserve integrity of data
+    {
+        var tmp = $.extend(true,{},subjects[i]);
+        temp.push(tmp);
+    }
 
     for(i = 0; i < temp.length; i++)
     {
@@ -783,12 +771,68 @@ function MergeSubjects(newSubjects,Criteria)
         delete temp[i]["group"];
     }
 
-    var fields = Object.getOwnPropertyNames(temp[0]);
+    var crit = Object.getOwnPropertyNames(temp[0]);
+
+    var valid = validCSV(newSubjects,Criteria,temp,crit);
+
+    if(!valid)
+    {
+        clearInput();
+    }
+    else
+    {
+        for(i = 0; i < valid.length; i++)
+        {
+            for(k = 0; k < subjects.length; k++)
+            {
+                var exists = false;
+                if(subjects[k][Criteria[0]] == valid[i][Criteria[0]])
+                {
+                    $.extend(subjects[k],valid[i]);
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists)
+            {
+                subjects.push(valid[i]);
+            }
+        }
+    }
+
+
+}
+
+function clearInput()
+{
+    var control = $("#CSVInput");
+    control.replaceWith( control = control.clone( true ) );
+}
+
+function validCSV(newSubjects,Criteria,temp,fields)
+{
+    var numFieldsNew = Criteria.length;
+    var counter = {};
+    var id = Criteria[0];
+    var validNumSubs;
+    var newCriteria = false;
+    var moreSubs = false;
+
+    newSubjects.forEach(function(sub){ //count duplicates
+        var key = JSON.stringify(sub[id]);
+        counter[key] = (counter[key] || 0) + 1;
+        if(counter[key] > 1)
+        {
+            alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats.");
+            return false;
+        }
+    });
 
     for(i = 0; i < newSubjects.length; i++)
     {
         if(Object.keys(newSubjects[i]).length != numFieldsNew) { // check if subjects have same number of attributes
-            validCSV = false;
+            alert("Some subjects do not have the correct number of values. See user manual for correct upload formats.");
+            return false;
         }
         else //check for null values
         {
@@ -797,7 +841,7 @@ function MergeSubjects(newSubjects,Criteria)
             {
                 if(newSubjects[i][Criteria[k]] == "")
                 {
-                    validCSV = false;
+                    alert("Subjects cannot have empty values. See user manual for correct upload formats.");
                 }
             }
         }
@@ -814,113 +858,84 @@ function MergeSubjects(newSubjects,Criteria)
             }
         }
         if(!validNumSubs)
-            break;
-    }
-    if(!validCSV)
-    {
-        alert("The file you uploaded is not in the correct format. See user manual for correct upload formats");
-    }
-    else if(!validNumSubs)
-    {
-        alert("Some subjects have been omitted. See user manual for correct upload formats");
-    }
-    else if(duplicates)
-    {
-        alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats");
-    }
-    else
-    {
-        if(newSubjects.length > temp.length) // User attempting to add new subject
         {
-            moreSubs = true;
+            alert("Some subjects have been omitted. See user manual for correct upload formats");
+            return false;
         }
+    }
 
-        for(i = 0; i < Criteria.length; i++)
+    if(newSubjects.length > temp.length) // User attempting to add new subject
+    {
+        moreSubs = true;
+    }
+
+    for(i = 0; i < Criteria.length; i++)
+    {
+        if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
         {
-            if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
-            {
-                newCriteria = true;
-            }
+            newCriteria = true;
         }
+    }
 
-        if(newCriteria)
+    if(newCriteria)
+    {
+        for(k = 0; k < temp.length; k++) // for each object in temp merge with object in newSubject where ids are the same
         {
-            for(k = 0; k < temp.length; k++) // for each object in temp merge with object in newSubject where ids are the same
+            for(i = 0; i < newSubjects.length; i++)
             {
-                for(i = 0; i < newSubjects.length; i++)
+                validNumSubs = false;
+                if(temp[k][id] == newSubjects[i][id])
                 {
-                    validNumSubs = false;
-                    if(temp[k][id] == newSubjects[i][id])
-                    {
-                        $.extend(temp[k],newSubjects[i]);
-                        //console.log(JSON.stringify(temp[k]));
-                        validNumSubs = true;
-                        break;
-                    }
-                }
-                if(!validNumSubs)
+                    $.extend(temp[k],newSubjects[i]);
+                    validNumSubs = true;
                     break;
-            }
-
-        }
-        if(moreSubs)
-        {
-            for(k = 0; k < newSubjects.length; k++) //for each object in newSubjects not matching any subjects in temp, push to temp.
-            {
-                for(i = 0; i < temp.length; i++)
-                {
-                    validNumSubs = false;
-                    if(temp[i][id] == newSubjects[k][id])
-                    {
-                        validNumSubs = true;
-                        break;
-                    }
                 }
-                if(!validNumSubs)
-                {
-                    var correctCrit = false;
-                    fields.forEach(function(field)
-                    {
-                        Criteria.forEach(function(newField)
-                        {
-                            if(field == newField)
-                            {
-                                correctCrit = true;
-                                break;
-                            }
-                        });
-                        if(!correctCrit)
-                            break;
-                    });
-
-                    if(!correctCrit)
-                        alert("Could not add new subjects, all criteria should be included");
-                    else
-                    {
-                        newSubjects[k].previousGroups = [];
-                        newSubjects[k].group = 0;
-                        temp.push(newSubjects[k]);
-                    }
-
-                }
-
             }
+            if(!validNumSubs)
+                break;
         }
-        //console.log(JSON.stringify(temp));
     }
-}
 
+    if(moreSubs)
+    {
+        for(k = 0; k < fields.length; k++) //for each object in newSubjects not matching any subjects in temp, push to temp.
+        {
+            for (i = 0; i < Criteria.length; i++)
+            {
+                correctCrit = false;
+                if(fields[k] == Criteria[i])
+                {
+                    correctCrit = true;
+                    break;
+                }
+            }
+            if(!correctCrit)
+            {
+                alert("Could not add new subjects, all criteria should be included");
+                return false;
+            }
+        }
 
-function SortBy(arr,key)
-{
-    arr.sort(function(a, b){
-        var keyA = a.key,
-            keyB = b.key;
-        // Compare the 2 dates
-        if(keyA < keyB) return -1;
-        if(keyA > keyB) return 1;
-        return 0;
-    });
+        for(k = 0; k < newSubjects.length; k++) //for each object in newSubjects not matching any subjects in temp, push to temp.
+        {
+            for(i = 0; i < temp.length; i++)
+            {
+                validNumSubs = false;
+                if(temp[i][id] == newSubjects[k][id])
+                {
+                    validNumSubs = true;
+                    break;
+                }
+            }
+            if(!validNumSubs) // more subjects than present in current set
+            {
+                newSubjects[k].previousGroups = [];
+                newSubjects[k].group = 0;
+                temp.push(newSubjects[k]);
+            }
+        }
+    }
+    return temp;
 }
 
 function getNumTeams(subs){
