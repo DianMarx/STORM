@@ -1,0 +1,30 @@
+This section discusses the architectural components, technologies and frameworks used to address
+the architectural responsibilities and the architectural tactics chosen to address the quality require-
+ments as specifed in section 3.2.
+
+\subsubsection{JavaScript}
+JavaScript is chosen as a single programming language used across the presentation and business
+logic layers of the system in order to implement the tactic of minimizing the technology suite. This prototype based dynamic programming language which supports duck typing is aligned with realizing flexibility and rapid development. Using a single programming language across the client and the server reduces complexity and improves maintainability.
+
+\subsubsection{Node.js}
+The system will be deployed in a Node.js execution environment. Node.js implements the asynchronous-processing by providing a framework for event-driven asynchronous callbacks in the form of asynchronous libraries. These typically provide second order functions which receive two functions as arguments. 
+\begin{lstlisting}
+1 provider.someFunction(task, callbackFunction);
+\end{lstlisting}
+The first is the function which may require waiting for resources or consume a significant amount
+of time and the second is the callback function which is to be called once the results from the first
+function are obtained.
+
+\subsubsection{MongoDB}
+The software architecture will use as persistence provider the MongoDB cross-platform document store. The reasons for this are that the application largely stores data whose state does not change (subjectID's, subjectNames). Using MongoDB as a NOSQL document store results in a highly cachable persistence environment which is very scalable (requirement 3.2.2) and can result in high levels of performance (requirement 3.2.3). The default locking mechanism is a readers-writer lock which allows concurrent read access but only allows a single write operation, i.e. while one transaction is writing a document no other transaction can read that document or write to that document. Scalability and performance can be further improved by using:
+\begin{itemize}
+\item Effective indexing
+\item Clustering with load balancing
+\item Sharding.
+\end{itemize}
+
+\subsubsection{NodeMailer}
+STORM will make use of the NodeMailer JavaScript email client to send emails to a mail server.
+
+\subsubsection{jsreport Reporting Framework}
+The jsreport reporting framework will be used to provide a simple, yet powerful and flexible reporting framework for the application.
