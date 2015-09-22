@@ -628,11 +628,12 @@ function getHeadings(fields, subj)
             }
 
             newFields.push(field);
+
         }
     }
-    var field;
-    field.type = "control";
-    newFields.push(field);
+    var fieldCtr = {};
+    fieldCtr.type = "control";
+    newFields.push(fieldCtr);
 
     return newFields;
 }
