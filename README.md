@@ -14,7 +14,6 @@ to select the teams.
 # Students
 
 Renaldo van Dyk u12204359  
-Andreas du Preez u12207871  
 Sean Hill u12221458  
 Shaun Meintjies u13310896  
 Dian Marx u12105202  
