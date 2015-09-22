@@ -27,6 +27,15 @@
 
 
 });</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+    // Load the Visualization API library and the piechart library.
+    google.load('visualization', '1', {'packages':['corechart']});
+    google.setOnLoadCallback(drawExampleChart);
+    // ... draw the chart...
+
+</script>
 <body>
 <nav class="navbar navbar-default">
 
@@ -99,6 +108,17 @@
                 <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
                 <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
             </div>
+
+        <div class="mainChart" id="mainChart">
+            <p style="font-size: large; text-align: center">Charts</p>
+            <div id="poolChart"></div>
+
+            <!-- <div class="pieChart" id="chartDiv"  style="width:400; height:300"> </div>
+            <div id="chart_lines" style="width: 900px; height: 500px;"></div>
+            <div id="curve_chart" style="width: 900px; height: 500px"></div>
+            <div id="curve_chart2" style="width: 900px; height: 500px"></div> -->
+            <div id="exampleChart"></div>
+        </div>
 
     </div>
 

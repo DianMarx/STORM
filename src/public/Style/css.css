@@ -518,3 +518,16 @@ section {
 .hidden{
     display:none;
 }
+.charts{
+    resize: both;
+    width: 600px;
+    height: 400px;
+    display: inline-block;
+    vertical-align:top;
+    background:#EAF2FF;
+    border: solid 1pt;
+    overflow:auto;
+    margin:5px;
+    padding: 10px;
+    z-index: 2;
+}

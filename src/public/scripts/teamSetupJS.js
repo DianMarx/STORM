@@ -64,6 +64,10 @@ $(document).ready(function(e) {
         field = field.replace(' ','_');
         $("th#"+ field).remove();
         $("td#"+ field).remove();
+        var elem = document.getElementById("poolChart");
+        elem.parentElement.removeChild(elem);
+
+        $('#mainChart').append("<div id='poolChart'></div>")
     }
 
         var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
@@ -961,4 +965,100 @@ function addField(field)
         var sub = subjects[i];
         $("#"+sub.id+"group").closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
     }
+
+    //Adding Charts for each Team
+    for(var k = 1;k < numTeamGroups;k++)
+    {
+        $('#poolChart').append("<div class='charts "+(k)+"'>Team "+(k)+"<div id='chartDiv "+(k)+"'</div> </div>");
+        drawChart(k,field);
+    }
 }
+
+
+//Function to Draw the Chart
+function drawChart(n,tField) {
+    var columnCount = 0;
+
+    var data = new google.visualization.DataTable();
+    var dataArray = [];
+    data.addColumn('number', 'values');
+    data.addColumn('number', 'values');
+    dataArray.push(1);
+    dataArray.push(100);
+    for(var t=0;t<subjects.length;t++)
+    {
+        if(subjects[t].group == n)
+        {
+            columnCount++;
+            data.addColumn({id:'i'+t, type:'number', role:'interval'});
+        }
+    }
+//alert(columnCount);
+    for(var q = 0;q < subjects.length;q++)
+    {
+        if(subjects[q].group == n)
+        {
+            var subje = subjects[q];
+            var tempValue = subje[tField];
+            dataArray.push(tempValue);
+        }
+    }
+    //alert(dataArray);
+    data.addRow(dataArray);
+    //alert('test');
+
+    var chartOptions = {
+        title:'Points, default',
+        curveType:'function',
+        lineWidth: 2,
+        series: [{'color': '#D3362D'}],
+        intervals: { 'style':'points', pointSize: 2 },
+        legend: 'none',
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
+    chart.draw(data, chartOptions);
+}
+
+/*
+function drawExampleChart() {
+    var Edata = new google.visualization.DataTable();
+    var columnCount;
+    Edata.addColumn('number', 'values');
+    Edata.addColumn('number', 'values');
+        Edata.addColumn({id:'i'+t, type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+    Edata.addColumn({id:'i', type:'number', role:'interval'});
+
+    Edata.addRows([[1,10,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+        [2,21,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40],
+        [3,32,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60]]);
+}
+
+var EchartOptions = {
+    title:'Points, default',
+    curveType:'function',
+    lineWidth: 2,
+    series: [{'color': '#D3362D'}],
+    intervals: { 'style':'points', pointSize: 2 },
+    legend: 'none';
+};
+var chart = new google.visualization.LineChart(document.getElementById('exampleChart'));
+chart.draw(Edata, EchartOptions);
+}*/
