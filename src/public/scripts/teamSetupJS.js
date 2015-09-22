@@ -1017,3 +1017,125 @@ function drawChart(n,tField) {
     var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
     chart.draw(data, chartOptions);
 }
+
+function drawExampleChart() {
+    var data = new google.visualization.DataTable();
+    var columnCount
+    var dataArray = [];
+    data.addColumn('number', 'values');
+    data.addColumn('number', 'values');
+    for(var t=0;t<20;t++)
+    {
+        columnCount++;
+        data.addColumn({id:'i'+t, type:'number', role:'interval'});
+    }
+
+    dataArray.push(1);
+    dataArray.push(10);
+    dataArray.push(1);
+    dataArray.push(2);
+    dataArray.push(3);
+    dataArray.push(4);
+    dataArray.push(5);
+    dataArray.push(6);
+    dataArray.push(7);
+    dataArray.push(8);
+    dataArray.push(9);
+    dataArray.push(10);
+    dataArray.push(11);
+    dataArray.push(12);
+    dataArray.push(13);
+    dataArray.push(14);
+    dataArray.push(15);
+    dataArray.push(16);
+    dataArray.push(17);
+    dataArray.push(18);
+    dataArray.push(19);
+    dataArray.push(20);
+    data.addRow(dataArray);
+    dataArray = [];
+    dataArray.push(2);
+    dataArray.push(21);
+    dataArray.push(2);
+    dataArray.push(4);
+    dataArray.push(6);
+    dataArray.push(8);
+    dataArray.push(10);
+    dataArray.push(12);
+    dataArray.push(14);
+    dataArray.push(16);
+    dataArray.push(18);
+    dataArray.push(20);
+    dataArray.push(22);
+    dataArray.push(24);
+    dataArray.push(26);
+    dataArray.push(28);
+    dataArray.push(30);
+    dataArray.push(32);
+    dataArray.push(34);
+    dataArray.push(36);
+    dataArray.push(38);
+    dataArray.push(40);
+    data.addRow(dataArray);
+    dataArray = [];
+    dataArray.push(3);
+    dataArray.push(32);
+    dataArray.push(3);
+    dataArray.push(6);
+    dataArray.push(9);
+    dataArray.push(12);
+    dataArray.push(15);
+    dataArray.push(18);
+    dataArray.push(21);
+    dataArray.push(24);
+    dataArray.push(27);
+    dataArray.push(30);
+    dataArray.push(33);
+    dataArray.push(36);
+    dataArray.push(39);
+    dataArray.push(42);
+    dataArray.push(45);
+    dataArray.push(48);
+    dataArray.push(51);
+    dataArray.push(54);
+    dataArray.push(57);
+    dataArray.push(60);
+    data.addRow(dataArray);
+    dataArray = [];
+    dataArray.push(4);
+    dataArray.push(34);
+    dataArray.push(19);
+    dataArray.push(36);
+    dataArray.push(52);
+    dataArray.push(54);
+    dataArray.push(32);
+    dataArray.push(1);
+    dataArray.push(19);
+    dataArray.push(53);
+    dataArray.push(37);
+    dataArray.push(55);
+    dataArray.push(43);
+    dataArray.push(47);
+    dataArray.push(12);
+    dataArray.push(43);
+    dataArray.push(43);
+    dataArray.push(55);
+    dataArray.push(13);
+    dataArray.push(38);
+    dataArray.push(20);
+    dataArray.push(26);
+    data.addRow(dataArray);
+    dataArray = [];
+}
+
+var chartOptions = {
+    title:'Points, default',
+    curveType:'function',
+    lineWidth: 2,
+    series: [{'color': '#D3362D'}],
+    intervals: { 'style':'points', pointSize: 2 },
+    legend: 'none',
+};
+var chart = new google.visualization.LineChart(document.getElementById('exampleChart'));
+chart.draw(data, chartOptions);
+}
