@@ -101,13 +101,18 @@ $(document).ready(function(e) {
             var sub = subjects[i];
             $("#"+sub.id+"group").closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
         }
-        //Adding Charts for each Team
+
         for(var k = 1;k < numTeamGroups;k++)
         {
-            $('#poolChart').append("<div class='charts "+(k)+"'>Team "+(k)+"<div id='chartDiv "+(k)+"'</div> </div>");
-            alert(k);
-            drawChart(k,field);
-            alert(k);
+            $('#poolChart').append("<div class='charts "+(k)+"' id='chartDiv "+(k)+"'  style='width:300; height:300'>TestDiv </div>");
+
+            var pieOptions = {'title':'Marks Test',
+                'width':300,
+                'height':400,
+                'pieSliceText':'value'};
+            var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
+            chart.draw(dataTest, pieOptions);
+
         }
     }
     //Removes from all records
@@ -917,81 +922,90 @@ function SortBy(arr,key)
 }
 
 //Function to Draw the Chart
-function drawChart(n,tField) {
-    var columnCount = 0;
-    var data = new google.visualization.DataTable();
-    var dataArray = [];
-    data.addColumn('number', 'values');
-    data.addColumn('number', 'values');
-    dataArray.push(1);
-    dataArray.push(100);
-    for(var t=0;t<subjects.length;t++)
-    {
-        if(subjects[t].group == n)
-        {
-            columnCount++;
-            data.addColumn({id:'i'+t, type:'number', role:'interval'});
-        }
-    }
-    alert(columnCount);
-    for(var q = 0;q < subjects.length;q++)
-    {
-        if(subjects[q].group == n)
-        {
-            var subje = subjects[q];
-            var tempValue = subje[tField];
-            dataArray.push(tempValue);
-        }
-    }
-    alert(dataArray);
-    data.addRow([1,100,2,43,54,67,87,65,34,23,12,12]);
-    data.addRow([2,20,2,43,54,67,87,65,34,23,12,12]);
-    data.addRow([3,10,2,43,54,67,87,65,34,23,12,12]);
-    alert('test');
 
-    var chartOptions = {
-        title:'Points, default',
-        curveType:'function',
-        lineWidth: 2,
-        series: [{'color': '#D3362D'}],
-        intervals: { 'style':'points', pointSize: 2 },
-        legend: 'none',
-    };
-    var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
-    chart.draw(data, chartOptions);
-}
-// function createDataTable(n,tField) {
-//
-//   var columnCount = 0;
-//   var data = new google.visualization.DataTable();
-//   var dataString = "["+n+",100";
-//   //alert('1');
-//     data.addColumn('number', 'values');
-//     data.addColumn('number', 'values');
-//   for(var t=0;t<subjects.length;t++)
-//   {
-//   //  alert('2');
-//     if(subjects[t].group == n)
-//     {
-//       //alert('3');
-//       columnCount++;
-//       data.addColumn({id:'i'+t, type:'number', role:'interval'});
-//     }
-//   }
-//
-//   for(var q = 0;q < subjects.length;q++)
-//   {
-//     //alert('4');
-//     if(subjects[q].group == n)
-//     {
-//       //alert('5');
-//       var subje = subjects[q];
-//       var tempValue = subje[tField];
-//       dataString = dataString + "," + tempValue;
-//     }
-//   }
-//   //alert('6');
-//   dataString = dataString + "]";
-//   data.addRow(dataString);
-//   alert('1');
-// }
+/*function drawChart() {
+
+ //Create the data table
+ var dataPie = new google.visualization.DataTable();
+ dataPie.addColumn('string', 'Names');
+ dataPie.addColumn('number', 'Grade');
+ dataPie.addRows([
+ ['Dorme', 90],
+ ['Hendrik', 98],
+ ['Piet', 19],
+ ['Jason', 71],
+ ['Ang', 28],
+ ['Shaun', 60],
+ ['SD', 55],
+ ['Karien', 63],
+ ['Suanne', 71]
+ ]);
+
+ var dataLine = new google.visualization.DataTable();
+ dataLine.addColumn('string', 'Names');
+ dataLine.addColumn('number', 'Grade');
+ dataLine.addColumn('number', 'Participation');
+ dataLine.addRows([
+ ['Dorme', 90, 70],
+ ['Hendrik', 98, 60],
+ ['Piet', 19, 75],
+ ['Jason', 71, 30],
+ ['Ang', 28, 35],
+ ['Shaun', 60, 58],
+ ['SD', 55, 87],
+ ['Karien', 63, 98],
+ ['Suanne', 71, 48]
+ ]);
+ var dataLineHistory = new google.visualization.DataTable();
+ dataLineHistory.addColumn('string', 'Team');
+ dataLineHistory.addColumn('number', 'Average1');
+ dataLineHistory.addColumn('number', 'Average2');
+ dataLineHistory.addColumn('number', 'Average3');
+ dataLineHistory.addColumn('number', 'Average4');
+ dataLineHistory.addColumn('number', 'StdDev1');
+ dataLineHistory.addColumn('number', 'StdDev2');
+ dataLineHistory.addColumn('number', 'StdDev3');
+ dataLineHistory.addColumn('number', 'StdDev4');
+ dataLineHistory.addRows([
+ ['One', 55, 59, 51, 55, 2.4, 2.6, 2.1, 2.3],
+ ['Two', 98, 60, 90, 70, 3.6, 3.6, 3.1, 3.3],
+ ['Three', 19, 75, 90, 70, 4.4, 4.6, 4.1, 4.3],
+
+ ]);
+ //PieChart
+ // Set chart options
+ /*    var pieOptions = {'title':'Marks Test',
+ 'width':300,
+ 'height':400,
+ 'pieSliceText':'value'};*/
+
+// Instantiate and draw our charts, passing in some options.
+
+//    var chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
+//  chart.draw(dataTest, pieOptions);
+
+//Interval Chart
+/* var options_lines = {
+ title: 'Line intervals, default',
+ curveType: 'function',
+ lineWidth: 4,
+ intervals: { 'style':'line' },
+ legend: 'none'
+ };
+
+ var chart_lines = new google.visualization.LineChart(document.getElementById('chart_lines'));
+ chart_lines.draw(dataLine, options_lines);
+
+ //Line Chart
+ var lineOptions = {
+ title: 'Company Performance',
+ curveType: 'function',
+ legend: { position: 'bottom' }
+ };
+
+ var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+ chart.draw(dataLine, lineOptions);
+ var chart = new google.visualization.LineChart(document.getElementById('curve_chart2'));
+ chart.draw(dataLineHistory, lineOptions);
+
+ }*/
