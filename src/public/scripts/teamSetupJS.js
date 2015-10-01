@@ -426,22 +426,22 @@ function exportCSV(subs, fields)
 
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
-
-        csvContent += fields[i];
-        if (i != fields.length - 2)
+            csvContent += fields[i];
             csvContent += ',';
     }
+
     }
+    csvContent = csvContent.substr(0,csvContent.length-1);
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
         {   if(fields[k] != "previousGroups") {
             csvContent += subs[p][fields[k]];
-            if (k != fields.length - 2)
                 csvContent += ',';
         }
         }
+        csvContent = csvContent.substr(0,csvContent.length-1);
         csvContent += '\r\n';
     }
 
