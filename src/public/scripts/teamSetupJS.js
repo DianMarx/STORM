@@ -221,7 +221,7 @@ function updateTeams()
 
     //dragable
 
-    var k = {};
+
 
 
     addAlgorithmBox();
@@ -914,6 +914,7 @@ function populateTable() {
 
 function populateSubjectPool()
 {
+    var k = {};
     $('#subjects').empty();
     $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
     for(var i = 0; i < subjects.length; i++)
