@@ -307,6 +307,7 @@ function deleteProject(p,id)
      var counter = {};
      var id = fields[0];
      var nulls = false;
+		 var FirstColID = true;
 
      Subjects.forEach(function(sub){ //count duplicates
          var key = JSON.stringify(sub[id]);
@@ -314,7 +315,12 @@ function deleteProject(p,id)
          if(counter[key] > 1)
              duplicates = true;
      });
-
+		 
+     Subjects.forEach(function(sub){ //Is first column numeric and unique?
+         if(isNaN(sub[id]))
+            FirstColID = false;
+     });		
+		 
      Subjects.forEach(function(sub){
         for(i = 0; i < fields.length; i++)
         {
@@ -325,7 +331,11 @@ function deleteProject(p,id)
         }
      });
 
-
+     if(!FirstColID)
+     {
+         alert("The first column should contain numeric unique identifiers. See user manual for correct upload formats.");
+         return false;
+     }
      if($.isEmptyObject(Subjects))
      {
          alert("The file cannot be empty. See user manual for correct upload formats.");
