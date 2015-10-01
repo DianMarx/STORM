@@ -717,6 +717,7 @@ function MergeSubjects(newSubjects,Criteria)
         populateTable();
         populateSubjectPool();
         alert("Subject set merged successfully. Remember to save before you exit.");
+        clearInput();
     }
 
 
