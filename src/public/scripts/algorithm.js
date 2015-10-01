@@ -27,33 +27,41 @@ function goShuffle(subs, algs, nGroups)
 
     for(var i = 0; i < algs.length; i++)
     {
+
+        function compareWeight(a,b){
+            var field = 'weight';
+
+                if (a[field] < b[field])
+                    return 1;
+                if (a[field] > b[field])
+                    return -1;
+            return 0;
+        }
+        algs.sort(compareWeight);
+        if(i < algs.length-1)
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
+        if((numGroups % 2 == 0) && (nGroups % 2 != 0))
+        numGroups+=1;
+
         if(i == algs.length -1) numGroups = nGroups;
         switch(algs[i].type) {
             case 'Similar':
-                if (algs[i].field == "previousGroups") {
-
+                if (algs[i].field == "previousGroups")
                     similarGroupings(subs, numGroups);
-                } else {
-
-
-
-
+                else
                     similarShuffle(subs, numGroups, algs[i].field);
-        }
-                            break;
-            case 'Diverse': if(algs[i].field == "previousGroups")
-            {
-                diverseGroupings(subs,numGroups);
-            }else
-
-                diverseShuffle(subs,numGroups, algs[i].field);
+                break;
+            case 'Diverse':
+                if(algs[i].field == "previousGroups")
+                    diverseGroupings(subs,numGroups);
+                else
+                    diverseShuffle(subs,numGroups, algs[i].field);
                 break;
             case 'By Roles': alert("Has yet to be implemented");
                 break;
 
         }
-        alert(JSON.stringify(subs));
+
     }
     sendToTables(subs);
 
@@ -62,30 +70,50 @@ function goShuffle(subs, algs, nGroups)
 function diverseGroupings(subs, numGroups){
     sortByPrev(subs);
     var t = 0;
-    for(var z = 0; z < subs.length; z++)
-    {
-        if(subs[z].group> t)t = subs[z].group;
+    function gComp(a,b){
+
+
+        if (a.group < b.group)
+            return -1;
+        if (a.group > b.group)
+            return 1;
+
+        return 0;
     }
 
 
-    if(t == 0){t = numGroups;}
-    var multi = numGroups;
-    numGroups = t * numGroups;
-    var a = 0;
 
+    subs.sort(gComp);
+    var lim;
+
+    var t = subs[subs.length-1].group;
+
+    if(t == 0) t = 2;
+    lim = numGroups;
+    //t is amount groups from
+
+
+    var multi = t * numGroups;
+
+
+    var a = 0;
+    var old = subs[0].group;
+    var cur = subs[0].group;
     for(var p = 0; p < subs.length; p++){
-        var lim = t;
-        if(subs[p].group > lim){a=lim; lim +=t; }
-        alert(p);
+
+        old = cur;
+        cur = subs[p].group;
+        if(cur > old){a=lim; lim +=numGroups; }
         subs[p].group = ++a;
 
         if(a == lim)
         {
-            a = lim - t;
+            a = lim - numGroups;
         }
-
     }
-    merger(subs,multi);
+
+
+    diverseMerger(subs, numGroups, multi );
 
 
 }
@@ -132,7 +160,7 @@ function findBest(arr, subs){
         }
         if(!skip){
 
-            var sim = similarity(arr, subs[i].previousGroups, subs);
+            var sim = similarity(arr, subs[i], subs);
             if(sim > topCompare){
                 topIndex = i;
                 topCompare = sim;
@@ -149,12 +177,16 @@ function similarity(arr,b, subs){
     //alert(b);
     for(var i = 0; i < arr.length; i++){
 
-        var temp = subs[arr[i]].previousGroups;
+        if(subs[arr[i]].group == b.group) {
+            var temp = subs[arr[i]].previousGroups;
 
-        for(var p = 0; p < b.length; p++){
-            //alert(temp[p] + " = " + b[p]);
-            if(temp[p] == b[p]){ c++;}
+            for (var p = 0; p < b.previousGroups.length; p++) {
+                //alert(temp[p] + " = " + b[p]);
+                if (temp[p] == b[p]) {
+                    c++;
+                }
 
+            }
         }
     }
     return c;
@@ -163,6 +195,7 @@ function diverseShuffle(subs,numGroups,field)
 {
 
     function compare(a,b){
+
     if(a.group == b.group) {
         if (a[field] < b[field])
             return -1;
@@ -171,28 +204,82 @@ function diverseShuffle(subs,numGroups,field)
     }
         return 0;
     }
-    var numSubj = subs.length;
+
+    function gComp(a,b){
+
+
+            if (a.group < b.group)
+                return -1;
+            if (a.group > b.group)
+                return 1;
+
+        return 0;
+    }
+
+
     subs.sort(compare);
+    subs.sort(gComp);
+    var lim;
+
     var t = subs[subs.length-1].group;
-    if(t == 0)t++;
 
-    var multi = numGroups;
-    numGroups = t * numGroups;
-    var allowed = getMaxes(numSubj, numGroups);
+
+    lim = numGroups;
+    //t is amount groups from
+
+    var multi = t * numGroups;
+    if(t == 0)
+    multi = numGroups;
+
+
+
     var a = 0;
-
+    var old = subs[0].group;
+    var cur = subs[0].group;
     for(var p = 0; p < subs.length; p++){
-        var lim = t;
-        if(subs[p].group > lim){a=lim; lim +=t; }
+
+        old = cur;
+        cur = subs[p].group;
+        if(cur > old){a=lim; lim +=numGroups; }
         subs[p].group = ++a;
+
         if(a == lim)
         {
-            a = lim - t;
+            a = lim - numGroups;
         }
     }
-    merger(subs, multi);
+
+    diverseMerger(subs, numGroups, multi);
 
 
+}
+function diverseMerger(subs, numGroups, tempNum)
+{
+    var field = 'group';
+    //comparison function
+    function compare(a,b) {
+        if (a[field] < b[field])
+            return -1;
+        if (a[field] > b[field])
+            return 1;
+
+        return 0;
+    }
+    var numSubj = subs.length;
+    subs.sort(compare);
+
+    var t = tempNum/numGroups;
+
+    for(var p = 0; p< subs.length; p++)
+    {
+        var temp = t;
+        var g = 1;
+        while(temp < subs[p].group)
+        {temp += t; g++;}
+
+        subs[p].group = g;
+
+    }
 }
 function merger(subs,numGroups){
     var field = 'group';
@@ -258,10 +345,9 @@ var numSubs = subs.length;
     {
 
         var to = $('.' + subs[i].group).find('.subjBody');
-        $('#' + subs[i].id).appendTo(to);
-        
-    }
 
+        $('#' + subs[i].id+"group").appendTo(to);
+    }
 }
 
 //helper function
@@ -291,42 +377,61 @@ function getMaxes(numSubj, numGroups){
 
     return allowed;
 }
-function randomize(numSubj, numTeam){
 
-    var totalSubj = $('.subject').length;
+function randomize(subs, numTeams){
+
+
+
+    var numSubj = subs.length;
+    var arr = [];
+    for(var w = 0; w < numTeams; w++){
+        arr.push(0);
+    }
+    for(var i = 0; i < numSubj; i++){
+        arr[subs[i].group]++;
+    }
     //alert(numSubj + " teams: " + numTeam);
-    var numSubjects = numSubj; var numTeams = numTeam;
-    var max = totalSubj/numTeams;
+
+    var max = numSubj/numTeams;
     var even = false;
     var remaining = 0;
     if(max % 1 == 0)  even = true;
     else {
 
-        temp = max - Math.floor(max);
+        var temp = max - Math.floor(max);
 
         remaining = Math.ceil(temp * numTeams);
         //alert(temp + " " + remaining);
         max = Math.ceil(max);
 
     }
+
     var trueMax = max;
-alert(max);
-    $('.names').find('.subject').each(function(index, element) {
-//alert(index + " " + element);
+
+    for(var q = 0; q < numSubj; q++) {
+
+        if(subs[q].group == 0){
         var done = false;
-        while(!done){
+        while(!done) {
             var randm = Math.floor(Math.random() * (numTeams) + 1);
 
-            if($('.' + randm).find("tr").length-1 < max){
+            if ($(arr[randm] < max)) {
                 //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
-                var to = $('.' + randm).find('.subjBody');
-                $(element).appendTo(to); done = true;
+                subs[q].group = randm;
+                arr[randm]++;
+                done = true;
 
-                if($('.' + randm).find("tr").length-1 == max)
-                {if(!even){if(remaining > 0)remaining--; if(remaining ==0) max = trueMax-1;}}
+                if (arr[randm] == max) {
+                    if (!even) {
+                        if (remaining > 0)remaining--;
+                        if (remaining == 0) max = trueMax - 1;
+                    }
+                }
 
             }
-
         }
-    });
+        }
+        }
+    sendToTables(subs);
+
 }

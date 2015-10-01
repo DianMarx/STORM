@@ -3,14 +3,13 @@ var testUser = false;
 var user;
 var collection = getParameterByName('collection');
 var subjects;
+var numAlgs = 0;
 var fields = [];
 
 $(document).ready(function(e) {
-    var dataTest = new google.visualization.DataTable();
-    dataTest.addColumn('string','Name');
-    dataTest.addColumn('number','Grade');
+
     $("#uploadCSV").click(function(){
-        $("#CSVInput").click();
+       $("#CSVInput").click();
     });
 
     $("#CSVInput").change(function(){
@@ -40,93 +39,46 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
-    init();
 
+    //gets all the subjects' fields
+    fields = [];
+    for (var name in subjects[0]) {
+
+        if (name[0] != '_') {
+            fields.push(name);
+            //$('<th>' + name + '</th>').appendTo("#subjectFields");
+        }
+    }
+    //alert(JSON.stringify(fields));
+    //alert(JSON.stringify(subjects));
+    populateTable();
+    //toSubjects table
 
 
     $(".table").selectable();
     //Loads subject pool with first variable(name)
-    function populateSubjectPool()
-    {
-        $('#subjects').empty();
-        $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
-        dataTest.addRows(subjects.length);
-        for(var i = 0; i < subjects.length; i++)
-        {
-            subjects[i].group = 0;
-            var sub = subjects[i];
-            if(sub['name']){var name= 'name';}else var name = 'Name';
-            $("tbody#0").append("<tr class='subject' id='" + sub.id+"group" + "' ><td>" + sub[name] + "</td></tr>");
-            dataTest.setCell(i,0,sub[name]);
-            dataTest.setCell(i,1,subjects[i].Mark);
-        }
 
-        $(".subject").draggable({
-
-            helper: "clone",
-            cursor: "move",
-            opacity: "0.5",
-            revert: "invalid",
-            start: function(){
-                k.tr = this;
-            }
-
-        });
-
-        $(".teamTables").droppable({
-            accept: '.subject',
-            cursor: "normal",
-            drop: function(event, ui) {
-                //var temp = alert();
-                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
-            }
-        });
-        $("#subjects").droppable({
-            accept: '.subject',
-            drop: function(event, ui) {
-                //var temp = alert();
-                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
-            }
-        });
-    }
-
-
-    //User selectable fields to view
-    function addField(field)
-    {
-        field = field.replace(' ','_');
-        $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
-        for(var i = 0; i < subjects.length; i++)
-        {
-            var sub = subjects[i];
-            $("#"+sub.id+"group").closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
-        }
-        //Adding Charts for each Team
-        for(var k = 1;k < numTeamGroups;k++)
-        {
-            $('#poolChart').append("<div class='charts "+(k)+"'>Team "+(k)+"<div id='chartDiv "+(k)+"'</div> </div>");
-            alert(k);
-            drawChart(k,field);
-            alert(k);
-        }
-    }
     //Removes from all records
     function removeField(field)
     {
-
+        field = field.replace(' ','_');
         $("th#"+ field).remove();
         $("td#"+ field).remove();
+        var elem = document.getElementById("poolChart");
+        elem.parentElement.removeChild(elem);
+
+        $('#mainChart').append("<div id='poolChart'></div>")
     }
 
-    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
         if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
 
-            var temp = fields[i];
-            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+        var temp = fields[i];
+        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
             if(fields[i].toLowerCase() != 'name')
-                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
-        }
+            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+    }
     }
 
     //user checks a checkbox
@@ -142,34 +94,34 @@ $(document).ready(function(e) {
     });
 
 
+
 //Change number of groups
     $("#totalTeams").change(function() {
-        var empty = true;
-        $(".teams").find("div").each(function () {
-
-            if ($(this).find("tr").length >= 2) {
-                empty = false;
-            }
-        });
+        var empty = false;
+        if(getNumTeams(subjects) == 0)
+            empty = true;
         var c = false;
         if(!empty)
         {
             c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
         }
         if(empty || c){
-            $(".subject").detach().appendTo("#subjects table .subjBody");
-            $(".teamTables").detach();
-            numTeamGroups = 1;
+            returnToPool();
             var temp = parseInt($("#totalTeams").val());
+            $("#maxPerGroup").val(Math.ceil(subjects.length/temp));
             for(var r = 0; r < temp; r++){
-                $("#plusButton").click();}
+            $("#plusButton").click();}
         }
     });
-
-    function updateTeams()
-    {
-
+    function returnToPool(){
+        $(".subject").detach().appendTo("#subjects table .subjBody");
+        $(".teamTables").detach();
+        numTeamGroups = 1;
     }
+function updateTeams()
+{
+
+}
 
 
 
@@ -186,7 +138,7 @@ $(document).ready(function(e) {
             alg.field = $(this).find('#selectField option:selected').val();
             alg.type = $(this).find('#shuffleSelect option:selected').val();
             if(alg.type == 'By Roles'){
-                //  alert($(this).find('.strict').first().checked);
+                alert($(this).find('.strict').first().checked);
                 //alert(alg.strict);
             }
             alg.weight = parseInt($(this).find('#weight').val());
@@ -198,10 +150,10 @@ $(document).ready(function(e) {
 
     $("#plusButton").click(function(e){
 
-        var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
-        $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
-        numTeamGroups++;
-        $("#totalTeams").val(numTeamGroups-1);
+            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
+            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+            numTeamGroups++;
+            $("#totalTeams").val(numTeamGroups-1);
 
 
 
@@ -269,27 +221,24 @@ $(document).ready(function(e) {
 
     //dragable
 
-    var k = {};
+
 
 
     addAlgorithmBox();
     $('#addAlg').click(function (e) {
-        addAlgorithmBox();
-    });
-    //nog klaar maak
-    $("#maxPerGroup").change(function(e){
-
-        var groups = parseInt(Math.ceil(subjects.length/$(this).val()));
-        $("#totalTeams").val(groups);
+        if(Math.pow(2,numAlgs+1) <= numTeamGroups -1)
+            addAlgorithmBox();
+        else alert("You need at least " + Math.pow(2,numAlgs+1) + " groups to shuffle by " + (numAlgs+1) + " fields." );
     });
 
     function addAlgorithmBox()
     {
+        numAlgs++;
         //appendTO
         var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
         {
-            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
@@ -298,13 +247,14 @@ $(document).ready(function(e) {
 
         //$('#closeAlg').unbind();
         $('#closeAlg').click(function(e){
-            $(this).parent().detach();
+           $(this).parent().detach();
+            numAlgs--;
         });
 
 
     }
     $("#exportMasterTable").click(function (e) {
-        exportCSV(subjects, fields);
+       exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
 
@@ -345,18 +295,18 @@ $(document).ready(function(e) {
     });
 
     $("#selectField").change(function(){
-        var field = $(this).val();
+var field = $(this).val();
 
-        if(isDiscrete(field,subjects[0]))
+       if(isDiscrete(field,subjects[0]))
         {
 
             $(this).parent().find("#byRoles").detach();
             $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
 
         }else {
-            $(this).parent().find("#byRoles").detach();
-            $(this).parent().find('.roles').detach();
-        }
+           $(this).parent().find("#byRoles").detach();
+           $(this).parent().find('.roles').detach();
+       }
     });
 
     $("#shuffleSelect").change(function(){
@@ -388,8 +338,8 @@ $(document).ready(function(e) {
                     numRoles++;
                 }
                 while(numRoles > $(this).val()) {
-                    $(this).parent().find('.aRole').first().detach();
-                    numRoles--;
+                $(this).parent().find('.aRole').first().detach();
+                numRoles--;
                 }
             });
 
@@ -405,7 +355,7 @@ $(document).ready(function(e) {
     $("#plusButton").click();
     $("#plusButton").click();
     populateSubjectPool();
-
+    $("#maxPerGroup").val(Math.ceil(subjects.length/2));
 
 });
 
@@ -477,10 +427,10 @@ function exportCSV(subs, fields)
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
 
-            csvContent += fields[i];
-            if (i != fields.length - 2)
-                csvContent += ',';
-        }
+        csvContent += fields[i];
+        if (i != fields.length - 2)
+            csvContent += ',';
+    }
     }
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
@@ -503,6 +453,7 @@ function exportCSV(subs, fields)
     document.body.appendChild(link);
     link.click();
 }
+
 function fnOpenNormalDialog(element) {
 
     buttons = {
@@ -706,7 +657,6 @@ function uploadCSV()
             var obj = $.csv.toObjects(result);
             var arr = $.csv.toArrays(result);
 
-            //console.log(JSON.stringify(obj));
             MergeSubjects(obj,arr[0]);
         };
     }
@@ -714,23 +664,12 @@ function uploadCSV()
 
 function MergeSubjects(newSubjects,Criteria)
 {
-    var validNumSubs;
-    var duplicates = false;
-    var validCSV = true;
-    var newCriteria = false;
-    var moreSubs = false;
-    var temp = subjects;
-    var sameIDs = false;
-    var numFieldsNew = Criteria.length;
-    var counter = {};
-    var id = Criteria[0];
-
-    newSubjects.forEach(function(sub){ //count duplicates
-        var key = JSON.stringify(sub[id]);
-        counter[key] = (counter[key] || 0) + 1;
-        if(counter[key] > 1)
-            duplicates = true;
-    });
+    var temp = [];
+    for(i = 0; i < subjects.length; i++) // make deep copy of subjects to reserve integrity of data
+    {
+        var tmp = $.extend(true,{},subjects[i]);
+        temp.push(tmp);
+    }
 
     for(i = 0; i < temp.length; i++)
     {
@@ -739,12 +678,79 @@ function MergeSubjects(newSubjects,Criteria)
         delete temp[i]["group"];
     }
 
-    var fields = Object.getOwnPropertyNames(temp[0]);
+    var crit = Object.getOwnPropertyNames(temp[0]);
+
+    var valid = validCSV(newSubjects,Criteria,temp,crit);
+
+    if(!valid)
+    {
+        clearInput();
+    }
+    else
+    {
+        for(i = 0; i < valid.length; i++)
+        {
+            for(k = 0; k < subjects.length; k++)
+            {
+                var exists = false;
+                if(subjects[k][Criteria[0]] == valid[i][Criteria[0]])
+                {
+                    $.extend(subjects[k],valid[i]);
+                    exists = true;
+                    break;
+                }
+            }
+            if(!exists)
+            {
+                subjects.push(valid[i]);
+            }
+        }
+        fields = [];
+        for (var name in subjects[0]) {
+
+            if (name[0] != '_') {
+                fields.push(name);
+                //$('<th>' + name + '</th>').appendTo("#subjectFields");
+            }
+        }
+        populateTable();
+        populateSubjectPool();
+        alert("Subject set merged successfully. Remember to save before you exit.");
+    }
+
+
+}
+
+function clearInput()
+{
+    var control = $("#CSVInput");
+    control.replaceWith( control = control.clone( true ) );
+}
+
+function validCSV(newSubjects,Criteria,temp,fields)
+{
+    var numFieldsNew = Criteria.length;
+    var counter = {};
+    var id = Criteria[0];
+    var validNumSubs;
+    var newCriteria = false;
+    var moreSubs = false;
+
+    newSubjects.forEach(function(sub){ //count duplicates
+        var key = JSON.stringify(sub[id]);
+        counter[key] = (counter[key] || 0) + 1;
+        if(counter[key] > 1)
+        {
+            alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats.");
+            return false;
+        }
+    });
 
     for(i = 0; i < newSubjects.length; i++)
     {
         if(Object.keys(newSubjects[i]).length != numFieldsNew) { // check if subjects have same number of attributes
-            validCSV = false;
+            alert("Some subjects do not have the correct number of values. See user manual for correct upload formats.");
+            return false;
         }
         else //check for null values
         {
@@ -753,7 +759,7 @@ function MergeSubjects(newSubjects,Criteria)
             {
                 if(newSubjects[i][Criteria[k]] == "")
                 {
-                    validCSV = false;
+                    alert("Subjects cannot have empty values. See user manual for correct upload formats.");
                 }
             }
         }
@@ -770,95 +776,96 @@ function MergeSubjects(newSubjects,Criteria)
             }
         }
         if(!validNumSubs)
-            break;
-    }
-    if(!validCSV)
-    {
-        alert("The file you uploaded is not in the correct format. See user manual for correct upload formats");
-    }
-    else if(!validNumSubs)
-    {
-        alert("Some subjects have been omitted. See user manual for correct upload formats");
-    }
-    else if(duplicates)
-    {
-        alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats");
-    }
-    else
-    {
-        if(newSubjects.length > temp.length) // User attempting to add new subject
         {
-            moreSubs = true;
+            alert("Some subjects have been omitted. See user manual for correct upload formats");
+            return false;
         }
+    }
 
-        for(i = 0; i < Criteria.length; i++)
+    if(newSubjects.length > temp.length) // User attempting to add new subject
+    {
+        moreSubs = true;
+    }
+
+    for(i = 0; i < Criteria.length; i++)
+    {
+        if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
         {
-            if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
-            {
-                newCriteria = true;
-            }
+            newCriteria = true;
+            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
         }
+    }
 
-        if(newCriteria)
+    if(newCriteria)
+    {
+        for(k = 0; k < temp.length; k++) // for each object in temp merge with object in newSubject where ids are the same
         {
-            for(k = 0; k < temp.length; k++) // for each object in temp merge with object in newSubject where ids are the same
+            for(i = 0; i < newSubjects.length; i++)
             {
-                for(i = 0; i < newSubjects.length; i++)
+                validNumSubs = false;
+                if(temp[k][id] == newSubjects[i][id])
                 {
-                    validNumSubs = false;
-                    if(temp[k][id] == newSubjects[i][id])
-                    {
-                        $.extend(temp[k],newSubjects[i]);
-                        //console.log(JSON.stringify(temp[k]));
-                        validNumSubs = true;
-                        break;
-                    }
-                }
-                if(!validNumSubs)
+                    $.extend(temp[k],newSubjects[i]);
+                    validNumSubs = true;
                     break;
-            }
-
-        }
-        if(moreSubs)
-        {
-            for(k = 0; k < newSubjects.length; k++) // for each object in newSubjects not matching any subjects in temp, push to temp.
-            {
-                for(i = 0; i < temp.length; i++)
-                {
-                    validNumSubs = false;
-                    if(temp[i][id] == newSubjects[k][id]) //NB CHANGE TO FIRST CRITERIA NOT HARDCODED id
-                    {
-                        validNumSubs = true;
-                        break;
-                    }
                 }
-                if(!validNumSubs)
-                    temp.push(newSubjects[k]);
+            }
+            if(!validNumSubs)
+                break;
+        }
+    }
+
+    if(moreSubs)
+    {
+        for(k = 0; k < fields.length; k++) //for each object in newSubjects not matching any subjects in temp, push to temp.
+        {
+            for (i = 0; i < Criteria.length; i++)
+            {
+                correctCrit = false;
+                if(fields[k] == Criteria[i])
+                {
+                    correctCrit = true;
+                    break;
+                }
+            }
+            if(!correctCrit)
+            {
+                alert("Could not add new subjects, all criteria should be included");
+                return false;
             }
         }
-        //console.log(JSON.stringify(temp));
-    }
-}
 
-function init()
-{
-    //gets all the subjects' fields
-    fields = [];
-    for (var name in subjects[0]) {
-
-        if (name[0] != '_') {
-            name = name.replace(' ', '_');
-            fields.push(name);
-            //$('<th>' + name + '</th>').appendTo("#subjectFields");
+        for(k = 0; k < newSubjects.length; k++) //for each object in newSubjects not matching any subjects in temp, push to temp.
+        {
+            for(i = 0; i < temp.length; i++)
+            {
+                validNumSubs = false;
+                if(temp[i][id] == newSubjects[k][id])
+                {
+                    validNumSubs = true;
+                    break;
+                }
+            }
+            if(!validNumSubs) // more subjects than present in current set
+            {
+                newSubjects[k].previousGroups = [];
+                newSubjects[k].group = 0;
+                temp.push(newSubjects[k]);
+            }
         }
     }
-    //  alert(JSON.stringify(subjects));
-    populateTable();
-
-
+    return temp;
 }
 
-//toSubjects table
+function getNumTeams(subs){
+    var temp = 0;
+    for(var i = 0; i < subs.length; i++){
+        if(subs[i].group > temp)
+            temp = subs[i].group;
+    }
+    return temp;
+}
+
 function populateTable() {
     $(function () {
 
@@ -884,7 +891,6 @@ function populateTable() {
                     return subjects
                 }
             }
-
         });
 
     });
@@ -904,94 +910,66 @@ function populateTable() {
      */
 }
 
-function SortBy(arr,key)
+function populateSubjectPool()
 {
-    arr.sort(function(a, b){
-        var keyA = a.key,
-            keyB = b.key;
-        // Compare the 2 dates
-        if(keyA < keyB) return -1;
-        if(keyA > keyB) return 1;
-        return 0;
+  var k = {};
+    $('#subjects').empty();
+    $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
+    for(var i = 0; i < subjects.length; i++)
+    {
+        subjects[i].group = 0;
+        var sub = subjects[i];
+        if(sub['name']){var name= 'name';}else var name = 'Name';
+        $("tbody#0").append("<tr class='subject' id='" + sub.id+"group" + "' ><td>" + sub[name] + "</td></tr>");
+    }
+
+    $(".subject").draggable({
+
+        helper: "clone",
+        cursor: "move",
+        opacity: "0.5",
+        revert: "invalid",
+        start: function(){
+            k.tr = this;
+        }
+
     });
+
+    $(".teamTables").droppable({
+        accept: '.subject',
+        cursor: "normal",
+        drop: function(event, ui) {
+            //var temp = alert();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+        }
+    });
+    $("#subjects").droppable({
+        accept: '.subject',
+        drop: function(event, ui) {
+            //var temp = alert();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+        }
+    });
+
 }
 
-//Function to Draw the Chart
-function drawChart(n,tField) {
-    var columnCount = 0;
-    var data = new google.visualization.DataTable();
-    var dataArray = [];
-    data.addColumn('number', 'values');
-    data.addColumn('number', 'values');
-    dataArray.push(1);
-    dataArray.push(100);
-    for(var t=0;t<subjects.length;t++)
-    {
-        if(subjects[t].group == n)
-        {
-            columnCount++;
-            data.addColumn({id:'i'+t, type:'number', role:'interval'});
-        }
-    }
-    alert(columnCount);
-    for(var q = 0;q < subjects.length;q++)
-    {
-        if(subjects[q].group == n)
-        {
-            var subje = subjects[q];
-            var tempValue = subje[tField];
-            dataArray.push(tempValue);
-        }
-    }
-    alert(dataArray);
-    data.addRow([1,100,2,43,54,67,87,65,34,23,12,12]);
-    data.addRow([2,20,2,43,54,67,87,65,34,23,12,12]);
-    data.addRow([3,10,2,43,54,67,87,65,34,23,12,12]);
-    alert('test');
 
-    var chartOptions = {
-        title:'Points, default',
-        curveType:'function',
-        lineWidth: 2,
-        series: [{'color': '#D3362D'}],
-        intervals: { 'style':'points', pointSize: 2 },
-        legend: 'none',
-    };
-    var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
-    chart.draw(data, chartOptions);
+//User selectable fields to view
+function addField(field)
+{
+
+    field = field.replace(' ','_');
+    $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
+    for(var i = 0; i < subjects.length; i++)
+    {
+        var sub = subjects[i];
+        $("#"+sub.id+"group").closest('tr').append("<td id='"+field +"'>"+sub[field]+"</td>");
+    }
+
+    //Adding Charts for each Team
+    for(var k = 1;k < numTeamGroups;k++)
+    {
+        $('#poolChart').append("<div class='charts "+(k)+"'>Team "+(k)+"<div id='chartDiv "+(k)+"'</div> </div>");
+        drawChart(k,field);
+    }
 }
-// function createDataTable(n,tField) {
-//
-//   var columnCount = 0;
-//   var data = new google.visualization.DataTable();
-//   var dataString = "["+n+",100";
-//   //alert('1');
-//     data.addColumn('number', 'values');
-//     data.addColumn('number', 'values');
-//   for(var t=0;t<subjects.length;t++)
-//   {
-//   //  alert('2');
-//     if(subjects[t].group == n)
-//     {
-//       //alert('3');
-//       columnCount++;
-//       data.addColumn({id:'i'+t, type:'number', role:'interval'});
-//     }
-//   }
-//
-//   for(var q = 0;q < subjects.length;q++)
-//   {
-//     //alert('4');
-//     if(subjects[q].group == n)
-//     {
-//       //alert('5');
-//       var subje = subjects[q];
-//       var tempValue = subje[tField];
-//       dataString = dataString + "," + tempValue;
-//     }
-//   }
-//   //alert('6');
-//   dataString = dataString + "]";
-//   data.addRow(dataString);
-//   alert('1');
-// }

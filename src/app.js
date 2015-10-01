@@ -13,8 +13,9 @@ app.set('view engine', 'html');
 app.use(express.static(__dirname + '/public'));
 //app.use("/views/style", express.static(__dirname + '/css'));
 app.engine('.html', require('ejs').__express);
-var server=app.listen(process.env.PORT || 8080,function(){
-    console.log("Express is running on port 8080");
+var port = (process.env.PORT || 8080)
+var server=app.listen(port,function(){
+    console.log("Express is running on port "+port);
 });
 
 

@@ -171,7 +171,7 @@ BODY:last-child .signin {
     height: 300px;
     display: inline-block;
     width: 100%;
-    vertical-align:top;
+	vertical-align:top;
     margin-top:50px;
 
 }
@@ -218,7 +218,7 @@ BODY:last-child .signin {
     width: 250px;
     height: 300px;
     display: inline-block;
-    vertical-align:top;
+	vertical-align:top;
     background:#EAF2FE;
     border: solid 1pt;
     overflow:auto;
@@ -226,20 +226,6 @@ BODY:last-child .signin {
     padding: 10px;
     z-index: 2;
 }
-.charts{
-    resize: both;
-    width: 250px;
-    height: 300px;
-    display: inline-block;
-    vertical-align:top;
-    background:#EAF2FE;
-    border: solid 1pt;
-    overflow:auto;
-    margin:5px;
-    padding: 10px;
-    z-index: 2;
-}
-
 .algPart{
     width: 200px;
     resize: horizontal;
@@ -282,7 +268,7 @@ BODY:last-child .signin {
 
 #randomize
 {
-    margin-left: 0px;
+	margin-left: 0px;
 }
 
 .ui-widget
@@ -531,4 +517,17 @@ section {
 
 .hidden{
     display:none;
+}
+.charts{
+    resize: both;
+    width: 600px;
+    height: 400px;
+    display: inline-block;
+    vertical-align:top;
+    background:#EAF2FF;
+    border: solid 1pt;
+    overflow:auto;
+    margin:5px;
+    padding: 10px;
+    z-index: 2;
 }
