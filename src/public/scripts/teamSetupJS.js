@@ -8,6 +8,8 @@ var fields = [];
 
 $(document).ready(function(e) {
 
+
+
     $("#uploadCSV").click(function(){
        $("#CSVInput").click();
     });
@@ -146,6 +148,7 @@ function updateTeams()
         });
 
         goShuffle(subjects,algs,numTeamGroups-1);
+        GroupsChanged();
     });
 
     $("#plusButton").click(function(e){
@@ -163,6 +166,7 @@ function updateTeams()
             drop: function(event, ui) {
                 //var temp = alert();
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+                GroupsChanged();
             }
         });
 
@@ -943,6 +947,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            GroupsChanged();
         }
     });
     $("#subjects").droppable({
@@ -950,6 +955,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            GroupsChanged();
         }
     });
 
@@ -1064,3 +1070,8 @@ var EchartOptions = {
 var chart = new google.visualization.LineChart(document.getElementById('exampleChart'));
 chart.draw(Edata, EchartOptions);
 }*/
+
+function GroupsChanged()
+{
+    
+}
