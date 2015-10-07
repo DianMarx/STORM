@@ -380,11 +380,9 @@ function getMaxes(numSubj, numGroups){
 
 function randomize(subs, numTeams){
 
-
-
     var numSubj = subs.length;
     var arr = [];
-    for(var w = 0; w < numTeams; w++){
+    for(var w = 0; w <= numTeams; w++){
         arr.push(0);
     }
     for(var i = 0; i < numSubj; i++){
@@ -414,14 +412,14 @@ function randomize(subs, numTeams){
         var done = false;
         while(!done) {
             var randm = Math.floor(Math.random() * (numTeams) + 1);
-
-            if ($(arr[randm] < max)) {
+            alert(randm + " " +arr[randm]);
+            if (arr[randm] < max) {
                 //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
                 subs[q].group = randm;
                 arr[randm]++;
                 done = true;
 
-                if (arr[randm] == max) {
+                if (arr[randm] == max-1) {
                     if (!even) {
                         if (remaining > 0)remaining--;
                         if (remaining == 0) max = trueMax - 1;
