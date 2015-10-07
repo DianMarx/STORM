@@ -5,6 +5,7 @@ var collection = getParameterByName('collection');
 var subjects;
 var numAlgs = 0;
 var fields = [];
+var numManipulations = 0;
 
 $(document).ready(function(e) {
 
@@ -1064,5 +1065,6 @@ chart.draw(Edata, EchartOptions);
 
 function GroupsChanged()
 {
-    
+    var numGroups = numTeamGroups -1;
+    numManipulations += 1;
 }
