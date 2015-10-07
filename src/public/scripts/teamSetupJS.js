@@ -969,7 +969,8 @@ function addField(field)
     //Adding Charts for each Team
     for(var k = 1;k < numTeamGroups;k++)
     {
-        $('#poolChart').append("<div class='charts "+(k)+"'>Team "+(k)+"<div id='chartDiv "+(k)+"'</div> </div>");
+
         drawChart(k,field);
+
     }
 }

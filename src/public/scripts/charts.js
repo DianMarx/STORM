@@ -1,56 +1,46 @@
 //Function to Draw the Chart
-
+var sum;
+var average;
+var counter;
 function drawChart(n,tField) {
-    var columnCount = 0;
-
+    $('#poolChart').append("<div class='charts "+(n)+"'>Team "+(n)+"<div id='chartDiv "+(n)+"'</div> </div>");
+    sum = 0;
+    average = 0;
+    counter = 0;
     var data = new google.visualization.DataTable();
+    data.addColumn('number', 'Subject');
+    data.addColumn('number', 'Marks');
 
-    data.addColumn('number', 'values');
-    data.addColumn('number', 'values');
-
-    for(var t=0;t<=subjects.length;t++)
-    {
-        if(subjects[t].group == n)
-        {
-            columnCount++;
-            data.addColumn({id:'i'+t, type:'number', role:'interval'});
-        }
-    }
-//alert(columnCount);
-    //alert(dataArray);
-    data.addRow(addData(n,tField));
-    data.addRow(addData(n,tField));
-    data.addRow(addData(n,tField));
-    //alert('test');
-
-    var chartOptions = {
-        title:'Points, default',
-        curveType:'function',
-        lineWidth: 2,
-        series: [{'color': '#D3362D'}],
-        intervals: { 'style':'points', pointSize: 2 },
-        legend: 'none',
-    };
-    var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
-    chart.draw(data, chartOptions);
-}
-
-function addData(n,tField){
-    var dataArray = new Array();
-
-    dataArray.push(1);
-    dataArray.push(70);
-    dataArray.push(0);
     for(var q = 0;q < subjects.length;q++)
     {
         if(subjects[q].group == n)
         {
             var subje = subjects[q];
             var tempValue = subje[tField];
-            dataArray.push(tempValue);
+            data.addRow([++counter,tempValue]);
+            setSum(subje[tField]);
         }
     }
+    setAverage(sum);
+    var chartOptions = {
+        title: 'Subjects vs '+tField+' comparison',
+        hAxis: {title: 'Subject', minValue: 0, maxValue: 15},
+        vAxis: {title: tField, minValue: 0, maxValue: 100},
+        legend: 'none'
+    };
+    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
+    chart.draw(data, chartOptions);
 
+}
 
-    return dataArray;
+function setSum(sValue){
+    sum += sValue;
+}
+
+function setAverage(aValue){
+    average =sum / counter;
+}
+
+function getAverage(){
+    return average;
 }
