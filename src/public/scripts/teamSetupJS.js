@@ -235,6 +235,8 @@ function updateTeams()
         else alert("You need at least " + Math.pow(2,numAlgs+1) + " groups to shuffle by " + (numAlgs+1) + " fields." );
     });
 
+    //This function adds a box for selecting a field and shuffling method
+
     function addAlgorithmBox()
     {
         numAlgs++;
@@ -255,8 +257,46 @@ function updateTeams()
             numAlgs--;
         });
 
+        $("#selectField").change(function(){
+            var field = $(this).val();
 
+            if(isDiscrete(field,subjects[0]))
+            {
+
+                $(this).parent().find("#byRoles").detach();
+                $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
+            }else {
+                $(this).parent().find("#byRoles").detach();
+                $(this).parent().find('.roles').detach();
+            }
+        });
+        $("#shuffleSelect").change(function(){
+
+            $(this).parent().find('.roles').detach();
+            if($(this).val() == "By Roles")
+            {
+                var t = $(this).parent().find(".rules");
+                var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+                var field = $(this).parent().find("#selectField").val();
+
+                var arr = getDiscreteArr(field, subjects);
+
+
+                var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
+                var table = table.find('.rollTable').append($("<tbody></tbody>"));
+                $(arr).each(function(){
+                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' id = ''"+this+"Min'></td>" +
+                    "<td><input type='number' class='rollMax' id = ''"+this+"Max'></td></tr>"));
+                });
+
+
+
+            }
+
+        });
     }
+
     $("#exportMasterTable").click(function (e) {
        exportCSV(subjects, fields);
     });
@@ -298,58 +338,9 @@ function updateTeams()
         randomize(subjects, numTeamGroups-1);
     });
 
-    $("#selectField").change(function(){
-var field = $(this).val();
-
-       if(isDiscrete(field,subjects[0]))
-        {
-
-            $(this).parent().find("#byRoles").detach();
-            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
-
-        }else {
-           $(this).parent().find("#byRoles").detach();
-           $(this).parent().find('.roles').detach();
-       }
-    });
-
-    $("#shuffleSelect").change(function(){
-
-        $(this).parent().find('.roles').detach();
-        if($(this).val() == "By Roles")
-        {
-            var t = $(this).parent().find(".rules");
-            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
-            var field = $(this).parent().find("#selectField").val();
-
-            var arr = getDiscreteArr(field, subjects);
-            var spinner = $("<input class='input-group' style='width:40px; float: right;' id='roleCount' type='number' value='1' min='1'>").appendTo(div);
-
-            var select = $("<select></select>").addClass('aRole').appendTo(div);
-            $(arr).each(function(){
-                select.append($("<option>").attr('value',this).text(this));
-            });
-            var numRoles = 1;
-            $(div).prepend("<h6>strict: <input type='checkbox' class='strict' name='strict' value='strict'></h6>");
-            $(spinner).change(function () {
 
 
-                while(numRoles < $(this).val()){
-                    select = $("<select></select>").addClass('aRole').appendTo(div);
-                    $(arr).each(function(){
-                        select.append($("<option>").attr('value',this).text(this));
-                    });
-                    numRoles++;
-                }
-                while(numRoles > $(this).val()) {
-                $(this).parent().find('.aRole').first().detach();
-                numRoles--;
-                }
-            });
 
-        }
-
-    });
 
     $("#saveMasterToDB").click(function(e){
             updateSubjects(subjects);
