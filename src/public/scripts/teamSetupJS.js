@@ -9,7 +9,7 @@ var fields = [];
 $(document).ready(function(e) {
 
     $("#uploadCSV").click(function(){
-       $("#CSVInput").click();
+        $("#CSVInput").click();
     });
 
     $("#CSVInput").change(function(){
@@ -70,15 +70,15 @@ $(document).ready(function(e) {
         $('#mainChart').append("<div id='poolChart'></div>")
     }
 
-        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
         if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
 
-        var temp = fields[i];
-        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+            var temp = fields[i];
+            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
             if(fields[i].toLowerCase() != 'name')
-            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
-    }
+                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+        }
     }
 
     //user checks a checkbox
@@ -110,7 +110,7 @@ $(document).ready(function(e) {
             var temp = parseInt($("#totalTeams").val());
             $("#maxPerGroup").val(Math.ceil(subjects.length/temp));
             for(var r = 0; r < temp; r++){
-            $("#plusButton").click();}
+                $("#plusButton").click();}
         }
     });
     function returnToPool(){
@@ -118,10 +118,10 @@ $(document).ready(function(e) {
         $(".teamTables").detach();
         numTeamGroups = 1;
     }
-function updateTeams()
-{
+    function updateTeams()
+    {
 
-}
+    }
 
 
 
@@ -146,14 +146,15 @@ function updateTeams()
         });
 
         goShuffle(subjects,algs,numTeamGroups-1);
+        GroupsChanged();
     });
 
     $("#plusButton").click(function(e){
 
-            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
-            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
+        var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
+        $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+        numTeamGroups++;
+        $("#totalTeams").val(numTeamGroups-1);
 
 
 
@@ -163,6 +164,7 @@ function updateTeams()
             drop: function(event, ui) {
                 //var temp = alert();
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+                GroupsChanged();
             }
         });
 
@@ -238,7 +240,7 @@ function updateTeams()
         var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
         {
-         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
@@ -247,14 +249,14 @@ function updateTeams()
 
         //$('#closeAlg').unbind();
         $('#closeAlg').click(function(e){
-           $(this).parent().detach();
+            $(this).parent().detach();
             numAlgs--;
         });
 
 
     }
     $("#exportMasterTable").click(function (e) {
-       exportCSV(subjects, fields);
+        exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
 
@@ -295,18 +297,18 @@ function updateTeams()
     });
 
     $("#selectField").change(function(){
-var field = $(this).val();
+        var field = $(this).val();
 
-       if(isDiscrete(field,subjects[0]))
+        if(isDiscrete(field,subjects[0]))
         {
 
             $(this).parent().find("#byRoles").detach();
             $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
 
         }else {
-           $(this).parent().find("#byRoles").detach();
-           $(this).parent().find('.roles').detach();
-       }
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find('.roles').detach();
+        }
     });
 
     $("#shuffleSelect").change(function(){
@@ -338,8 +340,8 @@ var field = $(this).val();
                     numRoles++;
                 }
                 while(numRoles > $(this).val()) {
-                $(this).parent().find('.aRole').first().detach();
-                numRoles--;
+                    $(this).parent().find('.aRole').first().detach();
+                    numRoles--;
                 }
             });
 
@@ -426,22 +428,22 @@ function exportCSV(subs, fields)
 
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
-
-        csvContent += fields[i];
-        if (i != fields.length - 2)
+            csvContent += fields[i];
             csvContent += ',';
+        }
+
     }
-    }
+    csvContent = csvContent.substr(0,csvContent.length-1);
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
         {   if(fields[k] != "previousGroups") {
             csvContent += subs[p][fields[k]];
-            if (k != fields.length - 2)
-                csvContent += ',';
+            csvContent += ',';
         }
         }
+        csvContent = csvContent.substr(0,csvContent.length-1);
         csvContent += '\r\n';
     }
 
@@ -632,11 +634,12 @@ function getHeadings(fields, subj)
             }
 
             newFields.push(field);
+
         }
     }
-    var field;
-    field.type = "control";
-    newFields.push(field);
+    var fieldCtr = {};
+    fieldCtr.type = "control";
+    newFields.push(fieldCtr);
 
     return newFields;
 }
@@ -716,6 +719,7 @@ function MergeSubjects(newSubjects,Criteria)
         populateTable();
         populateSubjectPool();
         alert("Subject set merged successfully. Remember to save before you exit.");
+        clearInput();
     }
 
 
@@ -912,7 +916,7 @@ function populateTable() {
 
 function populateSubjectPool()
 {
-  var k = {};
+    var k = {};
     $('#subjects').empty();
     $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
     for(var i = 0; i < subjects.length; i++)
@@ -941,6 +945,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            GroupsChanged();
         }
     });
     $("#subjects").droppable({
@@ -948,6 +953,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            GroupsChanged();
         }
     });
 
@@ -969,8 +975,14 @@ function addField(field)
     //Adding Charts for each Team
     for(var k = 1;k < numTeamGroups;k++)
     {
-
         drawChart(k,field);
+    }
+}
 
+function GroupsChanged()
+{
+    for(var k = 1;k < numTeamGroups;k++)
+    {
+        updateChart(k,'Mark');
     }
 }
