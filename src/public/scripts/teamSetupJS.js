@@ -5,8 +5,11 @@ var collection = getParameterByName('collection');
 var subjects;
 var numAlgs = 0;
 var fields = [];
+var numManipulations = 0;
 
 $(document).ready(function(e) {
+
+
 
     $("#uploadCSV").click(function(){
        $("#CSVInput").click();
@@ -146,6 +149,7 @@ function updateTeams()
         });
 
         goShuffle(subjects,algs,numTeamGroups-1);
+        GroupsChanged();
     });
 
     $("#plusButton").click(function(e){
@@ -163,6 +167,7 @@ function updateTeams()
             drop: function(event, ui) {
                 //var temp = alert();
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+                GroupsChanged();
             }
         });
 
@@ -221,7 +226,7 @@ function updateTeams()
 
     //dragable
 
-    var k = {};
+
 
 
     addAlgorithmBox();
@@ -426,22 +431,22 @@ function exportCSV(subs, fields)
 
     for(var i = 0; i < fields.length; i++) {
         if (fields[i] != 'previousGroups') {
-
-        csvContent += fields[i];
-        if (i != fields.length - 2)
+            csvContent += fields[i];
             csvContent += ',';
     }
+
     }
+    csvContent = csvContent.substr(0,csvContent.length-1);
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
         for(var k = 0; k < fields.length; k++)
         {   if(fields[k] != "previousGroups") {
             csvContent += subs[p][fields[k]];
-            if (k != fields.length - 2)
                 csvContent += ',';
         }
         }
+        csvContent = csvContent.substr(0,csvContent.length-1);
         csvContent += '\r\n';
     }
 
@@ -632,11 +637,12 @@ function getHeadings(fields, subj)
             }
 
             newFields.push(field);
+
         }
     }
-    var field;
-    field.type = "control";
-    newFields.push(field);
+    var fieldCtr = {};
+    fieldCtr.type = "control";
+    newFields.push(fieldCtr);
 
     return newFields;
 }
@@ -716,6 +722,7 @@ function MergeSubjects(newSubjects,Criteria)
         populateTable();
         populateSubjectPool();
         alert("Subject set merged successfully. Remember to save before you exit.");
+        clearInput();
     }
 
 
@@ -912,6 +919,7 @@ function populateTable() {
 
 function populateSubjectPool()
 {
+    var k = {};
     $('#subjects').empty();
     $('#subjects').append('<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody class="subjBody" id="0"></tbody></table>');
     for(var i = 0; i < subjects.length; i++)
@@ -940,6 +948,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            GroupsChanged();
         }
     });
     $("#subjects").droppable({
@@ -947,6 +956,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            GroupsChanged();
         }
     });
 
@@ -1061,3 +1071,9 @@ var EchartOptions = {
 var chart = new google.visualization.LineChart(document.getElementById('exampleChart'));
 chart.draw(Edata, EchartOptions);
 }*/
+
+function GroupsChanged()
+{
+    var numGroups = numTeamGroups -1;
+    numManipulations += 1;
+}
