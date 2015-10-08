@@ -22,22 +22,24 @@ function goShuffle(subs, algs, nGroups)
     }
     for(var z = 0; z < algs.length; z++)
     {
+        if(algs[z].type != 'By Roles')
         totalWeight+= algs[z].weight;
     }
 
+    function compareWeight(a,b){
+        var field = 'weight';
+
+        if (a[field] < b[field])
+            return 1;
+        if (a[field] > b[field])
+            return -1;
+        return 0;
+    }
+    algs.sort(compareWeight);
     for(var i = 0; i < algs.length; i++)
     {
 
-        function compareWeight(a,b){
-            var field = 'weight';
-
-                if (a[field] < b[field])
-                    return 1;
-                if (a[field] > b[field])
-                    return -1;
-            return 0;
-        }
-        algs.sort(compareWeight);
+        alert(JSON.stringify(algs[i]));
         if(i < algs.length-1)
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
         if((numGroups % 2 == 0) && (nGroups % 2 != 0))

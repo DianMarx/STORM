@@ -150,6 +150,7 @@ function updateTeams()
                     alg.roles.push(temp);
                     alg.mins.push($(this).find("#"+temp+"Min").val());
                     alg.maxes.push($(this).find("#"+temp+"Max").val());
+                    alg.weight = -1;
                     //c++;
                 });
 
@@ -159,7 +160,7 @@ function updateTeams()
                 }
                 */
                 //alert(alg.strict);
-            }
+            }else
             alg.weight = parseInt($(this).find('#weight').val());
             algs.push(alg);
         });
