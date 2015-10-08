@@ -76,15 +76,25 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
     var numRoles = [];
     var minLimits = [];
     var maxLimits = [];
+    var cur = [];
+    var tempRoles = [];
     for(var k = 0; k < roles.length; k++){
         numRoles.push(0);
         minLimits.push(0);
         maxLimits.push(0);
+        var grps = [];
+        for(var t = 0; t < numGroups; t++)
+        {
+            grps.push(0);
+        }
+        cur.push(grps);
     }
+    //cur[rolenum][groupnum] to access current
     for(var i = 0 ; i < subs.length; i++){
-
+        subs[i].locked = false;
         for(var p = 0; p < roles.length; p++){
-            if(subs[i][field] == roles[p].replace('_', ' ')) {
+            tempRoles.push(roles[p].replace('_', ' '));
+            if(subs[i][field] == tempRoles ) {
                 numRoles[p]++;
             }
         }
@@ -95,6 +105,58 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
         minLimits[q] = mins[q] * numGroups;
         maxLimits[q] = maxes[q] * numGroups;
        alert(roles[q] + " " + numRoles[q] + " " + minLimits[q] + " " + maxLimits[q]);
+    }
+
+    var done = false;
+    var iteration = 1;
+    while(!done){
+    //iterates through groups locking one role at a time
+    for(var s = 0; s < subs.length; s++)
+    {
+        var group = subs[s].group;
+        for(var r = 0; r < roles.length; r++)
+        {
+            if(subs[s][field] == tempRoles[r] && subs[s].locked == false)
+            {
+                if(group != 1)
+                { var oldGroup;
+                    if(cur[r][group] > cur[r][group-1] ){
+                        var tempIndex = s -1;
+                        while(subs[tempIndex-1].group == group){
+                            tempIndex--;
+                        }
+                        oldGroup = tempIndex-1;
+                        while(tempIndex < s) {
+                            if(subs[tempIndex][field] == subs[s][field]){
+                                var tt = tempIndex -1;
+                                while(subs[tt][field] != subs[s][field])tt++;
+                                var tempSub = subs[tempIndex];
+                                subs[tempIndex] = subs[tt];
+                                subs[tt] = tempSub;
+                                subs[tt].locked = false;
+                                subs[tempSub].locked = true;
+                            }
+                        }
+
+
+                    }
+                    
+                }
+                if(cur[r][group] < iteration && cur[r][group] < maxes[r] )
+                {
+                    subs[s].locked = true;
+                    cur[r][group]++;
+
+                }
+            }
+        }
+    }
+        for(var e = 0; e < numGroups; e++)
+        {
+
+        }
+        done = true;
+        alert(JSON.stringify(subs));
     }
 }
 
