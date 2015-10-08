@@ -135,6 +135,7 @@ function updateTeams()
 
         var algs = [];
         var i = 0;
+        var exit = false;
         $('.algPart').each(function(){
             var alg = new Object();
             alg.field = $(this).find('#selectField option:selected').val();
@@ -150,6 +151,12 @@ function updateTeams()
                     alg.roles.push(temp);
                     alg.mins.push($(this).find("#"+temp+"Min").val());
                     alg.maxes.push($(this).find("#"+temp+"Max").val());
+                    if(alg.mins > alg.maxes)
+                    {
+
+                        exit = true;
+
+                    }
                     alg.weight = -1;
                     //c++;
                 });
@@ -164,7 +171,11 @@ function updateTeams()
             alg.weight = parseInt($(this).find('#weight').val());
             algs.push(alg);
         });
-
+        if(exit)
+        {
+            alert("All role minimums must be less than their maximums");
+            return;
+        }
         goShuffle(subjects,algs,numTeamGroups-1);
         GroupsChanged();
     });

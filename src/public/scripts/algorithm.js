@@ -39,13 +39,14 @@ function goShuffle(subs, algs, nGroups)
     for(var i = 0; i < algs.length; i++)
     {
 
-        alert(JSON.stringify(algs[i]));
+
         if(i < algs.length-1)
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
         if((numGroups % 2 == 0) && (nGroups % 2 != 0))
         numGroups+=1;
 
-        if(i == algs.length -1) numGroups = nGroups;
+        if(i == algs.length -1){ numGroups = nGroups;}
+        else if(algs[i+1].type = "By Roles") numGroups = nGroups;
         switch(algs[i].type) {
             case 'Similar':
                 if (algs[i].field == "previousGroups")
@@ -59,7 +60,7 @@ function goShuffle(subs, algs, nGroups)
                 else
                     diverseShuffle(subs,numGroups, algs[i].field);
                 break;
-            case 'By Roles': alert("Has yet to be implemented");
+            case 'By Roles': byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field);
                 break;
 
         }
@@ -68,6 +69,35 @@ function goShuffle(subs, algs, nGroups)
     sendToTables(subs);
 
 }
+
+function byRoles(subs,roles, mins, maxes, numGroups, field)
+{
+    //Check the limits
+    var numRoles = [];
+    var minLimits = [];
+    var maxLimits = [];
+    for(var k = 0; k < roles.length; k++){
+        numRoles.push(0);
+        minLimits.push(0);
+        maxLimits.push(0);
+    }
+    for(var i = 0 ; i < subs.length; i++){
+
+        for(var p = 0; p < roles.length; p++){
+            if(subs[i][field] == roles[p].replace('_', ' ')) {
+                numRoles[p]++;
+            }
+        }
+    }
+
+    for(var q = 0; q < roles.length; q++)
+    {
+        minLimits[q] = mins[q] * numGroups;
+        maxLimits[q] = maxes[q] * numGroups;
+       alert(roles[q] + " " + numRoles[q] + " " + minLimits[q] + " " + maxLimits[q]);
+    }
+}
+
 
 function diverseGroupings(subs, numGroups){
     sortByPrev(subs);
