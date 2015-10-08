@@ -46,7 +46,7 @@ $(document).ready(function(e) {
     fields = [];
     for (var name in subjects[0]) {
 
-        if (name[0] != '_') {
+        if (name[0] != '_' && name != 'id') {
             fields.push(name);
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
@@ -140,7 +140,24 @@ function updateTeams()
             alg.field = $(this).find('#selectField option:selected').val();
             alg.type = $(this).find('#shuffleSelect option:selected').val();
             if(alg.type == 'By Roles'){
-                alert($(this).find('.strict').first().checked);
+                alg.roles = [];
+                alg.mins = [];
+                alg.maxes = [];
+                //var c = 0;
+                $(this).find('tbody > tr').each(function(){
+                   var temp = $(this).text();
+                    temp = temp.replace(' ','_');;
+                    alg.roles.push(temp);
+                    alg.mins.push($(this).find("#"+temp+"Min").val());
+                    alg.maxes.push($(this).find("#"+temp+"Max").val());
+                    //c++;
+                });
+
+                /*test
+                for(var k = 0; k < c; k++){
+                    alert(alg.roles[k] + " "+ alg.mins[k] + " " + alg.maxes[k]);
+                }
+                */
                 //alert(alg.strict);
             }
             alg.weight = parseInt($(this).find('#weight').val());
@@ -244,11 +261,12 @@ function updateTeams()
         var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
         for(var i = 0; i < fields.length; i++)
         {
+            if(fields[i] != 'id')
          div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
         }
         div += "</select>";
         div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
-        div += "<br><div class='rules'></div><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+        div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
         $("#shuffleRow").prepend(div);
 
         //$('#closeAlg').unbind();
@@ -267,6 +285,7 @@ function updateTeams()
                 $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
 
             }else {
+                $(this).parent().find(".weightDiv").show();
                 $(this).parent().find("#byRoles").detach();
                 $(this).parent().find('.roles').detach();
             }
@@ -274,6 +293,7 @@ function updateTeams()
         $("#shuffleSelect").change(function(){
 
             $(this).parent().find('.roles').detach();
+            $(this).parent().find(".weightDiv").show();
             if($(this).val() == "By Roles")
             {
                 var t = $(this).parent().find(".rules");
@@ -287,12 +307,10 @@ function updateTeams()
                 var table = table.find('.rollTable').append($("<tbody></tbody>"));
                 $(arr).each(function(){
                     var role = this.replace(' ','_');
-                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' id = '"+role+"Min'></td>" +
-                    "<td><input type='number' class='rollMax' id = '"+role+"Max'></td></tr>"));
+                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
+                    "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
                 });
-
-
-
+            $(this).parent().find(".weightDiv").hide();
             }
 
         });
