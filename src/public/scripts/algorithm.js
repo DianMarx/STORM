@@ -22,28 +22,31 @@ function goShuffle(subs, algs, nGroups)
     }
     for(var z = 0; z < algs.length; z++)
     {
+        if(algs[z].type != 'By Roles')
         totalWeight+= algs[z].weight;
     }
 
+    function compareWeight(a,b){
+        var field = 'weight';
+
+        if (a[field] < b[field])
+            return 1;
+        if (a[field] > b[field])
+            return -1;
+        return 0;
+    }
+    algs.sort(compareWeight);
     for(var i = 0; i < algs.length; i++)
     {
 
-        function compareWeight(a,b){
-            var field = 'weight';
 
-                if (a[field] < b[field])
-                    return 1;
-                if (a[field] > b[field])
-                    return -1;
-            return 0;
-        }
-        algs.sort(compareWeight);
         if(i < algs.length-1)
         var  numGroups = Math.floor((algs[i].weight/totalWeight) * nGroups);
         if((numGroups % 2 == 0) && (nGroups % 2 != 0))
         numGroups+=1;
 
-        if(i == algs.length -1) numGroups = nGroups;
+        if(i == algs.length -1){ numGroups = nGroups;}
+        else if(algs[i+1].type = "By Roles") numGroups = nGroups;
         switch(algs[i].type) {
             case 'Similar':
                 if (algs[i].field == "previousGroups")
@@ -57,7 +60,7 @@ function goShuffle(subs, algs, nGroups)
                 else
                     diverseShuffle(subs,numGroups, algs[i].field);
                 break;
-            case 'By Roles': alert("Has yet to be implemented");
+            case 'By Roles': byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field);
                 break;
 
         }
@@ -66,6 +69,97 @@ function goShuffle(subs, algs, nGroups)
     sendToTables(subs);
 
 }
+
+function byRoles(subs,roles, mins, maxes, numGroups, field)
+{
+    //Check the limits
+    var numRoles = [];
+    var minLimits = [];
+    var maxLimits = [];
+    var cur = [];
+    var tempRoles = [];
+    for(var k = 0; k < roles.length; k++){
+        numRoles.push(0);
+        minLimits.push(0);
+        maxLimits.push(0);
+        var grps = [];
+        for(var t = 0; t < numGroups; t++)
+        {
+            grps.push(0);
+        }
+        cur.push(grps);
+    }
+    //cur[rolenum][groupnum] to access current
+    for(var i = 0 ; i < subs.length; i++){
+        subs[i].locked = false;
+        for(var p = 0; p < roles.length; p++){
+            tempRoles.push(roles[p].replace('_', ' '));
+            if(subs[i][field] == tempRoles ) {
+                numRoles[p]++;
+            }
+        }
+    }
+
+    for(var q = 0; q < roles.length; q++)
+    {
+        minLimits[q] = mins[q] * numGroups;
+        maxLimits[q] = maxes[q] * numGroups;
+       alert(roles[q] + " " + numRoles[q] + " " + minLimits[q] + " " + maxLimits[q]);
+    }
+
+    var done = false;
+    var iteration = 1;
+    while(!done){
+    //iterates through groups locking one role at a time
+    for(var s = 0; s < subs.length; s++)
+    {
+        var group = subs[s].group;
+        for(var r = 0; r < roles.length; r++)
+        {
+            if(subs[s][field] == tempRoles[r] && subs[s].locked == false)
+            {
+                if(group != 1)
+                { var oldGroup;
+                    if(cur[r][group] > cur[r][group-1] ){
+                        var tempIndex = s -1;
+                        while(subs[tempIndex-1].group == group){
+                            tempIndex--;
+                        }
+                        oldGroup = tempIndex-1;
+                        while(tempIndex < s) {
+                            if(subs[tempIndex][field] == subs[s][field]){
+                                var tt = tempIndex -1;
+                                while(subs[tt][field] != subs[s][field])tt++;
+                                var tempSub = subs[tempIndex];
+                                subs[tempIndex] = subs[tt];
+                                subs[tt] = tempSub;
+                                subs[tt].locked = false;
+                                subs[tempSub].locked = true;
+                            }
+                        }
+
+
+                    }
+                    
+                }
+                if(cur[r][group] < iteration && cur[r][group] < maxes[r] )
+                {
+                    subs[s].locked = true;
+                    cur[r][group]++;
+
+                }
+            }
+        }
+    }
+        for(var e = 0; e < numGroups; e++)
+        {
+
+        }
+        done = true;
+        alert(JSON.stringify(subs));
+    }
+}
+
 
 function diverseGroupings(subs, numGroups){
     sortByPrev(subs);
