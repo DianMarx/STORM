@@ -286,8 +286,9 @@ function updateTeams()
                 var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
                 var table = table.find('.rollTable').append($("<tbody></tbody>"));
                 $(arr).each(function(){
-                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' id = ''"+this+"Min'></td>" +
-                    "<td><input type='number' class='rollMax' id = ''"+this+"Max'></td></tr>"));
+                    var role = this.replace(' ','_');
+                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' id = '"+role+"Min'></td>" +
+                    "<td><input type='number' class='rollMax' id = '"+role+"Max'></td></tr>"));
                 });
 
 
