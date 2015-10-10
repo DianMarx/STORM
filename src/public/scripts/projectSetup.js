@@ -188,6 +188,12 @@ function uploadCSV()
                 });
 
                 Subjects = obj;
+                var id = 0;
+                Subjects.forEach(function(sub){ // add ID field
+                    sub.id = id;
+                    id++;
+                });
+
                 //console.log(JSON.stringify(Subjects));
                 //console.log(JSON.stringify(fields));
             };
@@ -237,7 +243,6 @@ function LoadProjects(dat)
     //href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'"
     for (var i = 0; i < dat.length; i++)
     {
-
         displayProjects += '<div class="singleProject" data-toggle="tooltip" title="Click to open project"><a href="/teamSetup?collection='+dat[i].subjects+'" id="'+dat[i].projectName+'" class="projLink '+i+'" type="submit">' + dat[i].projectName + '</a><div hidden class="pull-right"><span class="glyphicon glyphicon-trash delProj" data-toggle="tooltip" title="Click to delete project"></span></div></div>';
     };
 
@@ -305,60 +310,69 @@ function deleteProject(p,id)
      var validNumSubs;
      var duplicates = false;
      var counter = {};
-     var id = fields[0];
      var nulls = false;
-		 var FirstColID = true;
+     var FirstColID = true;
+     var errorSub;
+     var emptyCol = false;
 
-     Subjects.forEach(function(sub){ //count duplicates
-         var key = JSON.stringify(sub[id]);
-         counter[key] = (counter[key] || 0) + 1;
-         if(counter[key] > 1)
-             duplicates = true;
-     });
-		 
-     Subjects.forEach(function(sub){ //Is first column numeric and unique?
-         if(isNaN(sub[id]))
-            FirstColID = false;
-     });		
-		 
-     Subjects.forEach(function(sub){
-        for(i = 0; i < fields.length; i++)
-        {
-            if(sub[fields[i]] == "")
-            {
-                nulls = true;
-            }
-        }
-     });
-
-     if(!FirstColID)
+     if(fields.indexOf("id") > -1)
      {
-         alert("The first column should contain numeric unique identifiers. See user manual for correct upload formats.");
+         alert("The file cannot contain a column called id");
          return false;
      }
+
+     fields.unshift("id");
+     var name = fields[1];
+
+     for(i =0; i < fields.length; i++)
+     {
+         if(fields[i] === "")
+         {
+             emptyCol = true;
+             break;
+         }
+
+     }
+
+     for(k = 0; k < Subjects.length; k++)
+     {
+         for(i = 0; i < fields.length; i++)
+         {
+             if(Subjects[k][fields[i]] === "")
+             {
+                 nulls = true;
+                 errorSub = Subjects[k][name];
+                 break;
+             }
+         }
+         if(nulls)
+            break;
+     }
+
+
      if($.isEmptyObject(Subjects))
      {
          alert("The file cannot be empty. See user manual for correct upload formats.");
          return false;
      }
+     if(emptyCol)
+     {
+         alert("The file cannot have an empty column header.");
+         return false;
+     }
      else if(Subjects.length < 2 || fields.length < 2)
      {
-         alert("A minimum of 2 columns and 2 subjects are required. See user manual for correct upload formats.");
+         alert("A minimum of 1 column and 2 subjects are required. See user manual for correct upload formats.");
          return false;
      }
      else if(nulls)
      {
-         alert("Subjects cannot have null values. See user manual for correct upload formats.");
+         alert("Subjects cannot have empty values. The first error occurred at subject: " + errorSub);
          return false;
      }
      else if(fields[1] != 'Name' && fields[1] != 'name')
      {
-         alert("Column 2 must contain name values. See user manual for correct upload formats.");
-         return false;
-     }
-     else if(duplicates)
-     {
-         alert("The file cannot contain duplicate unique identifiers. See user manual for correct upload formats.");
+         alert("Column 1 must contain name values. See user manual for correct upload formats.");
          return false;
      }
      return true;
