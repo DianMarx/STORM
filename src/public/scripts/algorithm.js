@@ -127,7 +127,7 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
     }
     //curLocked is a 2D array access: curLock[groupnr][rolenr]
 
-    alert("Ja");
+
 
     var iLocked = [roles.length];
     for(var z = 0; z < roles.length; z++) {
@@ -138,7 +138,7 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
     var done = false;
     var iteration = 1;
     while(!done) {
-        alert(iteration);
+
         i = 1;
         while (i <= numGroups) {
 
@@ -230,7 +230,7 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
         subs[i].group = 0;
         i++;
     }
-    alert(JSON.stringify(subs));
+
 }
 
 function right(groups, group, index){
@@ -242,7 +242,7 @@ function right(groups, group, index){
         groups[group][i-1] = tempSub;
         i--;
     }
-    alert(JSON.stringify(groups[group][i]));
+
     //find the replacement
     i = groups[group-1].length -1;
     while(groups[group-1][i].locked == true) {
@@ -250,7 +250,7 @@ function right(groups, group, index){
         if(i < 0)
         return;
     }
-    alert(JSON.stringify(groups[group-1][i]));
+
     //move replacement to bottom of its group
     while(i < groups[group-1].length -1){
         var tempSub = groups[group-1][i];
@@ -294,176 +294,8 @@ function left(groups, group, index, field) {
 
 
 }
-function giveRight(subs, index, group, field){
 
 
-    //find startIndex and endIndex of group
-    var done = false;
-    var startIndex = -1;
-    var endIndex = -1;
-    var i = 0;
-
-    while(i < subs.length){
-
-        if(subs[i].group == group && startIndex == -1)
-        {
-            startIndex = i;
-
-        }
-        if(i == subs.length-1 && endIndex == -1){
-            endIndex = i;
-        }
-        if(subs[i].group > group && endIndex == -1 ){
-
-            endIndex = i - 1;
-        }
-        i++;
-    }
-    //alert(startIndex + " " + endIndex);
-
-    i = index;
-    while(i < endIndex)
-    {
-        if(subs[i][field] == subs[index][field] && subs[i].locked == false)
-        index = i;
-        i++;
-    }
-
-    i = index;
-    //put index in lowest
-    while(i < endIndex -1)
-    {
-        var tempSub = subs[i];
-        subs[i] = subs[i+1];
-        subs[i+1] = tempSub;
-        i++;
-    }
-    index = endIndex;
-    var next = endIndex+1;
-    while(subs[next].locked == true){
-        next++;
-    }
-    i = next;
-    while(i > endIndex+1)
-    {
-        var tempSub = subs[i];
-        subs[i] = subs[i-1];
-        subs[i-1] = tempSub;
-        i--;
-    }
-    next = endIndex+1;
-    var tempSub = subs[index];
-    var tempGroup = subs[index].group;
-    subs[index] = subs[next];
-    subs[next] = tempSub;
-    subs[next].group = subs[index].group;
-    subs[index].group = tempGroup;
-
-
-}
-
-function giveLeft(subs, index, group, field, preds){
-
-
-    //find startIndex and endIndex of group
-    var done = false;
-    var startIndex = -1;
-    var endIndex = -1;
-    var i = 0;
-    while(i < subs.length){
-        if(subs[i].group == group && startIndex == -1)
-        {
-            startIndex = i;
-
-        }
-        if(i == subs.length-1&& endIndex == -1){
-            endIndex = i;
-        }
-        if(subs[i].group == group + 1 && endIndex == -1 ){
-            endIndex = i - 1;
-        }
-        i++;
-    }
-//alert(JSON.stringify(subs[index]));
-    i = 0;
-    var temp = 0;
-    var one = -1;
-    var two = -1;
-
-    while(i < preds){
-        temp = one+1;
-        one = -1;
-        var done = false;
-        //find the indexes of the subjects to be exchanged
-        while(!done){
-            if(subs[temp][field] == subs[index][field])
-            {
-                if(one ==-1)
-                {
-                    one = temp;
-                }else{ two = temp; done = true;}
-            }
-            temp++;
-        }
-        //swap em
-        var tempSub = subs[one];
-        subs[one] = subs[two];
-        subs[two] = tempSub;
-        subs[one].locked = true;
-        subs[two].locked = false;
-
-        i++;
-    }
-    //alert(startIndex);
-//put the current sub at the top of the group
-    i = index;
-    while(i > startIndex){
-        var tempSub = subs[i];
-        subs[i] = subs[i-1];
-        subs[i-1] = tempSub;
-        i--;
-    }
-    i--;
-
-    while(subs[i].locked != false){
-        i--;
-        //(i);
-
-    }
-
-    var tempGroup = subs[startIndex].group;  //sI = 2
-    var tempSub = subs[startIndex];
-    subs[startIndex] = subs[i]; //i = 1
-    subs[i] = tempSub;
-    subs[i].group = subs[startIndex].group;
-    subs[startIndex].group = tempGroup;
-    while(subs[i+1].group == subs[i].group)
-    {
-
-        tempSub = subs[i+1];
-        subs[i+1] = subs[i];
-        subs[i] = tempSub;
-        i++;
-    }
-
-    function gComp(a,b){
-
-
-        if (a.group < b.group)
-            return -1;
-        if (a.group > b.group)
-            return 1;
-
-        return 0;
-    }
-
-
-
-    subs.sort(gComp);
-    alert(JSON.stringify(subs[i]) +" " + JSON.stringify(subs[startIndex]));
-
-
-}
 
 function diverseGroupings(subs, numGroups){
     sortByPrev(subs);
