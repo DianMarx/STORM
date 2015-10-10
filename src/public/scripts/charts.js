@@ -4,7 +4,7 @@ var average;
 var counter;
 var dataArray = [];
 function drawChart(n,tField) {
-    $('#poolChart').append("<div class='charts "+(n)+"'>Team "+(n)+"<div id='chartDiv "+(n)+"'></div> <div id='chartDiv1 "+(n)+"'></div> </div>");
+    $('#poolChart').append("<div class='charts "+(n)+"'>Team "+(n)+"<p> Previous manupulation</p> <div id='chartDiv "+(n)+"'></div><p> Current manipulation</p> <div id='chartDiv1 "+(n)+"'></div> </div>");
     sum = 0;
     average = 0;
     counter = 0;
@@ -31,7 +31,7 @@ function drawChart(n,tField) {
         vAxis: {title: tField, minValue: 0, maxValue: 100},
         legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
+    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv1 '+n));
     chart.draw(data, chartOptions);
     alert(stdDev());
 }
@@ -69,6 +69,7 @@ function stdDev(){
     return stddev;
 }
 function updateChart(n,tField) {
+    copyDiv(n);
     sum = 0;
     average = 0;
     counter = 0;
@@ -97,4 +98,10 @@ function updateChart(n,tField) {
     var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv1 '+n));
     chart.draw(data, chartOptions);
 
+}
+
+function copyDiv(n) {
+    var firstGraph = document.getElementById('chartDiv1 '+n);
+    var secondGraph = document.getElementById('chartDiv '+n);
+    secondGraph.innerHTML = firstGraph.innerHTML;
 }
