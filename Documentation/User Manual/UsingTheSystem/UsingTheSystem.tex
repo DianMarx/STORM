@@ -21,7 +21,7 @@ To log in to an account enter user details in the appropriate fields in the foll
 Click on submit and the system will navigate to the user's specific team shuffling page.
 
 \item Log out\par
-Logging out of your account can be achieved by simply clicking on the "Logout" button that will be displayed at the upper right corner of your screen after being logged in.
+Logging out of your account can be achieved by simply clicking on the``Logout'' button that will be displayed at the upper right corner of your screen after being logged in.
  \begin{figure}[H] 
 	\centering
 	\includegraphics[width=13cm]{./graphics/Logout.jpg}\par
@@ -79,19 +79,27 @@ A .csv file can be uploaded into the system after a project has been created to 
 	\caption{Shuffle Setup dropdown}
 \end{figure}
 \begin{itemize}
+	\item[] \textit{Please note: \textbf{If a criteria is added to the project, it can't be removed.}}
+	\item[] \textit{If a criteria was added that is no longer in use, the user can choose to just ignore the criteria by not showing it. If the user would like to remove a criteria there is a workaround by following the steps below:}
+	\begin{enumerate}
+		\item \textit{Export the .csv file and save it to the desktop.}
+		\item \textit{Remove the first column in the.csv file which is a unique ID.}
+		\item \textit{Remove any unwanted columns (criteria).}
+		\item \textit{Create a new project and upload the .csv file that has been updated.}
+	\end{enumerate}
 	\item The following rules apply to uploading the initial .csv
 	\begin{enumerate}
 		\item The file cannot be empty
-		\item The file must contain at least 2 columns 
+		\item The file must contain at least 1 column
 		\item The file must contain at least 2 subjects
 		\item The first Row must be column headers(Criteria names)
-		\item One of the columns must be a unique identifier and have a unique value for every subject.
-		\item The unique identifier column must be the first column.
+		%\item One of the columns must be a unique identifier and have a unique value for every subject.
+		\item The first column must contain subject names with header ``Name'' as this value is the default value to display subjects in the team setup shuffling page.
 		\item Each student must contain a value for each column.
 		\item Any number of columns can be present
 		\item Any number of subjects can be present
-		\item Values may not contain instances of “;” or “,” characters.
-		\item The second column must contain subject names with header ‘Names’ as this value is the default value to 				display subjects in the team setup shuffling page.
+		\item Values may not contain instances of ``;'' or ``,'' characters.
+						
 	\end{enumerate}
  \begin{figure}[H] 
 	\centering
@@ -111,7 +119,7 @@ A .csv file can be uploaded into the system after a project has been created to 
  \begin{figure}[H] 
 	\centering
 	\includegraphics[width=7cm]{./graphics/IncorrectInitial1.png}\par
-	\caption{Incorrect Initial Upload Example - Rule (g) Broken}
+	\caption{Incorrect Initial Upload Example - Rule (f) Broken}
 \end{figure}
 	\item The following rules apply to uploading additional .csv files
 	\begin{enumerate}
@@ -125,8 +133,8 @@ A .csv file can be uploaded into the system after a project has been created to 
 		\end{enumerate}
 		\item Rules for adding criteria
 		\begin{enumerate}
-			\item First column of the file must contain unique identifiers, one for each subject currently existing in the 					set. (Omitting one identifier will result in error)
-			\item New criteria can be added in the column next to the identifiers. (Omitting the rest of the columns 					currently in the set. This is to make it possible for the user to add criteria by using only a list of all the 					subject’s unique identifiers. NB no additional subjects can be added in this way. See ‘Adding Criteria and 					Subjects’ section. More than one new criteria can also be added in this way.)
+			\item First column of the file must contain unique identifiers that was added during the export, one for each subject currently existing in the set. (Omitting one identifier will result in error)
+			\item New criteria can be added in the column next to the identifiers. (Omitting the rest of the columns 					currently in the set. This is to make it possible for the user to add criteria by using only a list of all the 					subject’s unique identifiers. NB no additional subjects can be added in this way. See ``Adding Criteria and 					Subjects'' section. More than one new criteria can also be added in this way.)
 		\end{enumerate}
 	
 	\begin{figure}[H] 
