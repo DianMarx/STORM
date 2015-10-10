@@ -60,7 +60,9 @@ function goShuffle(subs, algs, nGroups)
                 else
                     diverseShuffle(subs,numGroups, algs[i].field);
                 break;
-            case 'By Roles': byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field);
+            case 'By Roles': if(i == 0) similarShuffle(subs,numGroups, algs[i].field);
+
+                byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field);
                 break;
 
         }
@@ -72,94 +74,295 @@ function goShuffle(subs, algs, nGroups)
 
 function byRoles(subs,roles, mins, maxes, numGroups, field)
 {
-    //Check the limits
-    var numRoles = [];
-    var minLimits = [];
-    var maxLimits = [];
-    var cur = [];
-    var tempRoles = [];
-    for(var k = 0; k < roles.length; k++){
-        numRoles.push(0);
-        minLimits.push(0);
-        maxLimits.push(0);
-        var grps = [];
-        for(var t = 0; t < numGroups; t++)
-        {
-            grps.push(0);
-        }
-        cur.push(grps);
+    //alert("YOLO");
+   //unlock all subjects
+    for(var t = 0; t < subs.length; t++){
+        subs[t].locked = false;
     }
-    //cur[rolenum][groupnum] to access current
-    for(var i = 0 ; i < subs.length; i++){
-        subs[i].locked = false;
-        for(var p = 0; p < roles.length; p++){
-            tempRoles.push(roles[p].replace('_', ' '));
-            if(subs[i][field] == tempRoles ) {
-                numRoles[p]++;
-            }
-        }
+    //alert(JSON.stringify(subs));
+    //currentLocked is used to map how many of each role has been confirmed in each group
+    var currentLocked = [];
+
+    for(var x = 0; x < roles.length; x++){
+        var tempArr = [];
+        for(var y = 0; y < numGroups; y++){
+            tempArr.push(0);}
+    currentLocked.push(tempArr);
     }
 
-    for(var q = 0; q < roles.length; q++)
+    //alert(JSON.stringify(currentLocked));
+
+
+    var minLimits = [roles.length];
+    var maxLimits = [roles.length];
+    var highMax = 0;
+    for(var l = 0; l < roles.length; l++)
     {
-        minLimits[q] = mins[q] * numGroups;
-        maxLimits[q] = maxes[q] * numGroups;
-       alert(roles[q] + " " + numRoles[q] + " " + minLimits[q] + " " + maxLimits[q]);
+        roles[l] = roles[l].replace("_", " ");
+        minLimits[l] = mins[l] * numGroups;
+        maxLimits[l] = maxes[l] * numGroups;
+        if(maxes[l] > highMax) highMax = maxes[l];
     }
-
+    alert("yolo");
+    //loop over the rest until done
     var done = false;
     var iteration = 1;
-    while(!done){
-    //iterates through groups locking one role at a time
-    for(var s = 0; s < subs.length; s++)
+    var gaveleft = false;
+    var gaveright = false;
+    var got = [];
+    for(var x = 0; x < roles.length; x++)
     {
-        var group = subs[s].group;
-        for(var r = 0; r < roles.length; r++)
-        {
-            if(subs[s][field] == tempRoles[r] && subs[s].locked == false)
-            {
-                if(group != 1)
-                { var oldGroup;
-                    if(cur[r][group] > cur[r][group-1] ){
-                        var tempIndex = s -1;
-                        while(subs[tempIndex-1].group == group){
-                            tempIndex--;
-                        }
-                        oldGroup = tempIndex-1;
-                        while(tempIndex < s) {
-                            if(subs[tempIndex][field] == subs[s][field]){
-                                var tt = tempIndex -1;
-                                while(subs[tt][field] != subs[s][field])tt++;
-                                var tempSub = subs[tempIndex];
-                                subs[tempIndex] = subs[tt];
-                                subs[tt] = tempSub;
-                                subs[tt].locked = false;
-                                subs[tempSub].locked = true;
-                            }
-                        }
+        got.push(false); //has the role been gotten in this itteration
+    }
+    while(!done){
+        var group = 0;
 
 
-                    }
-                    
-                }
-                if(cur[r][group] < iteration && cur[r][group] < maxes[r] )
+        for(var i = 0; i < subs.length; i++){
+
+
+            if(group != subs[i].group){gaveleft = false; gaveright = false;
+                for(var f = 0; f< got.length; f++)
                 {
-                    subs[s].locked = true;
-                    cur[r][group]++;
+                    got[f] = false; //haven't gotten anything for this group in this iteration
+                }
+                group = subs[i].group;
+
+            }
+            var gave = false; //this subj hasn't been given away yet
+
+            for(var a = 0; a < roles.length; a++){
+                if(roles[a] == subs[i][field] && subs[i].locked == false){
+                    var bool = false;
+                    if(group > 1) {
+                        if (currentLocked[a][group - 1] > currentLocked[a][group - 2] &&  !bool) {
+
+                            giveLeft(subs, i, group, field, currentLocked[a][group - 1]);
+                            bool = true;
+                            gaveleft = true;
+                            gave = true;
+                            i--;
+                            break;
+                        }
+                    }
+                    if(group < numGroups && !gave){
+                        if (currentLocked[a][group - 1] > currentLocked[a][group] && !bool){
+                           // alert("Hierr");
+                           //giveRight(subs,a,group,field);
+                           //bool = true;
+                            //gaveright = true;
+                            //gave = true;
+                        }
+                    }
+                    if(currentLocked[a][group-1] < maxes[a] && !got[a] && !bool)
+                        {
+                            //alert(group + " "+currentLocked[a][group-1] +" " + maxes[a]);
+                            if(group > 1)
+                            {
+                                if(currentLocked[a][group-2] >= currentLocked[a][group-1]){
+                                    subs[i].locked = true;
+                                    currentLocked[a][group-1]++;
+                                    got[a] = true;
+                                }
+                            }
+                            else
+                            {
+                                if(currentLocked[a][group] >= currentLocked[a][group-1]){
+                                    subs[i].locked = true;
+                                    currentLocked[a][group-1]++;
+                                    got[a] = true;
+                                }
+                            }
+                            break;
+                        }
+
 
                 }
             }
         }
-    }
-        for(var e = 0; e < numGroups; e++)
-        {
 
-        }
-        done = true;
-        alert(JSON.stringify(subs));
+        if(iteration == (Math.pow(highMax,2) * Math.pow(numGroups,2)))
+            done = true; //placeholder
+        iteration++;
+    }
+
+    //document.body.innerHTML = JSON.stringify(subs);
+    for(var q = 0; q < subs.length; q++){
+        if(subs[q].locked == false)
+        subs[q].group = 0;
     }
 }
 
+function giveRight(subs, index, group, field){
+
+
+    //find startIndex and endIndex of group
+    var done = false;
+    var startIndex = -1;
+    var endIndex = -1;
+    var i = 0;
+
+    while(i < subs.length){
+
+        if(subs[i].group == group && startIndex == -1)
+        {
+            startIndex = i;
+
+        }
+        if(i == subs.length-1 && endIndex == -1){
+            endIndex = i;
+        }
+        if(subs[i].group > group && endIndex == -1 ){
+
+            endIndex = i - 1;
+        }
+        i++;
+    }
+    //alert(startIndex + " " + endIndex);
+
+    i = index;
+    while(i < endIndex)
+    {
+        if(subs[i][field] == subs[index][field] && subs[i].locked == false)
+        index = i;
+        i++;
+    }
+
+    i = index;
+    //put index in lowest
+    while(i < endIndex -1)
+    {
+        var tempSub = subs[i];
+        subs[i] = subs[i+1];
+        subs[i+1] = tempSub;
+        i++;
+    }
+    index = endIndex;
+    var next = endIndex+1;
+    while(subs[next].locked == true){
+        next++;
+    }
+    i = next;
+    while(i > endIndex+1)
+    {
+        var tempSub = subs[i];
+        subs[i] = subs[i-1];
+        subs[i-1] = tempSub;
+        i--;
+    }
+    next = endIndex+1;
+    var tempSub = subs[index];
+    var tempGroup = subs[index].group;
+    subs[index] = subs[next];
+    subs[next] = tempSub;
+    subs[next].group = subs[index].group;
+    subs[index].group = tempGroup;
+
+
+}
+
+function giveLeft(subs, index, group, field, preds){
+
+
+    //find startIndex and endIndex of group
+    var done = false;
+    var startIndex = -1;
+    var endIndex = -1;
+    var i = 0;
+    while(i < subs.length){
+        if(subs[i].group == group && startIndex == -1)
+        {
+            startIndex = i;
+
+        }
+        if(i == subs.length-1&& endIndex == -1){
+            endIndex = i;
+        }
+        if(subs[i].group == group + 1 && endIndex == -1 ){
+            endIndex = i - 1;
+        }
+        i++;
+    }
+//alert(JSON.stringify(subs[index]));
+    i = 0;
+    var temp = 0;
+    var one = -1;
+    var two = -1;
+
+    while(i < preds){
+        temp = one+1;
+        one = -1;
+        var done = false;
+        //find the indexes of the subjects to be exchanged
+        while(!done){
+            if(subs[temp][field] == subs[index][field])
+            {
+                if(one ==-1)
+                {
+                    one = temp;
+                }else{ two = temp; done = true;}
+            }
+            temp++;
+        }
+        //swap em
+        var tempSub = subs[one];
+        subs[one] = subs[two];
+        subs[two] = tempSub;
+        subs[one].locked = true;
+        subs[two].locked = false;
+
+        i++;
+    }
+    //alert(startIndex);
+//put the current sub at the top of the group
+    i = index;
+    while(i > startIndex){
+        var tempSub = subs[i];
+        subs[i] = subs[i-1];
+        subs[i-1] = tempSub;
+        i--;
+    }
+    i--;
+
+    while(subs[i].locked != false){
+        i--;
+        //(i);
+
+    }
+
+    var tempGroup = subs[startIndex].group;  //sI = 2
+    var tempSub = subs[startIndex];
+    subs[startIndex] = subs[i]; //i = 1
+    subs[i] = tempSub;
+    subs[i].group = subs[startIndex].group;
+    subs[startIndex].group = tempGroup;
+    while(subs[i+1].group == subs[i].group)
+    {
+
+        tempSub = subs[i+1];
+        subs[i+1] = subs[i];
+        subs[i] = tempSub;
+        i++;
+    }
+
+    function gComp(a,b){
+
+
+        if (a.group < b.group)
+            return -1;
+        if (a.group > b.group)
+            return 1;
+
+        return 0;
+    }
+
+
+
+    subs.sort(gComp);
+    alert(JSON.stringify(subs[i]) +" " + JSON.stringify(subs[startIndex]));
+
+
+}
 
 function diverseGroupings(subs, numGroups){
     sortByPrev(subs);
