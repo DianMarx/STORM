@@ -977,6 +977,11 @@ function addField(field)
     {
         drawChart(k,field);
     }
+    var globalDiv = document.getElementById('globalChart');
+    var gAve = getGlobalAverage(field);
+    var gstdDev = globalstdDev(gAve,field);
+    globalDiv.innerHTML = 'Global Average = ' + gAve;
+    globalDiv.innerHTML = globalDiv.innerHTML + '<br> Global Standard Deviation = ' + gstdDev;
 }
 
 function GroupsChanged()

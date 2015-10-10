@@ -1,10 +1,12 @@
 //Function to Draw the Chart
 var sum;
 var average;
+var stdDevV;
 var counter;
 var dataArray = [];
+
 function drawChart(n,tField) {
-    $('#poolChart').append("<div class='charts "+(n)+"'>Team "+(n)+"<p> Previous manupulation</p> <div id='chartDiv "+(n)+"'></div><p> Current manipulation</p> <div id='chartDiv1 "+(n)+"'></div> </div>");
+    $('#poolChart').append("<div class='charts "+(n)+"'>Team "+(n)+"<p> Current manipulation</p> <div id='chartDiv "+(n)+"'></div><p> Previous manipulation</p> <div id='chartDiv1 "+(n)+"'></div> </div>");
     sum = 0;
     average = 0;
     counter = 0;
@@ -31,9 +33,14 @@ function drawChart(n,tField) {
         vAxis: {title: tField, minValue: 0, maxValue: 100},
         legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv1 '+n));
+    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
     chart.draw(data, chartOptions);
-    alert(stdDev());
+    stdDevV = stdDev();
+    var chartDiv = document.getElementById('chartDiv '+n);
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Average = '+ average + '<br>';
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Standard Deviation = '+ stdDevV;
+
+
 }
 
 function setSum(sValue){
@@ -41,11 +48,42 @@ function setSum(sValue){
 }
 
 function setAverage(aValue){
-    average =sum / counter;
+    average =aValue / counter;
 }
+function getGlobalAverage(aField){
+    var temp = 0;
+    for(var q = 0;q < subjects.length;q++)
+    {
+        var subje = subjects[q];
+        var tempValue = subje[aField];
+        temp = temp + tempValue;
 
-function getAverage(){
-    return average;
+    }
+    temp = temp / subjects.length;
+    return temp;
+}
+function globalstdDev(gAve,gValue){
+    var gVariance = 0.0;
+    var i = subjects.length;
+    var v1 = 0.0;
+    var v2 = 0.0;
+    var gStddev = 0.0;
+    if ( i != 1)
+    {
+        for ( var k = 0; k <= i -1; k++)
+        {
+            var subj = subjects[k];
+            var tempVal = subj[gValue];
+            v1 = v1 + (tempVal - gAve) * (tempVal - gAve);
+            v2 = v2 + (tempVal - gAve);
+        }
+        v2 = v2 * v2 / i;
+        gVariance = (v1 - v2) / (i-1);
+        if (gVariance < 0) { gVariance = 0; }
+        gStddev = Math.sqrt(gVariance);
+    }
+    alert(gStddev);
+    return gStddev;
 }
 
 function stdDev(){
@@ -53,7 +91,7 @@ function stdDev(){
     var i = dataArray.length;
     var v1 = 0.0;
     var v2 = 0.0;
-    var stddev;
+    var stddev = 0.0;
     if ( i != 1)
     {
         for ( var k = 0; k <= i -1; k++)
@@ -68,6 +106,7 @@ function stdDev(){
     }
     return stddev;
 }
+
 function updateChart(n,tField) {
     copyDiv(n);
     sum = 0;
@@ -86,6 +125,7 @@ function updateChart(n,tField) {
             var tempValue = subje[tField];
             data.addRow([++counter,tempValue]);
             setSum(subje[tField]);
+            dataArray.push(subje[tField]);
         }
     }
     setAverage(sum);
@@ -95,13 +135,16 @@ function updateChart(n,tField) {
         vAxis: {title: tField, minValue: 0, maxValue: 100},
         legend: 'none'
     };
-    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv1 '+n));
+    var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
     chart.draw(data, chartOptions);
-
+    stdDevV = stdDev();
+    var chartDiv = document.getElementById('chartDiv '+n);
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Average = '+ average + '<br>';
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Standard Deviation = '+ stdDevV;
 }
 
 function copyDiv(n) {
-    var firstGraph = document.getElementById('chartDiv1 '+n);
-    var secondGraph = document.getElementById('chartDiv '+n);
+    var firstGraph = document.getElementById('chartDiv '+n);
+    var secondGraph = document.getElementById('chartDiv1 '+n);
     secondGraph.innerHTML = firstGraph.innerHTML;
 }
