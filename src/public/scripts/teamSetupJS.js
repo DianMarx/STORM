@@ -427,6 +427,7 @@ function isNumerical(obj){
 //End of on document load
 function updateSubjects(subs)
 {
+    //alert("this");
     $.ajax({
         type: "POST",
         url: '/updateSubjs',
@@ -574,6 +575,7 @@ function moveBack(element){
     $(".minusButton").off();
 
     $(".minusButton").on("click", function(e){
+        //alert("this");
         var parent = $(this).parent();
         if (parent.find("div").length >= 1){
             fnOpenNormalDialog($(this));
@@ -908,12 +910,13 @@ function populateTable() {
             paging: true,
             autoload: true,
             inserting: true,
+            editing: true,
 
             pageSize: 15,
             pageButtonCount: 5,
             rowClick: function (a) {
             },
-            deleteConfirm: "Do you really want to delete the client?",
+            deleteConfirm: "Do you really want to delete the subject?",
             fields: getHeadings(fields, subjects[0]),
             controller: {
                 loadData: function () {
