@@ -60,7 +60,7 @@ $(document).ready(function(e) {
     }
 
     var tempGroup = subjects[0].previousGroups;
-    alert(JSON.stringify(subjects[0]));
+
     if(tempGroup != null && subjects[0].previousGroups.length > 0)
     {
         for(var b = 0; b < subjects[0].previousGroups.length; b++)
@@ -71,16 +71,21 @@ $(document).ready(function(e) {
 
     $('#loadIteration').click(function(){
 
-        var tempp = $("#iterationSelect option:selected").val();
+        var largest = 0;
+        var tempp = parseInt($("#iterationSelect option:selected").val());
 
        if(tempp != null){
            for(var c = 0; c < subjects.length; c++)
            {
-               alert(subjects[c].previousGroups[tempp]);
+
                subjects[c].group = subjects[c].previousGroups[tempp];
+               if(subjects[c].group > largest)
+               largest = subjects[c].group;
            }
        }
-
+        returnToPool();
+        while(numTeamGroups-1 < largest)
+            $("#plusButton").click();
         sendToTables(subjects);
     });
     //alert(JSON.stringify(fields));
@@ -396,10 +401,11 @@ function updateTeams()
         for(var i = 0; i < subjects.length; i++) {
             if(subjects[i].previousGroups == null)
                 subjects[i].previousGroups = [];
-            subjects[i].previousGroups.push(subjects[i].group+1);
+            subjects[i].previousGroups.push(subjects[i].group);
 
         }
-
+        var b = subjects[0].previousGroups.length-1;
+        $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
 
         updateSubjects(subjects);
     });
@@ -957,6 +963,10 @@ function populateTable() {
             autoload: true,
             inserting: true,
             editing: true,
+            onItemUpdating: function(args) {
+                // cancel update of the item with empty 'name' field
+                alert(JSON.stringify(args.item));
+            },
 
             pageSize: 15,
             pageButtonCount: 5,

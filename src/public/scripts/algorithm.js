@@ -642,7 +642,7 @@ function randomize(subs, numTeams){
         var done = false;
         while(!done) {
             var randm = Math.floor(Math.random() * (numTeams) + 1);
-            alert(randm + " " +arr[randm]);
+
             if (arr[randm] < max) {
                 //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
                 subs[q].group = randm;
