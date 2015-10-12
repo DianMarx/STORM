@@ -43,7 +43,12 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
-
+    var x = 0;
+    while(x < subjects.length)
+    {
+        subjects[x].group = 0;
+        x++;
+    }
     //gets all the subjects' fields
     fields = [];
     for (var name in subjects[0]) {
@@ -53,6 +58,31 @@ $(document).ready(function(e) {
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
+
+    var tempGroup = subjects[0].previousGroups;
+    alert(JSON.stringify(subjects[0]));
+    if(tempGroup != null && subjects[0].previousGroups.length > 0)
+    {
+        for(var b = 0; b < subjects[0].previousGroups.length; b++)
+        {
+            $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
+        }
+    }
+
+    $('#loadIteration').click(function(){
+
+        var tempp = $("#iterationSelect option:selected").val();
+
+       if(tempp != null){
+           for(var c = 0; c < subjects.length; c++)
+           {
+               alert(subjects[c].previousGroups[tempp]);
+               subjects[c].group = subjects[c].previousGroups[tempp];
+           }
+       }
+
+        sendToTables(subjects);
+    });
     //alert(JSON.stringify(fields));
     //alert(JSON.stringify(subjects));
     populateTable();
@@ -356,19 +386,17 @@ function updateTeams()
         }
         fields.push("group");
         exportCSV(subjects, fields);
-        for(var p = 0; p < subjects.length; p++) {
 
-            delete subjects[p].group;
-
-        }
         fields.pop();
 
     });
     $("#saveIteration").click(function (e) {
 
-        for(var i = 0; i < subjects.length; i++) {
 
-            subjects[i].previousGroups.push($('tr[id=' + subjects[i].id+']').parent('tbody').attr('id'));
+        for(var i = 0; i < subjects.length; i++) {
+            if(subjects[i].previousGroups == null)
+                subjects[i].previousGroups = [];
+            subjects[i].previousGroups.push(subjects[i].group+1);
 
         }
 
@@ -1067,7 +1095,7 @@ function drawChart(n,tField) {
         lineWidth: 2,
         series: [{'color': '#D3362D'}],
         intervals: { 'style':'points', pointSize: 2 },
-        legend: 'none',
+        legend: 'none'
     };
     var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
     chart.draw(data, chartOptions);
