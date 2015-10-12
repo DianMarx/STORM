@@ -24,7 +24,7 @@ $(document).ready(function(e) {
     });
 
     $("#logOutBtn").click(function(){
-        if (confirmconfirm('Are you sure you want to logout?'))
+        if (confirm('Are you sure you want to logout?'))
             location.href = "/";
     });
 
