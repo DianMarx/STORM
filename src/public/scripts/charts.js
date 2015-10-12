@@ -13,7 +13,7 @@ function drawChart(n,tField) {
     dataArray = [];
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'Subject');
-    data.addColumn('number', 'Marks');
+    data.addColumn('number', tField);
 
     for(var q = 0;q < subjects.length;q++)
     {
@@ -114,7 +114,7 @@ function updateChart(n,tField) {
     dataArray = [];
     var data = new google.visualization.DataTable();
     data.addColumn('number', 'Subject');
-    data.addColumn('number', 'Marks');
+    data.addColumn('number', tField);
 
     for(var q = 0;q < subjects.length;q++)
     {
