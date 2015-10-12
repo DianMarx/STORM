@@ -520,8 +520,8 @@ section {
 }
 .charts{
     resize: both;
-    width: 600px;
-    height: 400px;
+    width: 400px;
+    height: 700px;
     display: inline-block;
     vertical-align:top;
     background:#EAF2FF;

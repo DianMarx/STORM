@@ -6,7 +6,7 @@ var counter;
 var dataArray = [];
 
 function drawChart(n,tField) {
-    $('#poolChart').append("<div class='charts "+(n)+"'>Team "+(n)+"<p> Current manipulation</p> <div id='chartDiv "+(n)+"'></div><p> Previous manipulation</p> <div id='chartDiv1 "+(n)+"'></div> </div>");
+    $('#poolChart').append("<div class='charts "+(n)+"'><h3>Team"+(n)+"</h3><p><h4> Current manipulation</h4></p> <div id='chartDiv "+(n)+"'></div><p> <h4>Previous manipulation</h4></p> <div id='chartDiv1 "+(n)+"'></div> </div>");
     sum = 0;
     average = 0;
     counter = 0;
@@ -82,7 +82,6 @@ function globalstdDev(gAve,gValue){
         if (gVariance < 0) { gVariance = 0; }
         gStddev = Math.sqrt(gVariance);
     }
-    alert(gStddev);
     return gStddev;
 }
 

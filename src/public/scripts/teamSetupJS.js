@@ -945,6 +945,21 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            var str = $(ui.draggable).attr('id');
+            alert(str);
+            var res = str.replace("group", "");
+            alert(res);
+            for( var su = 0; su < subjects.length;su++)
+            {
+                if(subjects[su].id == res) {
+                    subjects[su].group = $(ui.draggable).parent().attr('id')
+                    alert(subjects[su].group);
+                }
+
+
+            }
+
+
             GroupsChanged();
         }
     });
@@ -953,6 +968,7 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+
             GroupsChanged();
         }
     });
