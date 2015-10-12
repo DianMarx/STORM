@@ -57,10 +57,12 @@
     <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
     <div class="panel-body collapse in" id="subjectSetup">
         <div id="subjTable"></div>
-        <button id="saveMasterToDB" class="btn btn-default">Save</button>
+
         <button id="exportMasterTable" class="btn btn-default">Export CSV</button>
         <button id='uploadCSV' class="btn btn-default">Upload CSV </button>
-        <div class="hidden">
+        <button id="saveMasterToDB" class="btn btn-default" disabled>Save</button>
+        <button id="CancelChanges" class="btn btn-default" disabled>Cancel Changes</button>
+        <div hidden>
             <input class="form-control" type="file" id="CSVInput" name="file" accept=".csv" required/>
         </div>
     </div>

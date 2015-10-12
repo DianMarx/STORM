@@ -3,14 +3,17 @@ var testUser = false;
 var user;
 var collection = getParameterByName('collection');
 var subjects;
+var oldSubjects = [];
 var numAlgs = 0;
 var fields = [];
+var oldFields = [];
 var numManipulations = 0;
 var viewFields = [];
 
 $(document).ready(function(e) {
 
-
+    $("CancelChanges").button("disable");
+    $("saveMasterToDB").button("disable");
 
     $("#uploadCSV").click(function(){
        $("#CSVInput").click();
@@ -438,6 +441,8 @@ function updateTeams()
 
     $("#saveMasterToDB").click(function(e){
             updateSubjects(subjects);
+            $(this).prop("disabled", true);
+            $("#CancelChanges").prop("disabled", true);
         }
     );
 
@@ -760,10 +765,16 @@ function uploadCSV()
 function MergeSubjects(newSubjects,Criteria)
 {
     var temp = [];
+
     for(i = 0; i < subjects.length; i++) // make deep copy of subjects to reserve integrity of data
     {
         var tmp = $.extend(true,{},subjects[i]);
         temp.push(tmp);
+    }
+    for(i = 0; i < subjects.length; i++) // make deep copy of temp to revert changes
+    {
+        var tmp = $.extend(true,{},temp[i]);
+        oldSubjects.push(tmp);
     }
 
     for(i = 0; i < temp.length; i++)
@@ -801,6 +812,7 @@ function MergeSubjects(newSubjects,Criteria)
                 subjects.push(valid[i]);
             }
         }
+        oldFields = fields.slice(0);
         fields = [];
         for (var name in subjects[0]) {
 
@@ -813,7 +825,33 @@ function MergeSubjects(newSubjects,Criteria)
         populateSubjectPool();
         alert("Subject set merged successfully. Remember to save before you exit. Or cancel to discard changes");
         clearInput();
+
+        jsTableChange();
     }
+}
+
+function jsTableChange()
+{
+    $("#CancelChanges").prop("disabled", false);
+
+    $("#CancelChanges").on("click", function()
+    {
+        subjects = oldSubjects;
+        fields = [];
+        for (var name in subjects[0]) {
+
+            if (name[0] != '_' && name != "id")
+            {
+                fields.push(name);
+            }
+        }
+        populateTable();
+        populateSubjectPool();
+        $("#CancelChanges").prop("disabled", true);
+        $("#saveMasterToDB").prop("disabled", true);
+    });
+
+    $("#saveMasterToDB").prop("disabled", false);
 }
 
 function clearInput()
