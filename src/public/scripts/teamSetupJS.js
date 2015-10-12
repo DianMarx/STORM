@@ -451,10 +451,13 @@ function exportCSV(subs, fields)
 {
     var csvContent = '';
     var index = 0;
+    var newFields = fields.slice(0);
 
-    for(var i = 0; i < fields.length; i++) {
-        if (fields[i] != 'previousGroups') {
-            csvContent += fields[i];
+    newFields.unshift('id');
+
+    for(var i = 0; i < newFields.length; i++) {
+        if (newFields[i] != 'previousGroups') {
+            csvContent += newFields[i];
             csvContent += ',';
     }
 
@@ -463,9 +466,9 @@ function exportCSV(subs, fields)
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
-        for(var k = 0; k < fields.length; k++)
-        {   if(fields[k] != "previousGroups") {
-            csvContent += subs[p][fields[k]];
+        for(var k = 0; k < newFields.length; k++)
+        {   if(newFields[k] != "previousGroups") {
+            csvContent += subs[p][newFields[k]];
                 csvContent += ',';
         }
         }
