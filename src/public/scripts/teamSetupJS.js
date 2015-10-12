@@ -804,7 +804,7 @@ function MergeSubjects(newSubjects,Criteria)
         fields = [];
         for (var name in subjects[0]) {
 
-            if (name[0] != '_') {
+            if (name[0] != '_' && name != "id") {
                 fields.push(name);
                 //$('<th>' + name + '</th>').appendTo("#subjectFields");
             }
