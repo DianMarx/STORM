@@ -6,6 +6,7 @@ var subjects;
 var numAlgs = 0;
 var fields = [];
 var numManipulations = 0;
+var viewFields = [];
 
 $(document).ready(function(e) {
 
@@ -20,7 +21,7 @@ $(document).ready(function(e) {
     });
 
     $("#logOutBtn").click(function(){
-        if (confirm('Are you sure you want to logout?'))
+        if (confirmconfirm('Are you sure you want to logout?'))
             location.href = "/";
     });
 
@@ -65,6 +66,15 @@ $(document).ready(function(e) {
     function removeField(field)
     {
         field = field.replace(' ','_');
+        var index = -1;
+        for(var w = 0; w < viewFields.length; w++)
+        {
+            if(viewFields[w] == field)
+            {index = w;
+            }
+        }
+        if(index != -1)
+        viewFields.splice(index, 1);
         $("th#"+ field).remove();
         $("td#"+ field).remove();
         var elem = document.getElementById("poolChart");
@@ -183,7 +193,12 @@ function updateTeams()
 
     $("#plusButton").click(function(e){
 
-            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
+            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th>';
+            for(var q = 0; q < viewFields.length; q++)
+            {
+                temp+= '<th id = "'+viewFields[q]+'">' +  viewFields[q] + '</th>';
+            }
+        temp += '</tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
             $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
             numTeamGroups++;
             $("#totalTeams").val(numTeamGroups-1);
@@ -992,10 +1007,12 @@ function populateSubjectPool()
 
 
 //User selectable fields to view
+
 function addField(field)
 {
 
     field = field.replace(' ','_');
+    viewFields.push(field);
     $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
     for(var i = 0; i < subjects.length; i++)
     {
