@@ -1079,6 +1079,6 @@ function GroupsChanged()
     numManipulations += 1;
     for(var k = 1;k < numTeamGroups;k++)
     {
-        updateChart(k,'Mark');
+        updateChart(k,viewFields[0]);
     }
 }
