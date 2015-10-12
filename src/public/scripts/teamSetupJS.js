@@ -100,49 +100,11 @@ $(document).ready(function(e) {
     $(".table").selectable();
     //Loads subject pool with first variable(name)
 
-    //Removes from all records
-    function removeField(field)
-    {
-        field = field.replace(' ','_');
-        var index = -1;
-        for(var w = 0; w < viewFields.length; w++)
-        {
-            if(viewFields[w] == field)
-            {index = w;
-            }
-        }
-        if(index != -1)
-        viewFields.splice(index, 1);
-        $("th#"+ field).remove();
-        $("td#"+ field).remove();
-        var elem = document.getElementById("poolChart");
-        elem.parentElement.removeChild(elem);
 
-        $('#mainChart').append("<div id='poolChart'></div>")
-    }
 
-        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
-    for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
+    loadViewBy();
 
-        var temp = fields[i];
-        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
-            if(fields[i].toLowerCase() != 'name')
-            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
-    }
-    }
 
-    //user checks a checkbox
-    $(".viewBy").change(function()
-    {
-        if(this.checked) {
-            addField(this.value);
-        }
-        else
-        {
-            removeField(this.value);
-        }
-    });
 
 
 
@@ -616,6 +578,54 @@ function confirmDeleteTeamTable(element)
     });
 }
 
+//Removes from all records
+function removeField(field)
+{
+    field = field.replace(' ','_');
+    var index = -1;
+    for(var w = 0; w < viewFields.length; w++)
+    {
+        if(viewFields[w] == field)
+        {index = w;
+        }
+    }
+    if(index != -1)
+        viewFields.splice(index, 1);
+    $("th#"+ field).remove();
+    $("td#"+ field).remove();
+    var elem = document.getElementById("poolChart");
+    elem.parentElement.removeChild(elem);
+
+    $('#mainChart').append("<div id='poolChart'></div>")
+}
+
+function loadViewBy()
+{
+    $("#selectFields").empty();
+    $("#selectFields").html("Show fields: <br>");
+    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
+
+            var temp = fields[i];
+            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+            if(fields[i].toLowerCase() != 'name')
+                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+        }
+    }
+    //user checks a checkbox
+    $(".viewBy").change(function()
+    {
+        if(this.checked) {
+            addField(this.value);
+        }
+        else
+        {
+            removeField(this.value);
+        }
+    });
+}
+
 function moveBackDialog(element) {
 
     buttons = {
@@ -823,6 +833,7 @@ function MergeSubjects(newSubjects,Criteria)
         }
         populateTable();
         populateSubjectPool();
+        loadViewBy();
         alert("Subject set merged successfully. Remember to save before you exit. Or cancel to discard changes");
         clearInput();
 
@@ -847,6 +858,7 @@ function jsTableChange()
         }
         populateTable();
         populateSubjectPool();
+        loadViewBy();
         $("#CancelChanges").prop("disabled", true);
         $("#saveMasterToDB").prop("disabled", true);
     });
@@ -945,7 +957,7 @@ function validCSV(newSubjects,Criteria,temp,fields)
             if(Criteria[i] != id)
             {
                 newCriteria = true;
-                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
+                //$("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
             }
         }
     }
