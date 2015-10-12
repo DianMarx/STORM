@@ -780,6 +780,7 @@ function MergeSubjects(newSubjects,Criteria)
     if(!valid)
     {
         clearInput();
+        alert("Could not merge subject set. Review errors and try again.");
     }
     else
     {
@@ -810,11 +811,9 @@ function MergeSubjects(newSubjects,Criteria)
         }
         populateTable();
         populateSubjectPool();
-        alert("Subject set merged successfully. Remember to save before you exit.");
+        alert("Subject set merged successfully. Remember to save before you exit. Or cancel to discard changes");
         clearInput();
     }
-
-
 }
 
 function clearInput()
@@ -828,35 +827,51 @@ function validCSV(newSubjects,Criteria,temp,fields)
     var numFieldsNew = Criteria.length;
     var counter = {};
     var id = Criteria[0];
+    var Name = Criteria[1];
     var validNumSubs;
     var newCriteria = false;
     var moreSubs = false;
+    var duplicates = false;
+    var emptyCol = false;
+    var errorSub;
 
     newSubjects.forEach(function(sub){ //count duplicates
         var key = JSON.stringify(sub[id]);
         counter[key] = (counter[key] || 0) + 1;
         if(counter[key] > 1)
         {
-            alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats.");
+            alert("You cannot have duplicate ids. Duplicate id " + key + " found. Please select unique ids for new subjects.");
+            duplicates = true;
             return false;
         }
     });
 
+    if(duplicates)
+        return false;
+
+
+
+    for(i = 0; i < Criteria.length; i++)
+    {
+        if(Criteria[i] === "")
+        {
+            emptyCol = true;
+            break;
+        }
+    }
+    if(emptyCol)
+    {
+        alert("The file cannot have an empty column header.");
+        return false;
+    }
     for(i = 0; i < newSubjects.length; i++)
     {
-        if(Object.keys(newSubjects[i]).length != numFieldsNew) { // check if subjects have same number of attributes
-            alert("Some subjects do not have the correct number of values. See user manual for correct upload formats.");
-            return false;
-        }
-        else //check for null values
+        for(k = 0; k < numFieldsNew; k++)
         {
-
-            for(k = 0; k < numFieldsNew; k++)
+            if(newSubjects[i][Criteria[k]] == "")
             {
-                if(newSubjects[i][Criteria[k]] == "")
-                {
-                    alert("Subjects cannot have empty values. See user manual for correct upload formats.");
-                }
+                alert("Subjects cannot have empty values. The first error occurred at subject: " + newSubjects[i][Name]);
+                return false;
             }
         }
     }
@@ -867,13 +882,15 @@ function validCSV(newSubjects,Criteria,temp,fields)
             validNumSubs = false;
             if(temp[k][id] == newSubjects[i][id])
             {
+
                 validNumSubs = true;
                 break;
             }
         }
         if(!validNumSubs)
         {
-            alert("Some subjects have been omitted. See user manual for correct upload formats");
+            errorSub = temp[k][Name];
+            alert("Subject '"+errorSub+"' has been omitted.");
             return false;
         }
     }
@@ -887,8 +904,11 @@ function validCSV(newSubjects,Criteria,temp,fields)
     {
         if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
         {
-            newCriteria = true;
-            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
+            if(Criteria[i] != id)
+            {
+                newCriteria = true;
+                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
+            }
         }
     }
 
