@@ -171,10 +171,11 @@ function updateTeams()
                         exit = true;
 
                     }
-                    alg.weight = -1;
+
                     //c++;
                 });
-
+                alg.weight = -1;
+                alg.strict = $('input[name=strict]:checked', '#strictForm').val();
                 /*test
                 for(var k = 0; k < c; k++){
                     alert(alg.roles[k] + " "+ alg.mins[k] + " " + alg.maxes[k]);
@@ -365,6 +366,7 @@ function updateTeams()
                     "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
                 });
             $(this).parent().find(".weightDiv").hide();
+                div.append('<br><form action="" id="strictForm" name="strictForm"> <input type="radio" name="strict" value="strict" checked>Stop within role bounds<br><input type="radio" name="strict" value="notstrict">Fill remaining</form>')
             }
 
         });

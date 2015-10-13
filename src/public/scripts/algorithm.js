@@ -62,7 +62,7 @@ function goShuffle(subs, algs, nGroups)
                 break;
             case 'By Roles': if(i == 0) diverseShuffle(subs,numGroups, algs[i].field);
 
-                byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field);
+                byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field, algs[i].strict);
                 break;
 
         }
@@ -72,9 +72,12 @@ function goShuffle(subs, algs, nGroups)
 
 }
 
-function byRoles(subs,roles, mins, maxes, numGroups, field)
+function byRoles(subs,roles, mins, maxes, numGroups, field, isStrict)
 {
 
+    var strict = false;
+    if(isStrict == "strict")
+    strict = true;
     var minimums = [];
     var maximums = [];
     for(var h = 0; h < mins.length; h++)
@@ -208,7 +211,7 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
             i++;
         }
         iteration++;
-        if(iteration == 500)
+        if(iteration == Math.pow(subs.length, numGroups));
         done = true;
     }
 
@@ -224,10 +227,12 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
         i++;
     }
     i = 0;
+
     while(i < subs.length)
     {
-        if(subs[i].locked == false)
+        if(subs[i].locked == false && strict == true)
         subs[i].group = 0;
+        delete subs[i].locked;
         i++;
     }
 
