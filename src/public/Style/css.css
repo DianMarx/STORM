@@ -525,9 +525,7 @@ width: 40px;
     opacity: 1;
 }
 
-.hidden{
-    display:none;
-}
+
 .charts{
     resize: both;
     width: 600px;

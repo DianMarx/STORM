@@ -3,16 +3,29 @@ var testUser = false;
 var user;
 var collection = getParameterByName('collection');
 var subjects;
+var oldSubjects = [];
 var numAlgs = 0;
 var fields = [];
+var oldFields = [];
 var numManipulations = 0;
+var viewFields = [];
 
 $(document).ready(function(e) {
 
+    //Glyph Icon Color
+    //change add(plus) glyph color on hover
+    $(document).on("mouseenter", ".addAlg", function() {
+        $(this).css("color","lime");
+    });
+    $(document).on("mouseleave", ".addAlg", function() {
+        $(this).css("color","black");
+    });
 
+    $("CancelChanges").button("disable");
+    $("saveMasterToDB").button("disable");
 
     $("#uploadCSV").click(function(){
-       $("#CSVInput").click();
+        $("#CSVInput").click();
     });
 
     $("#CSVInput").change(function(){
@@ -42,7 +55,12 @@ $(document).ready(function(e) {
 
     //Moved array van subject objects
     subjects = JSON.parse($('#jsondat').text());
-
+    var x = 0;
+    while(x < subjects.length)
+    {
+        subjects[x].group = 0;
+        x++;
+    }
     //gets all the subjects' fields
     fields = [];
     for (var name in subjects[0]) {
@@ -52,6 +70,37 @@ $(document).ready(function(e) {
             //$('<th>' + name + '</th>').appendTo("#subjectFields");
         }
     }
+
+    var tempGroup = subjects[0].previousGroups;
+
+    if(tempGroup != null && subjects[0].previousGroups.length > 0)
+    {
+        for(var b = 0; b < subjects[0].previousGroups.length; b++)
+        {
+            $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
+        }
+    }
+
+    $('#loadIteration').click(function(){
+
+        var largest = 0;
+        var tempp = parseInt($("#iterationSelect option:selected").val());
+        returnToPool();
+        if(tempp != null){
+            for(var c = 0; c < subjects.length; c++)
+            {
+
+                subjects[c].group = subjects[c].previousGroups[tempp];
+                if(subjects[c].group > largest)
+                    largest = subjects[c].group;
+            }
+        }
+
+        while(numTeamGroups-1 < largest)
+            $("#plusButton").click();
+        sendToTables(subjects);
+        GroupsChanged();
+    });
     //alert(JSON.stringify(fields));
     //alert(JSON.stringify(subjects));
     populateTable();
@@ -59,46 +108,11 @@ $(document).ready(function(e) {
 
 
     $(".table").selectable();
+
     //Loads subject pool with first variable(name)
+    loadViewBy();
 
-    //Removes from all records
-    function removeField(field)
-    {
-        field = field.replace(' ','_');
-        $("th#"+ field).remove();
-        $("td#"+ field).remove();
-        var elem = document.getElementById("poolChart");
-        elem.parentElement.removeChild(elem);
-
-        $('#mainChart').append("<div id='poolChart'></div>")
-    }
-
-        var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
-    for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
-
-        var temp = fields[i];
-        div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
-            if(fields[i].toLowerCase() != 'name')
-            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
-    }
-    }
-
-    //user checks a checkbox
-    $(".viewBy").change(function()
-    {
-        if(this.checked) {
-            addField(this.value);
-        }
-        else
-        {
-            removeField(this.value);
-        }
-    });
-
-
-
-//Change number of groups
+    //Change number of groups
     $("#totalTeams").change(function() {
         var empty = false;
         if(getNumTeams(subjects) == 0)
@@ -113,20 +127,21 @@ $(document).ready(function(e) {
             var temp = parseInt($("#totalTeams").val());
             $("#maxPerGroup").val(Math.ceil(subjects.length/temp));
             for(var r = 0; r < temp; r++){
-            $("#plusButton").click();}
+                $("#plusButton").click();}
         }
     });
     function returnToPool(){
         $(".subject").detach().appendTo("#subjects table .subjBody");
         $(".teamTables").detach();
         numTeamGroups = 1;
+        for(var p = 0; p < subjects.length; p++){
+            subjects[p].group = 0;
+        }
     }
-function updateTeams()
-{
+    function updateTeams()
+    {
 
-}
-
-
+    }
 
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
@@ -147,7 +162,7 @@ function updateTeams()
                 alg.maxes = [];
                 //var c = 0;
                 $(this).find('tbody > tr').each(function(){
-                   var temp = $(this).text();
+                    var temp = $(this).text();
                     temp = temp.replace(' ','_');;
                     alg.roles.push(temp);
                     alg.mins.push($(this).find("#"+temp+"Min").val());
@@ -158,18 +173,19 @@ function updateTeams()
                         exit = true;
 
                     }
-                    alg.weight = -1;
+
                     //c++;
                 });
-
+                alg.weight = -1;
+                alg.strict = $('input[name=strict]:checked', '#strictForm').val();
                 /*test
-                for(var k = 0; k < c; k++){
-                    alert(alg.roles[k] + " "+ alg.mins[k] + " " + alg.maxes[k]);
-                }
-                */
+                 for(var k = 0; k < c; k++){
+                 alert(alg.roles[k] + " "+ alg.mins[k] + " " + alg.maxes[k]);
+                 }
+                 */
                 //alert(alg.strict);
             }else
-            alg.weight = parseInt($(this).find('#weight').val());
+                alg.weight = parseInt($(this).find('#weight').val());
             algs.push(alg);
         });
         if(exit)
@@ -183,10 +199,15 @@ function updateTeams()
 
     $("#plusButton").click(function(e){
 
-            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th></tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
-            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
+        var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th>';
+        for(var q = 0; q < viewFields.length; q++)
+        {
+            temp+= '<th id = "'+viewFields[q]+'">' +  viewFields[q] + '</th>';
+        }
+        temp += '</tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
+        $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+        numTeamGroups++;
+        $("#totalTeams").val(numTeamGroups-1);
 
 
 
@@ -196,7 +217,30 @@ function updateTeams()
             drop: function(event, ui) {
                 //var temp = alert();
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+                var str = $(ui.draggable).attr('id');
+                //alert(str);
+                var res = str.replace("group", "");
+                //alert(res);
+                for( var su = 0; su < subjects.length;su++)
+                {
+                    if(subjects[su].id == res) {
+                        subjects[su].group = $(ui.draggable).parent().attr('id');
+                        //alert(subjects[su].group);
+                    }
+
+
+                }
+                $(ui.helper).remove();
                 GroupsChanged();
+            }
+        });
+        $("#subjects").droppable({
+            accept: '.subject',
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+                GroupsChanged();
+                $(ui.helper).remove();
             }
         });
 
@@ -266,97 +310,30 @@ function updateTeams()
     });
 
     //This function adds a box for selecting a field and shuffling method
-
-    function addAlgorithmBox()
-    {
-        numAlgs++;
-        //appendTO
-        var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
-        for(var i = 0; i < fields.length; i++)
-        {
-            if(fields[i] != 'id')
-         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
-        }
-        div += "</select>";
-        div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
-        div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
-        $("#shuffleRow").prepend(div);
-
-        //$('#closeAlg').unbind();
-        $('#closeAlg').click(function(e){
-           $(this).parent().detach();
-            numAlgs--;
-        });
-
-        $("#selectField").change(function(){
-            var field = $(this).val();
-
-            if(isDiscrete(field,subjects[0]))
-            {
-
-                $(this).parent().find("#byRoles").detach();
-                $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
-
-            }else {
-                $(this).parent().find(".weightDiv").show();
-                $(this).parent().find("#byRoles").detach();
-                $(this).parent().find('.roles').detach();
-            }
-        });
-        $("#shuffleSelect").change(function(){
-
-            $(this).parent().find('.roles').detach();
-            $(this).parent().find(".weightDiv").show();
-            if($(this).val() == "By Roles")
-            {
-                var t = $(this).parent().find(".rules");
-                var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
-                var field = $(this).parent().find("#selectField").val();
-
-                var arr = getDiscreteArr(field, subjects);
-
-
-                var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
-                var table = table.find('.rollTable').append($("<tbody></tbody>"));
-                $(arr).each(function(){
-                    var role = this.replace(' ','_');
-                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
-                    "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
-                });
-            $(this).parent().find(".weightDiv").hide();
-            }
-
-        });
-    }
+    initAlgBox();
 
     $("#exportMasterTable").click(function (e) {
-       exportCSV(subjects, fields);
+        exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
 
-        for(var i = 0; i < subjects.length; i++) {
 
-            subjects[i].group = $('tr[id=' + subjects[i].id+']').parent('tbody').attr('id');
-
-        }
-        fields.push("group");
         exportCSV(subjects, fields);
-        for(var p = 0; p < subjects.length; p++) {
 
-            delete subjects[p].group;
 
-        }
-        fields.pop();
 
     });
     $("#saveIteration").click(function (e) {
 
-        for(var i = 0; i < subjects.length; i++) {
 
-            subjects[i].previousGroups.push($('tr[id=' + subjects[i].id+']').parent('tbody').attr('id'));
+        for(var i = 0; i < subjects.length; i++) {
+            if(subjects[i].previousGroups == null)
+                subjects[i].previousGroups = [];
+            subjects[i].previousGroups.push(subjects[i].group);
 
         }
-
+        var b = subjects[0].previousGroups.length-1;
+        $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
 
         updateSubjects(subjects);
     });
@@ -376,6 +353,8 @@ function updateTeams()
 
     $("#saveMasterToDB").click(function(e){
             updateSubjects(subjects);
+            $(this).prop("disabled", true);
+            $("#CancelChanges").prop("disabled", true);
         }
     );
 
@@ -385,6 +364,134 @@ function updateTeams()
     $("#maxPerGroup").val(Math.ceil(subjects.length/2));
 
 });
+
+function initAlgBox()
+{
+    numAlgs = 0;
+    numAlgs++;
+    //appendTO
+    var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+    for(var i = 0; i < fields.length; i++)
+    {
+        if(fields[i] != 'id')
+            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+    }
+    div += "</select>";
+    div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
+    div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+    $("#shuffleRow").html(div);
+
+    //$('#closeAlg').unbind();
+    $('#closeAlg').click(function(e){
+        $(this).parent().detach();
+        numAlgs--;
+    });
+
+    $("#selectField").change(function(){
+        var field = $(this).val();
+
+        if(isDiscrete(field,subjects[0]))
+        {
+
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
+        }else {
+            $(this).parent().find(".weightDiv").show();
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find('.roles').detach();
+        }
+    });
+    $("#shuffleSelect").change(function(){
+
+        $(this).parent().find('.roles').detach();
+        $(this).parent().find(".weightDiv").show();
+        if($(this).val() == "By Roles")
+        {
+            var t = $(this).parent().find(".rules");
+            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+            var field = $(this).parent().find("#selectField").val();
+
+            var arr = getDiscreteArr(field, subjects);
+
+
+            var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
+            var table = table.find('.rollTable').append($("<tbody></tbody>"));
+            $(arr).each(function(){
+                var role = this.replace(' ','_');
+                table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
+                "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
+            });
+            $(this).parent().find(".weightDiv").hide();
+        }
+
+    });
+
+}
+
+function addAlgorithmBox()
+{
+    numAlgs++;
+    var div = "<div id='AlgBox"+numAlgs+"' class='algPart' hidden><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+    for(var i = 0; i < fields.length; i++)
+    {
+        if(fields[i] != 'id')
+            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+    }
+    div += "</select>";
+    div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
+    div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+    $("#shuffleRow").prepend(div);
+
+    //highlight new algBox
+    $("#AlgBox"+numAlgs).toggle("highlight");
+
+    //$('#closeAlg').unbind();
+    $('#closeAlg').click(function(e){
+        $(this).parent().remove();
+        numAlgs--;
+    });
+
+    $("#selectField").change(function(){
+        var field = $(this).val();
+
+        if(isDiscrete(field,subjects[0]))
+        {
+
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
+        }else {
+            $(this).parent().find(".weightDiv").show();
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find('.roles').detach();
+        }
+    });
+    $("#shuffleSelect").change(function(){
+
+        $(this).parent().find('.roles').detach();
+        $(this).parent().find(".weightDiv").show();
+        if($(this).val() == "By Roles")
+        {
+            var t = $(this).parent().find(".rules");
+            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+            var field = $(this).parent().find("#selectField").val();
+
+            var arr = getDiscreteArr(field, subjects);
+
+
+            var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
+            var table = table.find('.rollTable').append($("<tbody></tbody>"));
+            $(arr).each(function(){
+                var role = this.replace(' ','_');
+                table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
+                "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
+            });
+            $(this).parent().find(".weightDiv").hide();
+        }
+
+    });
+}
 
 function isDiscrete(field, sub){
     if(field.toLowerCase() != "name" && field.toLowerCase() != 'id')
@@ -427,6 +534,7 @@ function isNumerical(obj){
 //End of on document load
 function updateSubjects(subs)
 {
+    //alert("this");
     $.ajax({
         type: "POST",
         url: '/updateSubjs',
@@ -450,22 +558,26 @@ function exportCSV(subs, fields)
 {
     var csvContent = '';
     var index = 0;
+    var newFields = fields.slice(0);
 
-    for(var i = 0; i < fields.length; i++) {
-        if (fields[i] != 'previousGroups') {
-            csvContent += fields[i];
+    newFields.unshift('id');
+
+    for(var i = 0; i < newFields.length; i++) {
+        if (newFields[i] != 'previousGroups') {
+            csvContent += newFields[i];
             csvContent += ',';
-    }
+        }
 
     }
     csvContent = csvContent.substr(0,csvContent.length-1);
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
-        for(var k = 0; k < fields.length; k++)
-        {   if(fields[k] != "previousGroups") {
-            csvContent += subs[p][fields[k]];
-                csvContent += ',';
+        alert(subs[p].group);
+        for(var k = 0; k < newFields.length; k++)
+        {   if(newFields[k] != "previousGroups") {
+            csvContent += subs[p][newFields[k]];
+            csvContent += ',';
         }
         }
         csvContent = csvContent.substr(0,csvContent.length-1);
@@ -545,6 +657,54 @@ function confirmDeleteTeamTable(element)
     });
 }
 
+//Removes from all records
+function removeField(field)
+{
+    field = field.replace(' ','_');
+    var index = -1;
+    for(var w = 0; w < viewFields.length; w++)
+    {
+        if(viewFields[w] == field)
+        {index = w;
+        }
+    }
+    if(index != -1)
+        viewFields.splice(index, 1);
+    $("th#"+ field).remove();
+    $("td#"+ field).remove();
+    var elem = document.getElementById("poolChart");
+    elem.parentElement.removeChild(elem);
+
+    $('#mainChart').append("<div id='poolChart'></div>")
+}
+
+function loadViewBy()
+{
+    $("#selectFields").empty();
+    $("#selectFields").html("Show fields: <br>");
+    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
+
+            var temp = fields[i];
+            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
+            if(fields[i].toLowerCase() != 'name')
+                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+        }
+    }
+    //user checks a checkbox
+    $(".viewBy").change(function()
+    {
+        if(this.checked) {
+            addField(this.value);
+        }
+        else
+        {
+            removeField(this.value);
+        }
+    });
+}
+
 function moveBackDialog(element) {
 
     buttons = {
@@ -574,6 +734,7 @@ function moveBack(element){
     $(".minusButton").off();
 
     $(".minusButton").on("click", function(e){
+        //alert("this");
         var parent = $(this).parent();
         if (parent.find("div").length >= 1){
             fnOpenNormalDialog($(this));
@@ -693,10 +854,16 @@ function uploadCSV()
 function MergeSubjects(newSubjects,Criteria)
 {
     var temp = [];
+
     for(i = 0; i < subjects.length; i++) // make deep copy of subjects to reserve integrity of data
     {
         var tmp = $.extend(true,{},subjects[i]);
         temp.push(tmp);
+    }
+    for(i = 0; i < subjects.length; i++) // make deep copy of temp to revert changes
+    {
+        var tmp = $.extend(true,{},temp[i]);
+        oldSubjects.push(tmp);
     }
 
     for(i = 0; i < temp.length; i++)
@@ -713,6 +880,7 @@ function MergeSubjects(newSubjects,Criteria)
     if(!valid)
     {
         clearInput();
+        alert("Could not merge subject set. Review errors and try again.");
     }
     else
     {
@@ -733,21 +901,49 @@ function MergeSubjects(newSubjects,Criteria)
                 subjects.push(valid[i]);
             }
         }
+        oldFields = fields.slice(0);
         fields = [];
         for (var name in subjects[0]) {
 
-            if (name[0] != '_') {
+            if (name[0] != '_' && name != "id") {
                 fields.push(name);
                 //$('<th>' + name + '</th>').appendTo("#subjectFields");
             }
         }
         populateTable();
         populateSubjectPool();
-        alert("Subject set merged successfully. Remember to save before you exit.");
+        loadViewBy();
+        initAlgBox();
+        alert("Subject set merged successfully. Remember to save before you exit. Or cancel to discard changes");
         clearInput();
+
+        jsTableChange();
     }
+}
 
+function jsTableChange()
+{
+    $("#CancelChanges").prop("disabled", false);
 
+    $("#CancelChanges").on("click", function()
+    {
+        subjects = oldSubjects;
+        fields = [];
+        for (var name in subjects[0]) {
+
+            if (name[0] != '_' && name != "id")
+            {
+                fields.push(name);
+            }
+        }
+        populateTable();
+        populateSubjectPool();
+        loadViewBy();
+        $("#CancelChanges").prop("disabled", true);
+        $("#saveMasterToDB").prop("disabled", true);
+    });
+
+    $("#saveMasterToDB").prop("disabled", false);
 }
 
 function clearInput()
@@ -761,35 +957,51 @@ function validCSV(newSubjects,Criteria,temp,fields)
     var numFieldsNew = Criteria.length;
     var counter = {};
     var id = Criteria[0];
+    var Name = Criteria[1];
     var validNumSubs;
     var newCriteria = false;
     var moreSubs = false;
+    var duplicates = false;
+    var emptyCol = false;
+    var errorSub;
 
     newSubjects.forEach(function(sub){ //count duplicates
         var key = JSON.stringify(sub[id]);
         counter[key] = (counter[key] || 0) + 1;
         if(counter[key] > 1)
         {
-            alert("You cannot have duplicate unique identifiers. See user manual for correct upload formats.");
+            alert("You cannot have duplicate ids. Duplicate id " + key + " found. Please select unique ids for new subjects.");
+            duplicates = true;
             return false;
         }
     });
 
+    if(duplicates)
+        return false;
+
+
+
+    for(i = 0; i < Criteria.length; i++)
+    {
+        if(Criteria[i] === "")
+        {
+            emptyCol = true;
+            break;
+        }
+    }
+    if(emptyCol)
+    {
+        alert("The file cannot have an empty column header.");
+        return false;
+    }
     for(i = 0; i < newSubjects.length; i++)
     {
-        if(Object.keys(newSubjects[i]).length != numFieldsNew) { // check if subjects have same number of attributes
-            alert("Some subjects do not have the correct number of values. See user manual for correct upload formats.");
-            return false;
-        }
-        else //check for null values
+        for(k = 0; k < numFieldsNew; k++)
         {
-
-            for(k = 0; k < numFieldsNew; k++)
+            if(newSubjects[i][Criteria[k]] == "")
             {
-                if(newSubjects[i][Criteria[k]] == "")
-                {
-                    alert("Subjects cannot have empty values. See user manual for correct upload formats.");
-                }
+                alert("Subjects cannot have empty values. The first error occurred at subject: " + newSubjects[i][Name]);
+                return false;
             }
         }
     }
@@ -800,13 +1012,15 @@ function validCSV(newSubjects,Criteria,temp,fields)
             validNumSubs = false;
             if(temp[k][id] == newSubjects[i][id])
             {
+
                 validNumSubs = true;
                 break;
             }
         }
         if(!validNumSubs)
         {
-            alert("Some subjects have been omitted. See user manual for correct upload formats");
+            errorSub = temp[k][Name];
+            alert("Subject '"+errorSub+"' has been omitted.");
             return false;
         }
     }
@@ -820,8 +1034,11 @@ function validCSV(newSubjects,Criteria,temp,fields)
     {
         if(fields.indexOf(Criteria[i]) == -1) // User wants to add new criteria
         {
-            newCriteria = true;
-            $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
+            if(Criteria[i] != id)
+            {
+                newCriteria = true;
+                //$("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + Criteria[i] + "'>" + Criteria[i] +"</label>");
+            }
         }
     }
 
@@ -908,12 +1125,17 @@ function populateTable() {
             paging: true,
             autoload: true,
             inserting: true,
+            editing: true,
+            onItemUpdating: function(args) {
+                // cancel update of the item with empty 'name' field
+                alert(JSON.stringify(args.item));
+            },
 
             pageSize: 15,
             pageButtonCount: 5,
             rowClick: function (a) {
             },
-            deleteConfirm: "Do you really want to delete the client?",
+            deleteConfirm: "Do you really want to delete the subject?",
             fields: getHeadings(fields, subjects[0]),
             controller: {
                 loadData: function () {
@@ -970,6 +1192,20 @@ function populateSubjectPool()
         drop: function(event, ui) {
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+            var str = $(ui.draggable).attr('id');
+            //alert(str);
+            var res = str.replace("group", "");
+            //alert(res);
+            for( var su = 0; su < subjects.length;su++)
+            {
+                if(subjects[su].id == res) {
+                    subjects[su].group = $(ui.draggable).parent().attr('id');
+                    //alert(subjects[su].group);
+                }
+
+
+            }
+            $(ui.helper).remove();
             GroupsChanged();
         }
     });
@@ -979,6 +1215,7 @@ function populateSubjectPool()
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             GroupsChanged();
+            $(ui.helper).remove();
         }
     });
 
@@ -986,10 +1223,12 @@ function populateSubjectPool()
 
 
 //User selectable fields to view
+
 function addField(field)
 {
 
     field = field.replace(' ','_');
+    viewFields.push(field);
     $(".subjHeader").append("<th id='" +field+"'>"+ field + "</th>");
     for(var i = 0; i < subjects.length; i++)
     {
@@ -1000,102 +1239,24 @@ function addField(field)
     //Adding Charts for each Team
     for(var k = 1;k < numTeamGroups;k++)
     {
-        $('#poolChart').append("<div class='charts "+(k)+"'>Team "+(k)+"<div id='chartDiv "+(k)+"'</div> </div>");
         drawChart(k,field);
     }
+    var globalDiv = document.getElementById('globalChart');
+    var gAve = getGlobalAverage(field);
+    var gstdDev = globalstdDev(gAve,field);
+    globalDiv.innerHTML = 'Global Average = ' + gAve;
+    globalDiv.innerHTML = globalDiv.innerHTML + '<br> Global Standard Deviation = ' + gstdDev;
 }
-
-
-//Function to Draw the Chart
-function drawChart(n,tField) {
-    var columnCount = 0;
-
-    var data = new google.visualization.DataTable();
-    var dataArray = [];
-    data.addColumn('number', 'values');
-    data.addColumn('number', 'values');
-    dataArray.push(1);
-    dataArray.push(100);
-    for(var t=0;t<subjects.length;t++)
-    {
-        if(subjects[t].group == n)
-        {
-            columnCount++;
-            data.addColumn({id:'i'+t, type:'number', role:'interval'});
-        }
-    }
-//alert(columnCount);
-    for(var q = 0;q < subjects.length;q++)
-    {
-        if(subjects[q].group == n)
-        {
-            var subje = subjects[q];
-            var tempValue = subje[tField];
-            dataArray.push(tempValue);
-        }
-    }
-    //alert(dataArray);
-    data.addRow(dataArray);
-    //alert('test');
-
-    var chartOptions = {
-        title:'Points, default',
-        curveType:'function',
-        lineWidth: 2,
-        series: [{'color': '#D3362D'}],
-        intervals: { 'style':'points', pointSize: 2 },
-        legend: 'none',
-    };
-    var chart = new google.visualization.LineChart(document.getElementById('chartDiv '+n));
-    chart.draw(data, chartOptions);
-}
-
-/*
-function drawExampleChart() {
-    var Edata = new google.visualization.DataTable();
-    var columnCount;
-    Edata.addColumn('number', 'values');
-    Edata.addColumn('number', 'values');
-        Edata.addColumn({id:'i'+t, type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-    Edata.addColumn({id:'i', type:'number', role:'interval'});
-
-    Edata.addRows([[1,10,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
-        [2,21,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40],
-        [3,32,3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60]]);
-}
-
-var EchartOptions = {
-    title:'Points, default',
-    curveType:'function',
-    lineWidth: 2,
-    series: [{'color': '#D3362D'}],
-    intervals: { 'style':'points', pointSize: 2 },
-    legend: 'none';
-};
-var chart = new google.visualization.LineChart(document.getElementById('exampleChart'));
-chart.draw(Edata, EchartOptions);
-}*/
 
 function GroupsChanged()
 {
     var numGroups = numTeamGroups -1;
     numManipulations += 1;
+
+    if(viewFields[0]) {
+        for (var k = 1; k < numTeamGroups; k++) {
+            updateChart(k, viewFields[0]);
+        }
+    }
+
 }

@@ -62,7 +62,7 @@ function goShuffle(subs, algs, nGroups)
                 break;
             case 'By Roles': if(i == 0) diverseShuffle(subs,numGroups, algs[i].field);
 
-                byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field);
+                byRoles(subs,algs[i].roles, algs[i].mins,algs[i].maxes, numGroups, algs[i].field, algs[i].strict);
                 break;
 
         }
@@ -72,9 +72,12 @@ function goShuffle(subs, algs, nGroups)
 
 }
 
-function byRoles(subs,roles, mins, maxes, numGroups, field)
+function byRoles(subs,roles, mins, maxes, numGroups, field, isStrict)
 {
 
+    var strict = false;
+    if(isStrict == "strict")
+    strict = true;
     var minimums = [];
     var maximums = [];
     for(var h = 0; h < mins.length; h++)
@@ -208,8 +211,8 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
             i++;
         }
         iteration++;
-        if(iteration == 500)
-        done = true;
+        if(iteration == subs.length * numGroups){
+        done = true;}
     }
 
 
@@ -224,16 +227,36 @@ function byRoles(subs,roles, mins, maxes, numGroups, field)
         i++;
     }
     i = 0;
+
     while(i < subs.length)
     {
-        if(subs[i].locked == false)
+        if(subs[i].locked == false && strict == true)
         subs[i].group = 0;
+        delete subs[i].locked;
         i++;
     }
 
 }
 
-function right(groups, group, index){
+function right(groups, group, ind, field){
+    var index = ind;
+
+    //index to top of type lock this index if found
+    var value = groups[group][index][field];
+    var i = 0;
+    var d = false;
+    while(!d){
+        if(groups[group][i][field] == value){
+            groups[group][index].locked = true;
+            groups[group][i].locked = false;
+            index = i;
+            d = true;
+        }
+        i++;
+        if(index == i)
+        d = true;
+
+    }
     //move current to top of group
     var i = index;
     while(i > 0){
@@ -266,9 +289,26 @@ function right(groups, group, index){
 
 
 }
-function left(groups, group, index, field) {
+function left(groups, group, ind, field) {
+
+    var index = ind;
+    /*    var value = groups[group][index][field];
+    var i =  groups[group].length -1;
+    var d = false;
+    while(!d){
+        if(groups[group][i][field] == value){
+            groups[group][index].locked = true;
+            groups[group][i].locked = false;
+            index = i;
+            d = true;
+        }
+        i--;
+        if(index == i)
+            d = true;
+
+    }*/
 //move current to bottom if group
-    var i = index;
+    i = index;
     while(i < groups[group].length-1)
     {
         var tempSub = groups[group][i];
@@ -623,16 +663,14 @@ function randomize(subs, numTeams){
     var max = numSubj/numTeams;
     var even = false;
     var remaining = 0;
-    if(max % 1 == 0)  even = true;
-    else {
 
         var temp = max - Math.floor(max);
 
-        remaining = Math.ceil(temp * numTeams);
+        remaining = Math.round(temp * numTeams);
         //alert(temp + " " + remaining);
         max = Math.ceil(max);
 
-    }
+
 
     var trueMax = max;
 
@@ -642,18 +680,18 @@ function randomize(subs, numTeams){
         var done = false;
         while(!done) {
             var randm = Math.floor(Math.random() * (numTeams) + 1);
-            alert(randm + " " +arr[randm]);
+
             if (arr[randm] < max) {
                 //alert(randm + " " + max + " " + remaining + " " + $('.' + randm).children("div").length);
                 subs[q].group = randm;
                 arr[randm]++;
                 done = true;
 
-                if (arr[randm] == max-1) {
-                    if (!even) {
-                        if (remaining > 0)remaining--;
-                        if (remaining == 0) max = trueMax - 1;
-                    }
+                if (arr[randm] == max) {
+
+                        if (remaining > 0){remaining--;
+                        if (remaining == 0) max = trueMax - 1;}
+
                 }
 
             }
