@@ -12,11 +12,20 @@ var viewFields = [];
 
 $(document).ready(function(e) {
 
+    //Glyph Icon Color
+    //change add(plus) glyph color on hover
+    $(document).on("mouseenter", ".addAlg", function() {
+        $(this).css("color","lime");
+    });
+    $(document).on("mouseleave", ".addAlg", function() {
+        $(this).css("color","black");
+    });
+
     $("CancelChanges").button("disable");
     $("saveMasterToDB").button("disable");
 
     $("#uploadCSV").click(function(){
-       $("#CSVInput").click();
+        $("#CSVInput").click();
     });
 
     $("#CSVInput").change(function(){
@@ -77,15 +86,15 @@ $(document).ready(function(e) {
         var largest = 0;
         var tempp = parseInt($("#iterationSelect option:selected").val());
         returnToPool();
-       if(tempp != null){
-           for(var c = 0; c < subjects.length; c++)
-           {
+        if(tempp != null){
+            for(var c = 0; c < subjects.length; c++)
+            {
 
-               subjects[c].group = subjects[c].previousGroups[tempp];
-               if(subjects[c].group > largest)
-               largest = subjects[c].group;
-           }
-       }
+                subjects[c].group = subjects[c].previousGroups[tempp];
+                if(subjects[c].group > largest)
+                    largest = subjects[c].group;
+            }
+        }
 
         while(numTeamGroups-1 < largest)
             $("#plusButton").click();
@@ -99,17 +108,11 @@ $(document).ready(function(e) {
 
 
     $(".table").selectable();
+
     //Loads subject pool with first variable(name)
-
-
-
     loadViewBy();
 
-
-
-
-
-//Change number of groups
+    //Change number of groups
     $("#totalTeams").change(function() {
         var empty = false;
         if(getNumTeams(subjects) == 0)
@@ -124,7 +127,7 @@ $(document).ready(function(e) {
             var temp = parseInt($("#totalTeams").val());
             $("#maxPerGroup").val(Math.ceil(subjects.length/temp));
             for(var r = 0; r < temp; r++){
-            $("#plusButton").click();}
+                $("#plusButton").click();}
         }
     });
     function returnToPool(){
@@ -135,12 +138,10 @@ $(document).ready(function(e) {
             subjects[p].group = 0;
         }
     }
-function updateTeams()
-{
+    function updateTeams()
+    {
 
-}
-
-
+    }
 
 //Shuffling Algorithm---------------------------------------------------------------------------------------------------------------
     $('#shuffle').click(function(e) {
@@ -161,7 +162,7 @@ function updateTeams()
                 alg.maxes = [];
                 //var c = 0;
                 $(this).find('tbody > tr').each(function(){
-                   var temp = $(this).text();
+                    var temp = $(this).text();
                     temp = temp.replace(' ','_');;
                     alg.roles.push(temp);
                     alg.mins.push($(this).find("#"+temp+"Min").val());
@@ -178,13 +179,13 @@ function updateTeams()
                 alg.weight = -1;
                 alg.strict = $('input[name=strict]:checked', '#strictForm').val();
                 /*test
-                for(var k = 0; k < c; k++){
-                    alert(alg.roles[k] + " "+ alg.mins[k] + " " + alg.maxes[k]);
-                }
-                */
+                 for(var k = 0; k < c; k++){
+                 alert(alg.roles[k] + " "+ alg.mins[k] + " " + alg.maxes[k]);
+                 }
+                 */
                 //alert(alg.strict);
             }else
-            alg.weight = parseInt($(this).find('#weight').val());
+                alg.weight = parseInt($(this).find('#weight').val());
             algs.push(alg);
         });
         if(exit)
@@ -198,15 +199,15 @@ function updateTeams()
 
     $("#plusButton").click(function(e){
 
-            var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th>';
-            for(var q = 0; q < viewFields.length; q++)
-            {
-                temp+= '<th id = "'+viewFields[q]+'">' +  viewFields[q] + '</th>';
-            }
+        var temp = '<table class="table" ><thead><tr class="subjHeader"><th>Name</th>';
+        for(var q = 0; q < viewFields.length; q++)
+        {
+            temp+= '<th id = "'+viewFields[q]+'">' +  viewFields[q] + '</th>';
+        }
         temp += '</tr></thead><tbody  class="subjBody" id="'+numTeamGroups+'"></tbody></table>';
-            $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
-            numTeamGroups++;
-            $("#totalTeams").val(numTeamGroups-1);
+        $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
+        numTeamGroups++;
+        $("#totalTeams").val(numTeamGroups-1);
 
 
 
@@ -309,72 +310,10 @@ function updateTeams()
     });
 
     //This function adds a box for selecting a field and shuffling method
-
-    function addAlgorithmBox()
-    {
-        numAlgs++;
-        //appendTO
-        var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
-        for(var i = 0; i < fields.length; i++)
-        {
-            if(fields[i] != 'id')
-         div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
-        }
-        div += "</select>";
-        div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
-        div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
-        $("#shuffleRow").prepend(div);
-
-        //$('#closeAlg').unbind();
-        $('#closeAlg').click(function(e){
-           $(this).parent().detach();
-            numAlgs--;
-        });
-
-        $("#selectField").change(function(){
-            var field = $(this).val();
-
-            if(isDiscrete(field,subjects[0]))
-            {
-
-                $(this).parent().find("#byRoles").detach();
-                $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
-
-            }else {
-                $(this).parent().find(".weightDiv").show();
-                $(this).parent().find("#byRoles").detach();
-                $(this).parent().find('.roles').detach();
-            }
-        });
-        $("#shuffleSelect").change(function(){
-
-            $(this).parent().find('.roles').detach();
-            $(this).parent().find(".weightDiv").show();
-            if($(this).val() == "By Roles")
-            {
-                var t = $(this).parent().find(".rules");
-                var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
-                var field = $(this).parent().find("#selectField").val();
-
-                var arr = getDiscreteArr(field, subjects);
-
-
-                var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
-                var table = table.find('.rollTable').append($("<tbody></tbody>"));
-                $(arr).each(function(){
-                    var role = this.replace(' ','_');
-                    table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
-                    "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
-                });
-            $(this).parent().find(".weightDiv").hide();
-                div.append('<br><form action="" id="strictForm" name="strictForm"> <input type="radio" name="strict" value="strict" checked>Stop within role bounds<br><input type="radio" name="strict" value="notstrict">Fill remaining</form>')
-            }
-
-        });
-    }
+    initAlgBox();
 
     $("#exportMasterTable").click(function (e) {
-       exportCSV(subjects, fields);
+        exportCSV(subjects, fields);
     });
     $("#exportGroups").click(function (e) {
 
@@ -425,6 +364,134 @@ function updateTeams()
     $("#maxPerGroup").val(Math.ceil(subjects.length/2));
 
 });
+
+function initAlgBox()
+{
+    numAlgs = 0;
+    numAlgs++;
+    //appendTO
+    var div = "<div class='algPart'><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+    for(var i = 0; i < fields.length; i++)
+    {
+        if(fields[i] != 'id')
+            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+    }
+    div += "</select>";
+    div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
+    div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+    $("#shuffleRow").html(div);
+
+    //$('#closeAlg').unbind();
+    $('#closeAlg').click(function(e){
+        $(this).parent().detach();
+        numAlgs--;
+    });
+
+    $("#selectField").change(function(){
+        var field = $(this).val();
+
+        if(isDiscrete(field,subjects[0]))
+        {
+
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
+        }else {
+            $(this).parent().find(".weightDiv").show();
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find('.roles').detach();
+        }
+    });
+    $("#shuffleSelect").change(function(){
+
+        $(this).parent().find('.roles').detach();
+        $(this).parent().find(".weightDiv").show();
+        if($(this).val() == "By Roles")
+        {
+            var t = $(this).parent().find(".rules");
+            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+            var field = $(this).parent().find("#selectField").val();
+
+            var arr = getDiscreteArr(field, subjects);
+
+
+            var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
+            var table = table.find('.rollTable').append($("<tbody></tbody>"));
+            $(arr).each(function(){
+                var role = this.replace(' ','_');
+                table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
+                "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
+            });
+            $(this).parent().find(".weightDiv").hide();
+        }
+
+    });
+
+}
+
+function addAlgorithmBox()
+{
+    numAlgs++;
+    var div = "<div id='AlgBox"+numAlgs+"' class='algPart' hidden><button type='button' class='close' id='closeAlg'><span aria-hidden='true'>x</span> </button> Select Field: <select name='selectField' class='form-control' id='selectField'>"
+    for(var i = 0; i < fields.length; i++)
+    {
+        if(fields[i] != 'id')
+            div+= "<option value = '" + fields[i] + "'>"  + fields[i] + "</option>";
+    }
+    div += "</select>";
+    div += "<br>Select Shuffle type: <select name='selectType' class='form-control' id='shuffleSelect'><option value='Similar'>Similar</option><option value='Diverse'>Diverse</option></select>";
+    div += "<br><div class='rules'></div><div class='weightDiv'><br>Weight: <input type='number' class='form-control' min=1 value=1 id='weight'/></div>";
+    $("#shuffleRow").prepend(div);
+
+    //highlight new algBox
+    $("#AlgBox"+numAlgs).toggle("highlight");
+
+    //$('#closeAlg').unbind();
+    $('#closeAlg').click(function(e){
+        $(this).parent().remove();
+        numAlgs--;
+    });
+
+    $("#selectField").change(function(){
+        var field = $(this).val();
+
+        if(isDiscrete(field,subjects[0]))
+        {
+
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find("#shuffleSelect").append("<option id='byRoles' value='By Roles'>By Roles</option>");
+
+        }else {
+            $(this).parent().find(".weightDiv").show();
+            $(this).parent().find("#byRoles").detach();
+            $(this).parent().find('.roles').detach();
+        }
+    });
+    $("#shuffleSelect").change(function(){
+
+        $(this).parent().find('.roles').detach();
+        $(this).parent().find(".weightDiv").show();
+        if($(this).val() == "By Roles")
+        {
+            var t = $(this).parent().find(".rules");
+            var div = $("<div class='roles'><h6>Roles per grouping</h6></div>").appendTo(t);
+            var field = $(this).parent().find("#selectField").val();
+
+            var arr = getDiscreteArr(field, subjects);
+
+
+            var table = div.append($("<table class='rollTable'><thead><tr><th>Role</th><th>Min</th><th>Max</th></tr></thead></table>"));
+            var table = table.find('.rollTable').append($("<tbody></tbody>"));
+            $(arr).each(function(){
+                var role = this.replace(' ','_');
+                table.find('tbody:last-child').append($("<tr><td>"+this+"</td><td><input type='number' class='rollMin' min ='0' value='0' id = '"+role+"Min'></td>" +
+                "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
+            });
+            $(this).parent().find(".weightDiv").hide();
+        }
+
+    });
+}
 
 function isDiscrete(field, sub){
     if(field.toLowerCase() != "name" && field.toLowerCase() != 'id')
@@ -499,7 +566,7 @@ function exportCSV(subs, fields)
         if (newFields[i] != 'previousGroups') {
             csvContent += newFields[i];
             csvContent += ',';
-    }
+        }
 
     }
     csvContent = csvContent.substr(0,csvContent.length-1);
@@ -510,7 +577,7 @@ function exportCSV(subs, fields)
         for(var k = 0; k < newFields.length; k++)
         {   if(newFields[k] != "previousGroups") {
             csvContent += subs[p][newFields[k]];
-                csvContent += ',';
+            csvContent += ',';
         }
         }
         csvContent = csvContent.substr(0,csvContent.length-1);
@@ -846,6 +913,7 @@ function MergeSubjects(newSubjects,Criteria)
         populateTable();
         populateSubjectPool();
         loadViewBy();
+        initAlgBox();
         alert("Subject set merged successfully. Remember to save before you exit. Or cancel to discard changes");
         clearInput();
 
