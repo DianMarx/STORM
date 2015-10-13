@@ -462,9 +462,19 @@ section {
     padding: 10px 10px 10px 10px;
 }
 
-#totalTeams, #maxPerGroup{
+#totalTeams, #maxPerGroup {
     width:50px;
 }
+
+.rollMin, .rollMax {
+width: 40px;
+}
+
+.rollTable > tr
+{
+    collapse: true;
+}
+
 #shuffle, #exportGroups{
     width: 70px;
     float: right;
@@ -515,6 +525,17 @@ section {
     opacity: 1;
 }
 
-.hidden{
-    display:none;
+
+.charts{
+    resize: both;
+    width: 600px;
+    height: 400px;
+    display: inline-block;
+    vertical-align:top;
+    background:#EAF2FF;
+    border: solid 1pt;
+    overflow:auto;
+    margin:5px;
+    padding: 10px;
+    z-index: 2;
 }
