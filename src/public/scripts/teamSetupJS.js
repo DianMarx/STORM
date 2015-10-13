@@ -90,6 +90,7 @@ $(document).ready(function(e) {
         while(numTeamGroups-1 < largest)
             $("#plusButton").click();
         sendToTables(subjects);
+        GroupsChanged();
     });
     //alert(JSON.stringify(fields));
     //alert(JSON.stringify(subjects));

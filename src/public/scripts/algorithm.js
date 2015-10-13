@@ -211,8 +211,8 @@ function byRoles(subs,roles, mins, maxes, numGroups, field, isStrict)
             i++;
         }
         iteration++;
-        if(iteration == Math.pow(subs.length, numGroups));
-        done = true;
+        if(iteration == subs.length * numGroups){
+        done = true;}
     }
 
 
@@ -238,7 +238,25 @@ function byRoles(subs,roles, mins, maxes, numGroups, field, isStrict)
 
 }
 
-function right(groups, group, index){
+function right(groups, group, ind, field){
+    var index = ind;
+
+    //index to top of type lock this index if found
+    var value = groups[group][index][field];
+    var i = 0;
+    var d = false;
+    while(!d){
+        if(groups[group][i][field] == value){
+            groups[group][index].locked = true;
+            groups[group][i].locked = false;
+            index = i;
+            d = true;
+        }
+        i++;
+        if(index == i)
+        d = true;
+
+    }
     //move current to top of group
     var i = index;
     while(i > 0){
@@ -271,9 +289,26 @@ function right(groups, group, index){
 
 
 }
-function left(groups, group, index, field) {
+function left(groups, group, ind, field) {
+
+    var index = ind;
+    /*    var value = groups[group][index][field];
+    var i =  groups[group].length -1;
+    var d = false;
+    while(!d){
+        if(groups[group][i][field] == value){
+            groups[group][index].locked = true;
+            groups[group][i].locked = false;
+            index = i;
+            d = true;
+        }
+        i--;
+        if(index == i)
+            d = true;
+
+    }*/
 //move current to bottom if group
-    var i = index;
+    i = index;
     while(i < groups[group].length-1)
     {
         var tempSub = groups[group][i];
