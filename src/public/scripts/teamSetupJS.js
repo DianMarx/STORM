@@ -130,6 +130,9 @@ $(document).ready(function(e) {
         $(".subject").detach().appendTo("#subjects table .subjBody");
         $(".teamTables").detach();
         numTeamGroups = 1;
+        for(var p = 0; p < subjects.length; p++){
+            subjects[p].group = 0;
+        }
     }
 function updateTeams()
 {
@@ -212,19 +215,29 @@ function updateTeams()
                 //var temp = alert();
                 $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
                 var str = $(ui.draggable).attr('id');
-                alert(str);
+                //alert(str);
                 var res = str.replace("group", "");
-                alert(res);
+                //alert(res);
                 for( var su = 0; su < subjects.length;su++)
                 {
                     if(subjects[su].id == res) {
                         subjects[su].group = $(ui.draggable).parent().attr('id');
-                        alert(subjects[su].group);
+                        //alert(subjects[su].group);
                     }
 
 
                 }
+                $(ui.helper).remove();
                 GroupsChanged();
+            }
+        });
+        $("#subjects").droppable({
+            accept: '.subject',
+            drop: function(event, ui) {
+                //var temp = alert();
+                $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
+                GroupsChanged();
+                $(ui.helper).remove();
             }
         });
 
@@ -1113,18 +1126,19 @@ function populateSubjectPool()
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             var str = $(ui.draggable).attr('id');
-            alert(str);
+            //alert(str);
             var res = str.replace("group", "");
-            alert(res);
+            //alert(res);
             for( var su = 0; su < subjects.length;su++)
             {
                 if(subjects[su].id == res) {
                     subjects[su].group = $(ui.draggable).parent().attr('id');
-                    alert(subjects[su].group);
+                    //alert(subjects[su].group);
                 }
 
 
             }
+            $(ui.helper).remove();
             GroupsChanged();
         }
     });
@@ -1134,6 +1148,7 @@ function populateSubjectPool()
             //var temp = alert();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo($(this).find('.subjBody'));
             GroupsChanged();
+            $(ui.helper).remove();
         }
     });
 
@@ -1176,4 +1191,5 @@ function GroupsChanged()
             updateChart(k, viewFields[0]);
         }
     }
+  
 }

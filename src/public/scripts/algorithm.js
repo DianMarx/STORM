@@ -623,16 +623,14 @@ function randomize(subs, numTeams){
     var max = numSubj/numTeams;
     var even = false;
     var remaining = 0;
-    if(max % 1 == 0)  even = true;
-    else {
 
         var temp = max - Math.floor(max);
 
-        remaining = Math.ceil(temp * numTeams);
+        remaining = Math.round(temp * numTeams);
         //alert(temp + " " + remaining);
         max = Math.ceil(max);
 
-    }
+
 
     var trueMax = max;
 
@@ -649,11 +647,11 @@ function randomize(subs, numTeams){
                 arr[randm]++;
                 done = true;
 
-                if (arr[randm] == max-1) {
-                    if (!even) {
-                        if (remaining > 0)remaining--;
-                        if (remaining == 0) max = trueMax - 1;
-                    }
+                if (arr[randm] == max) {
+
+                        if (remaining > 0){remaining--;
+                        if (remaining == 0) max = trueMax - 1;}
+
                 }
 
             }
