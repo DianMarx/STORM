@@ -76,7 +76,7 @@ $(document).ready(function(e) {
 
         var largest = 0;
         var tempp = parseInt($("#iterationSelect option:selected").val());
-
+        returnToPool();
        if(tempp != null){
            for(var c = 0; c < subjects.length; c++)
            {
@@ -86,7 +86,7 @@ $(document).ready(function(e) {
                largest = subjects[c].group;
            }
        }
-        returnToPool();
+
         while(numTeamGroups-1 < largest)
             $("#plusButton").click();
         sendToTables(subjects);
@@ -378,7 +378,7 @@ function updateTeams()
 
         exportCSV(subjects, fields);
 
-        
+
 
     });
     $("#saveIteration").click(function (e) {
