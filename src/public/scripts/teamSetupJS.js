@@ -375,15 +375,10 @@ function updateTeams()
     });
     $("#exportGroups").click(function (e) {
 
-        for(var i = 0; i < subjects.length; i++) {
 
-            subjects[i].group = $('tr[id=' + subjects[i].id+']').parent('tbody').attr('id');
-
-        }
-        fields.push("group");
         exportCSV(subjects, fields);
 
-        fields.pop();
+        
 
     });
     $("#saveIteration").click(function (e) {
@@ -508,6 +503,7 @@ function exportCSV(subs, fields)
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
+        alert(subs[p].group);
         for(var k = 0; k < newFields.length; k++)
         {   if(newFields[k] != "previousGroups") {
             csvContent += subs[p][newFields[k]];
@@ -1191,5 +1187,5 @@ function GroupsChanged()
             updateChart(k, viewFields[0]);
         }
     }
-  
+
 }
