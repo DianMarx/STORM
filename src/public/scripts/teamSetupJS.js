@@ -709,10 +709,67 @@ function loadViewBy()
         }
     }
     //user checks a checkbox
-    $('.selectpicker').on('change', function(){
+    $('#selectCriteria li').on('click', function(){
+        alert($(this).html());
         var selected = $(this).val();
-        alert(selected);
+        if(selected.length == 1 && viewCriteria == null)
+        {
+            viewCriteria = selected.slice(0);
+            alert(viewCriteria);
+        }
+        else
+        {
+            var clicked;
+            var noMatch = true;
+            var temp = selected.slice(0);
+            if(temp.length > viewCriteria.length)
+            {
+                //user has added view by
+                for(i = 0; i < temp.length; i++)
+                {
+                    for(k = 0; k < viewCriteria.length; k++)
+                    {
+                        if(temp[i] == viewCriteria[k])
+                        {
+                            noMatch = false;
+                            break;
+                        }
+                    }
+                    if(noMatch)
+                    {
+                        alert(temp[i]);
+                        clicked = temp[i];
+                        break;
+                    }
+                }
+                alert("added " + clicked);
+            }
+            else
+            {
+                //user has removed viewBy
+                for(i = 0; i < viewCriteria.length; i++)
+                {
+                    for(k = 0; k < temp.length; k++)
+                    {
+                        if( viewCriteria[i] == temp[k] )
+                        {
+                            noMatch = false;
+                            break;
+                        }
+                    }
+                    if(noMatch)
+                    {
+                        clicked = viewCriteria[i];
+                        break;
+                    }
+                }
+                alert("removed " + clicked);
+            }
+            viewCriteria = selected.slice(0);
+        }
+
         //added varible for checking if added or if removed
+        //add glyph icon by remove all button
     });
 
     $(".viewBy").change(function()

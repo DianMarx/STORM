@@ -76,33 +76,34 @@
         <div id='addAlg'><span class="glyphicon glyphicon-plus-sign btn-lg addAlg" aria-hidden='true' data-toggle="tooltip" title="Add more criteria to shuffle by."></span></div>
         <div class="row" id="shuffleRow">
         </div>
-        <div class="btn-group" role="group" aria-label="Default button group">
-            <button type="button" class="btn btn-default" id="shuffle">Create Teams</button>
-            <button type="button" class="btn btn-default" id="randomize">Randomize</button>
-        </div>
+
 
     </div>
 </div>
 
 <div style="height: 100px;">
     <div class="btn-group" role="group" aria-label="Default button group">
-        <button type="button" class="btn btn-default" id="exportGroups">Download Teams</button>
-        <button type="button" class="btn btn-default" id="randomize">Randomize</button>
-        <select id="selectCriteria" class="selectpicker" multiple title='Choose criteria to view by' data-max-options="3">
+        <select id="selectCriteria" class="selectpicker" multiple title='View by' data-max-options="3">
         </select>
+        <button type="button" class="btn btn-default" id="shuffle">Create Teams</button>
+        <button type="button" class="btn btn-default" id="randomize">Randomize</button>
     </div>
-
-    <div style="text-align: left; margin:5px; position: absolute;" id="selectFields"></div>
+    <div class="btn-group" role="group" aria-label="Default button group">
+        <button type="button" class="btn btn-default" id="exportGroups" data-toggle="tooltip" title="Download teams CSV.">
+            <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="btn btn-default" id="saveIteration">Save Manipulation</button>
+        <select type="button" class="selectpicker" id="iterationSelect"></select>
+        <button type="button" class="btn btn-default" id="loadIteration">Load Manipulation</button>
+    </div>
 
     <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" readonly min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
 </div>
 <div class="container">
 
-    <button style="width: 125px; float:left;" class="form-control" id="saveIteration">Save Iteration</button>
 
 
-    <select style="width: 50px;" id="iterationSelect"></select>
-    <button style="width: 125px; float:left;" class="form-control" id="loadIteration">Load Iteration</button>
+
 </div>
 <div class="main">
 
@@ -114,7 +115,9 @@
         </div>
 
         <div class="btn-group" role="group" aria-label="Default button group">
-            <button type="button" class="btn btn-default" id="returnSubjs">Return All</button>
+            <button type="button" class="btn btn-default" id="returnSubjs" data-toggle="tooltip" title="Return all.">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+            </button>
             <!--<button type="button" class="btn btn-default" id="randomize">Randomize</button>-->
         </div>
 
