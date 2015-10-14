@@ -1128,7 +1128,11 @@ function populateTable() {
             editing: true,
             onItemUpdating: function(args) {
                 // cancel update of the item with empty 'name' field
-                alert(JSON.stringify(args.item));
+                var i = 0;
+                while(i < args.item.length) {
+                    alert(JSON.stringify(args.item));
+                    this.stop();
+                }
             },
 
             pageSize: 15,
