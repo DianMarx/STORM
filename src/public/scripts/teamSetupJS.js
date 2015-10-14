@@ -21,8 +21,8 @@ $(document).ready(function(e) {
         $(this).css("color","black");
     });
 
-    $("CancelChanges").button("disable");
-    $("saveMasterToDB").button("disable");
+    $("#CancelChanges").button("disable");
+    $("#saveMasterToDB").button("disable");
 
     $("#uploadCSV").click(function(){
         $("#CSVInput").click();
@@ -1128,13 +1128,45 @@ function populateTable() {
             editing: true,
             onItemUpdating: function(args) {
                 // cancel update of the item with empty 'name' field
-                var i = 0;
-                while(i < args.item.length) {
-                    alert(JSON.stringify(args.item));
-                    this.stop();
-                }
-            },
 
+                var e = 0;
+
+                while(e < fields.length)
+                {
+                    if(args.item[fields[e]] === "") {
+
+                        alert("All fields must be filled before updating");
+                        this.cancel();
+
+                    }
+                    e++;
+                }
+
+            jsTableChange();
+
+            },
+            onItemInserting: function(args) {
+                // cancel update of the item with empty 'name' field
+
+                var e = 0;
+
+                while(e < fields.length)
+                {
+                    if(args.item[fields[e]] === "") {
+
+                        alert("All fields must be filled before inserting");
+                        this.stop();
+
+                    }
+                    e++;
+                }
+
+                jsTableChange();
+
+            },
+            onItemDelete: function(args){
+                jsTableChange();
+            },
             pageSize: 15,
             pageButtonCount: 5,
             rowClick: function (a) {
