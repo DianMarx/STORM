@@ -6,13 +6,16 @@
     <title>Team Setup</title>
 
     <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <link rel="stylesheet" href="bootstrap/bootstrap-select/dist/css/bootstrap-select.css">
     <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
     <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/bootstrap-select/dist/js/bootstrap-select.js"></script>
     <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid.min.css" />
     <link type="text/css" rel="stylesheet" href="APIs/jsgrid/jsgrid-theme.min.css" />
     <script src="APIs/jsgrid/jsgrid.min.js"></script>
     <script src="scripts/teamSetupJS.js"></script>
+    <script src="scripts/charts.js"></script>
     <script src="scripts/jquery.csv-0.71.min.js"></script>
 
     <link rel="stylesheet" href="style/css.css">
@@ -27,6 +30,14 @@
 
 
 });</script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+
+    // Load the Visualization API library and the piechart library.
+    google.load('visualization', '1', {'packages':['corechart']});
+    // ... draw the chart...
+
+</script>
 <body>
 <nav class="navbar navbar-default">
 
@@ -48,10 +59,13 @@
     <div class="panel-heading" data-toggle="collapse" data-target="#subjectSetup">Subject setup</div>
     <div class="panel-body collapse in" id="subjectSetup">
         <div id="subjTable"></div>
-        <button id="saveMasterToDB" class="btn btn-default">Save</button>
-        <button id="exportMasterTable" class="btn btn-default">Export CSV</button>
-        <button id='uploadCSV' class="btn btn-default">Upload CSV </button>
-        <div class="hidden">
+        <div class="btn-group" role="group" aria-label="Default button group">
+            <button type="button" id="exportMasterTable" class="btn btn-default">Export CSV</button>
+            <button type="button" id='uploadCSV' class="btn btn-default">Upload CSV </button>
+            <button type="button" id="saveMasterToDB" class="btn btn-default" disabled>Save</button>
+            <button type="button" id="CancelChanges" class="btn btn-default" disabled>Cancel Changes</button>
+        </div>
+        <div hidden>
             <input class="form-control" type="file" id="CSVInput" name="file" accept=".csv" required/>
         </div>
     </div>
@@ -59,52 +73,72 @@
 <div class="algorithmBox panel panel-default" style="margin: 0;">
     <div class="panel-heading" data-toggle="collapse" data-target="#shuffleSetup">Shuffle setup </div>
     <div class="panel-body collapse container-fluid" id="shuffleSetup">
-    <div class="row" id="shuffleRow">
-    <div><button type='button' id='addAlg'><span aria-hidden='true'>+</span> </button></div>
-    </div>
+        <div id='addAlg'><span class="glyphicon glyphicon-plus-sign btn-lg addAlg" aria-hidden='true' data-toggle="tooltip" title="Add more criteria to shuffle by."></span></div>
+        <div class="row" id="shuffleRow">
+        </div>
+        <div class="btn-group" role="group" aria-label="Default button group">
+            <button type="button" class="btn btn-default" id="shuffle">Create Teams</button>
+            <button type="button" class="btn btn-default" id="randomize">Randomize</button>
+        </div>
+
     </div>
 </div>
 
 <div style="height: 100px;">
-    <div style="text-align: left; margin:5px; position: absolute;" id="selectFields">Show fields: <br></div>
+    <div class="btn-group" role="group" aria-label="Default button group">
+        <button type="button" class="btn btn-default" id="exportGroups">Download Teams</button>
+        <button type="button" class="btn btn-default" id="randomize">Randomize</button>
+        <select id="selectCriteria" class="selectpicker" multiple title='Choose criteria to view by' data-max-options="3">
+        </select>
+    </div>
+
+    <div style="text-align: left; margin:5px; position: absolute;" id="selectFields"></div>
 
     <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" readonly min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
 </div>
 <div class="container">
-    <button style="width: 100px; float:left;" class="form-control" id="shuffle">Shuffle</button>
-    <button style="width: 125px; float:left;" class="form-control" id="exportGroups">Download CSV</button>
+
     <button style="width: 125px; float:left;" class="form-control" id="saveIteration">Save Iteration</button>
-    <button style="width: 125px; float:left;" class="form-control" id="returnSubjs">Return All</button>
-    <button style="width: 125px; float:left;" class="form-control" id="randomize">Randomize</button>
+
+
+    <select style="width: 50px;" id="iterationSelect"></select>
+    <button style="width: 125px; float:left;" class="form-control" id="loadIteration">Load Iteration</button>
 </div>
-    <div class="main">
+<div class="main">
 
-            <div class="members">
-                <p style="font-size: large">Subject Pool</p>
+    <div class="members">
+        <p style="font-size: large">Subject Pool</p>
 
-                <div id="subjects" class="names">
-                    <!--<%for(var i = 0; i < subjects.length; i++){%>
-                    <div class="subject" id=<%= subjects[i].id %> draggable="true" ondragstart="drag(event)"><%=subjects[i].name%>
-                    </div> <% } %> -->
-                </div>
-                <br><br><br>
+        <div id="subjects" class="names">
 
+        </div>
 
-            </div>
-
-
-            <div class="teams">
-                <p style="font-size: large; text-align: center">Sandbox</p>
-                <!-- This is how the team boxes will look like -->
-                <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
-                <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
-            </div>
+        <div class="btn-group" role="group" aria-label="Default button group">
+            <button type="button" class="btn btn-default" id="returnSubjs">Return All</button>
+            <!--<button type="button" class="btn btn-default" id="randomize">Randomize</button>-->
+        </div>
 
     </div>
 
 
-    <br>
-    <div id="dialog-confirm"></div>
+    <div class="teams">
+        <p style="font-size: large; text-align: center">Sandbox</p>
+        <!-- This is how the team boxes will look like -->
+        <!-- <div class="teamTables 1" ondrop="drop(event)" ondragover="allowDrop(event)"><img src="images/minus_button.png" class="minusButton mB1" alt="plus" height="25" width="25"><img src="images/left_arrow.png" class="leftArrow lA1" alt="move back" height="25" width="25"></div> -->
+        <div class="teamAdd" id="teamAdd" ondrop="drop(event)"><img src="images/plus_button.png" id="plusButton" alt="plus" height="42" width="42"></div>
+    </div>
+
+    <div class="mainChart" id="mainChart">
+        <p style="font-size: large; text-align: center">Charts</p>
+        <div id="poolChart"></div>
+        <div id="globalChart"></div>
+    </div>
+
+</div>
+
+
+<br>
+<div id="dialog-confirm"></div>
 
 </body>
 
