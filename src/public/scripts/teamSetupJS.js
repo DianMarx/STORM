@@ -261,12 +261,11 @@ $(document).ready(function(e) {
         $(".minusButton").off();
 
         $(".minusButton").on("click", function(e){
-            if(numTeamGroups-1 < Math.pow(2, numAlgs))
+            if(numTeamGroups-2 < Math.pow(2, numAlgs))
             {
                 alert("You need at least " + Math.pow(2,numAlgs) + " groups to shuffle by " + numAlgs + " fields.");
                 return;
             }
-            else
             var parent = $(this).parent();
             if (parent.find("div").length >= 1){
                 fnOpenNormalDialog($(this));
@@ -300,12 +299,12 @@ $(document).ready(function(e) {
     });
 
     $(".minusButton").on("click", function(e){
-        if(numTeamGroups-1 < Math.pow(2, numAlgs))
+        if(numTeamGroups-2 < Math.pow(2, numAlgs))
         {
             alert("You need at least " + Math.pow(2,numAlgs) + " groups to shuffle by " + numAlgs + " fields.");
             return;
         }
-        else
+
             var parent = $(this).parent();
         if (parent.find("div").length >= 1){
             fnOpenNormalDialog($(this));
@@ -767,7 +766,11 @@ function moveBack(element){
 
     $(".minusButton").on("click", function(e){
         //alert("this");
-
+        if(numTeamGroups-2 < Math.pow(2, numAlgs))
+        {
+            alert("You need at least " + Math.pow(2,numAlgs) + " groups to shuffle by " + numAlgs + " fields.");
+            return;
+        }
         var parent = $(this).parent();
         if (parent.find("div").length >= 1){
             fnOpenNormalDialog($(this));
