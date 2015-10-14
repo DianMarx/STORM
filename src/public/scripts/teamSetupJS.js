@@ -9,6 +9,8 @@ var fields = [];
 var oldFields = [];
 var numManipulations = 0;
 var viewFields = [];
+var viewCriteria = [];
+
 
 $(document).ready(function(e) {
 
@@ -120,7 +122,7 @@ $(document).ready(function(e) {
         var c = false;
         if(!empty)
         {
-            c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
+            c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject list.\n Continue?");
         }
         if(empty || c){
             returnToPool();
@@ -680,7 +682,21 @@ function removeField(field)
 
 function loadViewBy()
 {
+    $("#selectCriteria").empty();
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i][0] != '_' && fields[i] != 'group') {
+
+            var temp = fields[i];
+            if(fields[i].toLowerCase() != 'name')
+                $("#selectCriteria").append("<option class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</option>");
+        }
+    }
+
+
     $("#selectFields").empty();
+
+
+
     $("#selectFields").html("Show fields: <br>");
     var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
     for(var i = 0; i < fields.length; i++) {
@@ -693,6 +709,12 @@ function loadViewBy()
         }
     }
     //user checks a checkbox
+    $('.selectpicker').on('change', function(){
+        var selected = $(this).val();
+        alert(selected);
+        //added varible for checking if added or if removed
+    });
+
     $(".viewBy").change(function()
     {
         if(this.checked) {
