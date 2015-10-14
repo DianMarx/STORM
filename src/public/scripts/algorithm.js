@@ -49,7 +49,7 @@ function goShuffle(subs, algs, nGroups)
         if(i == algs.length -1){ numGroups = nGroups;}
         else if(algs[i+1].type == "By Roles") numGroups = nGroups;
         switch(algs[i].type) {
-
+            case 'Similar':
                 if (algs[i].field == "previousGroups")
                     similarGroupings(subs, numGroups);
                 else
@@ -625,9 +625,8 @@ var numSubs = subs.length;
 function getMaxes(numSubj, numGroups){
 
     var max = numSubj/numGroups;
-
-
-        var temp = max - Math.floor(max);
+    var remaining = 0;
+    var temp = max - Math.floor(max);
         remaining = Math.round(temp * numGroups);
 
 
