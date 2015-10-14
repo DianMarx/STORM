@@ -36,6 +36,7 @@ function goShuffle(subs, algs, nGroups)
         return 0;
     }
     algs.sort(compareWeight);
+
     for(var i = 0; i < algs.length; i++)
     {
 
@@ -46,9 +47,9 @@ function goShuffle(subs, algs, nGroups)
         numGroups+=1;
 
         if(i == algs.length -1){ numGroups = nGroups;}
-        else if(algs[i+1].type = "By Roles") numGroups = nGroups;
+        else if(algs[i+1].type == "By Roles") numGroups = nGroups;
         switch(algs[i].type) {
-            case 'Similar':
+
                 if (algs[i].field == "previousGroups")
                     similarGroupings(subs, numGroups);
                 else
@@ -625,13 +626,11 @@ function getMaxes(numSubj, numGroups){
 
     var max = numSubj/numGroups;
 
-    var remaining = 0;
-    if(max % 2 != 0){
 
         var temp = max - Math.floor(max);
-        remaining = Math.floor(temp * numGroups);
+        remaining = Math.round(temp * numGroups);
 
-    }
+
     max = Math.floor(max);
     var allowed = [numGroups];
     for(var i = 0; i < numGroups; i++)

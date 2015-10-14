@@ -114,10 +114,23 @@ $(document).ready(function(e) {
 
     //Change number of groups
     $("#totalTeams").change(function() {
+
+        if(parseInt($("#totalTeams").val()) > subjects.length)
+        {
+            alert("The number of groups can't be more than the number of subjects.");
+            $("#totalTeams").val(numTeamGroups-1);
+            return;
+        }
         var empty = false;
         if(getNumTeams(subjects) == 0)
             empty = true;
         var c = false;
+        if(parseInt($("#totalTeams").val()) < Math.pow(2,numAlgs))
+        {
+            alert("You need at least " + Math.pow(2,numAlgs) + " groups to shuffle by " + numAlgs + " fields.");
+            $("#totalTeams").val(numTeamGroups-1);
+            return;
+        }
         if(!empty)
         {
             c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
@@ -129,6 +142,7 @@ $(document).ready(function(e) {
             for(var r = 0; r < temp; r++){
                 $("#plusButton").click();}
         }
+        else $("#totalTeams").val(numTeamGroups-1);
     });
     function returnToPool(){
         $(".subject").detach().appendTo("#subjects table .subjBody");
@@ -247,14 +261,23 @@ $(document).ready(function(e) {
         $(".minusButton").off();
 
         $(".minusButton").on("click", function(e){
+            if(numTeamGroups-1 < Math.pow(2, numAlgs))
+            {
+                alert("You need at least " + Math.pow(2,numAlgs) + " groups to shuffle by " + numAlgs + " fields.");
+                return;
+            }
+            else
             var parent = $(this).parent();
             if (parent.find("div").length >= 1){
                 fnOpenNormalDialog($(this));
             }
             else
             {
+
                 confirmDeleteTeamTable($(this));
                 $("#totalTeams").val(numTeamGroups-1);
+
+
             }
         });
 
@@ -277,14 +300,23 @@ $(document).ready(function(e) {
     });
 
     $(".minusButton").on("click", function(e){
-        var parent = $(this).parent();
-        if (parent.find("tr").length >= 2){
+        if(numTeamGroups-1 < Math.pow(2, numAlgs))
+        {
+            alert("You need at least " + Math.pow(2,numAlgs) + " groups to shuffle by " + numAlgs + " fields.");
+            return;
+        }
+        else
+            var parent = $(this).parent();
+        if (parent.find("div").length >= 1){
             fnOpenNormalDialog($(this));
         }
         else
         {
+
             confirmDeleteTeamTable($(this));
             $("#totalTeams").val(numTeamGroups-1);
+
+
         }
     });
 
@@ -735,6 +767,7 @@ function moveBack(element){
 
     $(".minusButton").on("click", function(e){
         //alert("this");
+
         var parent = $(this).parent();
         if (parent.find("div").length >= 1){
             fnOpenNormalDialog($(this));
