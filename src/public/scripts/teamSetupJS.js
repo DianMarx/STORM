@@ -16,6 +16,9 @@ $(document).ready(function(e) {
 
     //Glyph Icon Color
     //change add(plus) glyph color on hover
+
+
+
     $(document).on("mouseenter", ".addAlg", function() {
         $(this).css("color","lime");
     });
@@ -683,105 +686,57 @@ function removeField(field)
 function loadViewBy()
 {
     $("#selectCriteria").empty();
-    for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' && fields[i] != 'group') {
-
-            var temp = fields[i];
-            if(fields[i].toLowerCase() != 'name')
-                $("#selectCriteria").append("<option class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</option>");
-        }
-    }
-
-
-    $("#selectFields").empty();
-
-
-
-    $("#selectFields").html("Show fields: <br>");
-    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
-    for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
-
-            var temp = fields[i];
-            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
-            if(fields[i].toLowerCase() != 'name')
-                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
-        }
-    }
-    //user checks a checkbox
-    $('#selectCriteria li').on('click', function(){
-        alert($(this).html());
-        var selected = $(this).val();
-        if(selected.length == 1 && viewCriteria == null)
-        {
-            viewCriteria = selected.slice(0);
-            alert(viewCriteria);
-        }
-        else
-        {
-            var clicked;
-            var noMatch = true;
-            var temp = selected.slice(0);
-            if(temp.length > viewCriteria.length)
+    $('#selectCriteria').multiselect({
+        maxHeight: 200,
+        onChange: function(option, checked, select) {
+            if(checked)
             {
-                //user has added view by
-                for(i = 0; i < temp.length; i++)
-                {
-                    for(k = 0; k < viewCriteria.length; k++)
-                    {
-                        if(temp[i] == viewCriteria[k])
-                        {
-                            noMatch = false;
-                            break;
-                        }
-                    }
-                    if(noMatch)
-                    {
-                        alert(temp[i]);
-                        clicked = temp[i];
-                        break;
-                    }
-                }
-                alert("added " + clicked);
+                addField($(option).val());
             }
             else
             {
-                //user has removed viewBy
-                for(i = 0; i < viewCriteria.length; i++)
-                {
-                    for(k = 0; k < temp.length; k++)
-                    {
-                        if( viewCriteria[i] == temp[k] )
-                        {
-                            noMatch = false;
-                            break;
-                        }
-                    }
-                    if(noMatch)
-                    {
-                        clicked = viewCriteria[i];
-                        break;
-                    }
-                }
-                alert("removed " + clicked);
+                removeField($(option).val());
             }
-            viewCriteria = selected.slice(0);
-        }
+            //alert('Changed option ' + $(option).val() + '.');
 
-        //added varible for checking if added or if removed
-        //add glyph icon by remove all button
-    });
+            var selectedOptions = $('#selectCriteria option:selected');
 
-    $(".viewBy").change(function()
-    {
-        if(this.checked) {
-            addField(this.value);
-        }
-        else
-        {
-            removeField(this.value);
-        }
+            if (selectedOptions.length >= 3) {
+                // Disable all other checkboxes.
+                var nonSelectedOptions = $('#selectCriteria option').filter(function() {
+                    return !$(this).is(':selected');
+                });
+
+                var dropdown = $('#selectCriteria').siblings('.multiselect-container');
+                nonSelectedOptions.each(function() {
+                    var input = $('input[value="' + $(this).val() + '"]');
+                    input.prop('disabled', true);
+                    input.parent('li').addClass('disabled');
+                });
+            }
+            else {
+                // Enable all checkboxes.
+                var dropdown = $('#selectCriteria').siblings('.multiselect-container');
+                $('#selectCriteria option').each(function() {
+                    var input = $('input[value="' + $(this).val() + '"]');
+                    input.prop('disabled', false);
+                    input.parent('li').addClass('disabled');
+                });
+            }
+        },
+        nonSelectedText: 'View by',
+        buttonWidth: '150px'
     });
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i][0] != '_' /*&& fields[i] != 'group'*/) {
+
+            var temp = fields[i];
+            if(fields[i].toLowerCase() != 'name')
+                $("#selectCriteria").append("<option class='viewBy' value='" + fields[i] + "'>" + fields[i] +"</option>");
+        }
+    }
+    $('#selectCriteria').multiselect('rebuild');
+
 }
 
 function moveBackDialog(element) {
