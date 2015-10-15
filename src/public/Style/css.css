@@ -475,12 +475,6 @@ width: 40px;
     collapse: true;
 }
 
-#shuffle, #exportGroups{
-    width: 70px;
-    float: right;
-    margin-right: 15px;
-    margin-top: 5px;
-}
 #Projects{
     opacity: 0.8;
     margin-left: 30%;
@@ -538,4 +532,9 @@ width: 40px;
     margin:5px;
     padding: 10px;
     z-index: 2;
+}
+
+.teamControls
+{
+    margin-top: 15px;
 }

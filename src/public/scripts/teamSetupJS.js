@@ -9,11 +9,19 @@ var fields = [];
 var oldFields = [];
 var numManipulations = 0;
 var viewFields = [];
+var viewCriteria = [];
+
 
 $(document).ready(function(e) {
 
     //Glyph Icon Color
     //change add(plus) glyph color on hover
+
+    $('#iterationSelect').multiselect({
+        maxHeight: 200,
+        buttonWidth: '80px'
+    });
+
     $(document).on("mouseenter", ".addAlg", function() {
         $(this).css("color","lime");
     });
@@ -48,8 +56,7 @@ $(document).ready(function(e) {
     else {
         var user = JSON.parse(sessionStorage['User']);
         //Page Setup for user
-        $("#righty").prepend(user.username + '  ');
-
+        $("#usernm").html(user.username);
     }
     $("input[type=submit], a, button, input[type=file]").button();
 
@@ -78,6 +85,7 @@ $(document).ready(function(e) {
         for(var b = 0; b < subjects[0].previousGroups.length; b++)
         {
             $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
+            $('#iterationSelect').multiselect("rebuild");
         }
     }
 
@@ -133,7 +141,7 @@ $(document).ready(function(e) {
         }
         if(!empty)
         {
-            c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject lis1.\n Continue?");
+            c = confirm("Warning: Changing the number of teams in this way will return all the subjects to the subject list.\n Continue?");
         }
         if(empty || c){
             returnToPool();
@@ -365,6 +373,7 @@ $(document).ready(function(e) {
         }
         var b = subjects[0].previousGroups.length-1;
         $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
+        $('#iterationSelect').multiselect("rebuild");
 
         updateSubjects(subjects);
     });
@@ -711,29 +720,58 @@ function removeField(field)
 
 function loadViewBy()
 {
-    $("#selectFields").empty();
-    $("#selectFields").html("Show fields: <br>");
-    var div = $("<form id='selection'>Select variable to shuffle by:<br></form><br>").insertAfter("#shuffleHeading");
+    $("#selectCriteria").empty();
+    $('#selectCriteria').multiselect({
+        maxHeight: 200,
+        onChange: function(option, checked, select) {
+            if(checked)
+            {
+                addField($(option).val());
+            }
+            else
+            {
+                removeField($(option).val());
+            }
+            //alert('Changed option ' + $(option).val() + '.');
+
+            var selectedOptions = $('#selectCriteria option:selected');
+
+            if (selectedOptions.length >= 3) {
+                // Disable all other checkboxes.
+                var nonSelectedOptions = $('#selectCriteria option').filter(function() {
+                    return !$(this).is(':selected');
+                });
+
+                var dropdown = $('#selectCriteria').siblings('.multiselect-container');
+                nonSelectedOptions.each(function() {
+                    var input = $('input[value="' + $(this).val() + '"]');
+                    input.prop('disabled', true);
+                    input.parent('li').addClass('disabled');
+                });
+            }
+            else {
+                // Enable all checkboxes.
+                var dropdown = $('#selectCriteria').siblings('.multiselect-container');
+                $('#selectCriteria option').each(function() {
+                    var input = $('input[value="' + $(this).val() + '"]');
+                    input.prop('disabled', false);
+                    input.parent('li').addClass('disabled');
+                });
+            }
+        },
+        nonSelectedText: 'View by',
+        buttonWidth: '150px'
+    });
     for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' /*&& fields[i] != 'previousGroups'*/) {
+        if (fields[i][0] != '_' && fields[i] != 'group') {
 
             var temp = fields[i];
-            div.append(' <input type="radio" name="shuffleBy" id="' + temp + '" class="shuffleBy" value="' + temp + '" /> ' + fields[i] + "<br> ");
             if(fields[i].toLowerCase() != 'name')
-                $("#selectFields").append("<label class='checkbox-inline'><input class='viewBy' type ='checkbox' value='" + fields[i] + "'>" + fields[i] +"</label>");
+                $("#selectCriteria").append("<option class='viewBy' value='" + fields[i] + "'>" + fields[i] +"</option>");
         }
     }
-    //user checks a checkbox
-    $(".viewBy").change(function()
-    {
-        if(this.checked) {
-            addField(this.value);
-        }
-        else
-        {
-            removeField(this.value);
-        }
-    });
+    $('#selectCriteria').multiselect('rebuild');
+
 }
 
 function moveBackDialog(element) {
