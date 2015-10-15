@@ -17,7 +17,10 @@ $(document).ready(function(e) {
     //Glyph Icon Color
     //change add(plus) glyph color on hover
 
-
+    $('#iterationSelect').multiselect({
+        maxHeight: 200,
+        buttonWidth: '80px'
+    });
 
     $(document).on("mouseenter", ".addAlg", function() {
         $(this).css("color","lime");
@@ -83,6 +86,7 @@ $(document).ready(function(e) {
         for(var b = 0; b < subjects[0].previousGroups.length; b++)
         {
             $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
+            $('#iterationSelect').multiselect("rebuild");
         }
     }
 
@@ -339,6 +343,7 @@ $(document).ready(function(e) {
         }
         var b = subjects[0].previousGroups.length-1;
         $("#iterationSelect").append("<option  value='"+b+" '>"+b+"</option>");
+        $('#iterationSelect').multiselect("rebuild");
 
         updateSubjects(subjects);
     });
