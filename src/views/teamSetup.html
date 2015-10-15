@@ -44,10 +44,9 @@
     <div class="container-fluid">
         <div class=" navbar-form navbar-right" id="righty">
 
-            <a id="logOutBtn"><button class="btn btn-default">Log Out</button> </a>
+            <span class="text-primary"  id="usernm"></span> : <a id="logOutBtn"><button class="btn btn-default">Log Out</button> </a>
         </div>
         <div class="nav navbar-nav">
-
             <li><a id="MyProjectsPage" href="#">My Projects</a></li>
             <li ><a href="/about">About</a></li>
             <li ><a href="/contact">Contact</a></li>
@@ -82,13 +81,13 @@
 </div>
 
 <div style="height: 100px;">
-    <div class="btn-group" role="group" aria-label="Default button group">
-        <button type="button" class="btn btn-default" id="shuffle">Create Teams</button>
-        <button type="button" class="btn btn-default" id="randomize">Randomize</button>
+    <div class="btn-group teamControls" role="group" aria-label="Default button group">
+        <button type="button" class="btn btn-default" id="shuffle" data-toggle="tooltip" title="Create teams from shuffle criteria.">Create Teams</button>
+        <button type="button" class="btn btn-default" id="randomize" data-toggle="tooltip" title="Assign random teams">Randomize</button>
         <select id="selectCriteria" multiple="multiple" data-max-options="3">
         </select>
     </div>
-    <div class="btn-group" role="group" aria-label="Default button group">
+    <div class="btn-group teamControls" role="group" aria-label="Default button group">
         <button type="button" class="btn btn-default" id="exportGroups" data-toggle="tooltip" title="Download teams CSV.">
             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
         </button>

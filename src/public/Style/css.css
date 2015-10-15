@@ -533,3 +533,8 @@ width: 40px;
     padding: 10px;
     z-index: 2;
 }
+
+.teamControls
+{
+    margin-top: 15px;
+}

@@ -56,8 +56,7 @@ $(document).ready(function(e) {
     else {
         var user = JSON.parse(sessionStorage['User']);
         //Page Setup for user
-        $("#righty").prepend(user.username + '  ');
-
+        $("#usernm").html(user.username);
     }
     $("input[type=submit], a, button, input[type=file]").button();
 
@@ -733,7 +732,7 @@ function loadViewBy()
         buttonWidth: '150px'
     });
     for(var i = 0; i < fields.length; i++) {
-        if (fields[i][0] != '_' /*&& fields[i] != 'group'*/) {
+        if (fields[i][0] != '_' && fields[i] != 'group') {
 
             var temp = fields[i];
             if(fields[i].toLowerCase() != 'name')
