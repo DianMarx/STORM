@@ -16,6 +16,7 @@ numGroups like numTeams
 
 function goShuffle(subs, algs, nGroups)
 {
+
     var totalWeight = 0;
     for(var p = 0; p < subs.length; p++) {
         subs[p].group = 0;
@@ -465,31 +466,26 @@ function similarity(arr,b, subs){
 function diverseShuffle(subs,numGroups,field)
 {
 
-    function compare(a,b){
+    function compare(a, b) {
+        var aGroup = a.group;
+        var bGroup = b.group;
+        var aLow = a[field];
+        var bLow = b[field];
 
-    if(a.group == b.group) {
-        if (a[field] < b[field])
-            return -1;
-        if (a[field] > b[field])
-            return 1;
+        if(aGroup == bGroup)
+        {
+            return (aLow < bLow) ? -1 : (aLow > bLow) ? 1 : 0;
+        }
+        else
+        {
+            return (aGroup < bGroup) ? -1 : 1;
+        }
+
     }
-        return 0;
-    }
-
-    function gComp(a,b){
-
-
-            if (a.group < b.group)
-                return -1;
-            if (a.group > b.group)
-                return 1;
-
-        return 0;
-    }
-
-
     subs.sort(compare);
-    subs.sort(gComp);
+
+
+    
     var lim;
 
     var t = subs[subs.length-1].group;
@@ -582,25 +578,39 @@ function similarShuffle(subs,numGroups,field)
 {
 
 
-    //comparison function
-    function compare(a,b) {
-        if(a.group == b.group) {
-            if (a[field] < b[field])
-                return -1;
-            if (a[field] > b[field])
-                return 1;
+
+    function compare(a, b) {
+        var aGroup = a.group;
+        var bGroup = b.group;
+        var aLow = a[field];
+        var bLow = b[field];
+
+        if(aGroup == bGroup)
+        {
+            return (aLow < bLow) ? -1 : (aLow > bLow) ? 1 : 0;
         }
-        return 0;
+        else
+        {
+            return (aGroup < bGroup) ? -1 : 1;
+        }
+
     }
+
+
     var numSubj = subs.length;
     subs.sort(compare);
 
+
     var allowed = getMaxes(numSubj, numGroups);
     var q = 0, a=0;
+    var prev = subs[0].group;
     for(var p = 0; p < subs.length; p++){
+
+        prev = subs[p].group;
         subs[p].group = a+1;
         if(q < allowed[a]-1)
         {
+
             q++;
         }
         else {a++; q=0;}
@@ -630,6 +640,7 @@ function getMaxes(numSubj, numGroups){
         remaining = Math.round(temp * numGroups);
 
 
+
     max = Math.floor(max);
     var allowed = [numGroups];
     for(var i = 0; i < numGroups; i++)
@@ -645,6 +656,8 @@ function getMaxes(numSubj, numGroups){
 
     return allowed;
 }
+
+
 
 function randomize(subs, numTeams){
 
