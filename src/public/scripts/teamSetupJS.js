@@ -480,6 +480,7 @@ function initAlgBox()
 
         $(this).parent().find('.roles').detach();
         $(this).parent().find(".weightDiv").show();
+        $(this).parent().find("#strictForm").detach();
         if($(this).val() == "By Roles")
         {
             var t = $(this).parent().find(".rules");
@@ -497,6 +498,7 @@ function initAlgBox()
                 "<td><input type='number' class='rollMax' min ='0' value='0' id = '"+role+"Max'></td></tr>"));
             });
             $(this).parent().find(".weightDiv").hide();
+            div.append('<br><form action="" id="strictForm" name="strictForm"> <input type="radio" name="strict" value="strict" checked>Stop within role bounds<br><input type="radio" name="strict" value="notstrict">Fill remaining</form>');
         }
 
     });
