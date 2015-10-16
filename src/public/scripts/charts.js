@@ -35,7 +35,7 @@ function drawChart(n,tField) {
         title: 'Subjects vs '+tField+' comparison',
         hAxis: {title: 'Subject', minValue: 0, maxValue: hValue},
         vAxis: {title: tField, minValue: 0, maxValue: 100},
-        legend: 'none'
+        legend: { position: "none" }
     };
     var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
     chart.draw(data, chartOptions);
@@ -250,7 +250,7 @@ function updateChart(n,tField) {
         title: 'Subjects vs '+tField+' comparison',
         hAxis: {title: 'Subject', minValue: 0, maxValue: hValue},
         vAxis: {title: tField, minValue: 0, maxValue: 100},
-        legend: 'none'
+        legend: { position: "none" }
     };
     var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
     chart.draw(data, UchartOptions);

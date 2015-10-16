@@ -151,13 +151,14 @@ $(document).ready(function(e) {
                 $("#plusButton").click();}
         }
         else $("#totalTeams").val(numTeamGroups-1);
+
         for(var k = 1;k < numTeamGroups;k++)
         {
             if(isDiscrete(field,subjects[0])){
-                drawDiscrete(k,field);
+                drawDiscrete(k,viewFields[0]);
             }
             else
-                drawChart(k,field);
+                drawChart(k,viewFields[0]);
         }
         GroupsChanged();
     });
@@ -239,7 +240,22 @@ $(document).ready(function(e) {
         $("<div class='teamTables "+(numTeamGroups)+"''><img src='images/minus_button.png' class='minusButton mB"+(numTeamGroups)+"' alt='minus' height='25' width='25'><img src='images/left_arrow.png' class='leftArrow lA"+(numTeamGroups)+"' alt='move back height='25' width='25'>"+temp+"</div>").insertBefore($("#teamAdd"));
         numTeamGroups++;
         $("#totalTeams").val(numTeamGroups-1);
-
+        if ( viewFields[0]){
+            var elem = document.getElementById("poolChart");
+            elem.parentElement.removeChild(elem);
+            var globalDiv = document.getElementById('globalChart');
+            globalDiv.innerHTML = '';
+            $('#mainChart').append("<div id='poolChart'></div>")
+        for(var k = 1;k < numTeamGroups;k++)
+        {
+            if(isDiscrete(viewFields[0],subjects[0])){
+                drawDiscrete(k,viewFields[0]);
+            }
+            else {
+                drawChart(k, viewFields[0]);
+            }
+        }}
+        GroupsChanged();
 
 
         $(".teamTables").droppable({
@@ -313,7 +329,8 @@ $(document).ready(function(e) {
                 });
             }
         });
-        GroupsChanged();
+
+
     });
 
     $(".minusButton").on("click", function(e){
@@ -396,7 +413,6 @@ $(document).ready(function(e) {
     });
     $("#randomize").click(function(e){
         randomize(subjects, numTeamGroups-1);
-
         if(viewFields[0]) {
             for (var k = 1; k < numTeamGroups; k++) {
                 updateChart(k, viewFields[0]);
@@ -1369,11 +1385,11 @@ function addField(field)
     //Adding Charts for each Team
     for(var k = 1;k < numTeamGroups;k++)
     {
-        if(isDiscrete(field,subjects[0])){
-            drawDiscrete(k,field);
+        if(isDiscrete(viewFields[0],subjects[0])){
+            drawDiscrete(k,viewFields[0]);
         }
         else
-        drawChart(k,field);
+        drawChart(k,viewFields[0]);
     }
     var globalDiv = document.getElementById('globalChart');
     var gAve = getGlobalAverage(field);
