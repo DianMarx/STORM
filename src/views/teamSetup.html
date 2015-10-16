@@ -82,27 +82,23 @@
 
 <div style="height: 100px;">
     <div class="btn-group teamControls" role="group" aria-label="Default button group">
-        <button type="button" class="btn btn-default" id="shuffle" data-toggle="tooltip" title="Create teams from shuffle criteria.">Create Teams</button>
-        <button type="button" class="btn btn-default" id="randomize" data-toggle="tooltip" title="Assign random teams">Randomize</button>
         <select id="selectCriteria" multiple="multiple" data-max-options="3">
         </select>
+        <button type="button" class="btn btn-default" id="shuffle" data-toggle="tooltip" title="Create teams from shuffle criteria.">Create Teams</button>
+        <button type="button" class="btn btn-default" id="randomize" data-toggle="tooltip" title="Assign random teams">Randomize</button>
     </div>
     <div class="btn-group teamControls" role="group" aria-label="Default button group">
+        <select id="iterationSelect" ></select>
+        <button type="button" class="btn btn-default" id="loadIteration">Load Manipulation</button>
+        <button type="button" class="btn btn-default" id="saveIteration">Save Manipulation</button>
         <button type="button" class="btn btn-default" id="exportGroups" data-toggle="tooltip" title="Download teams CSV.">
+            Download Teams
             <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
         </button>
-        <button type="button" class="btn btn-default" id="saveIteration">Save Manipulation</button>
-        <button type="button" class="btn btn-default" id="loadIteration">Load Manipulation</button>
-        <select id="iterationSelect" ></select>
+
     </div>
 
     <div style="text-align: right; float: right; margin:20px;  ">Max per group:<input id="maxPerGroup" type="number" readonly min="0"/>Number of groups:<input id="totalTeams" type="number" min="0"/><br><br></div>
-</div>
-<div class="container">
-
-
-
-
 </div>
 <div class="main">
 
