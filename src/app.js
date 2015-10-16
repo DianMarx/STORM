@@ -11,8 +11,7 @@ require('./router/main')(app);
 app.set('views',__dirname + '/views');
 app.set('view engine', 'html');
 app.use(express.static(__dirname + '/public'));
-app.use(express.static(__dirname, '/public/css'));
-//app.use("/views/style", express.static(__dirname + '/css'));
+app.use("/public/style", express.static(__dirname + '/css'));
 app.engine('.html', require('ejs').__express);
 var port = (process.env.PORT || 80)
 var server=app.listen(port,function(){
