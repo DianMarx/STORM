@@ -151,6 +151,15 @@ $(document).ready(function(e) {
                 $("#plusButton").click();}
         }
         else $("#totalTeams").val(numTeamGroups-1);
+        for(var k = 1;k < numTeamGroups;k++)
+        {
+            if(isDiscrete(field,subjects[0])){
+                drawDiscrete(k,field);
+            }
+            else
+                drawChart(k,field);
+        }
+        GroupsChanged();
     });
     function returnToPool(){
         $(".subject").detach().appendTo("#subjects table .subjBody");
@@ -304,6 +313,7 @@ $(document).ready(function(e) {
                 });
             }
         });
+        GroupsChanged();
     });
 
     $(".minusButton").on("click", function(e){
@@ -325,6 +335,7 @@ $(document).ready(function(e) {
 
 
         }
+        GroupsChanged();
     });
 
     $(".leftArrow").on("click", function(e){
@@ -702,6 +713,7 @@ function confirmDeleteTeamTable(element)
             boxID++;
         }
     });
+    GroupsChanged();
 }
 
 //Removes from all records
