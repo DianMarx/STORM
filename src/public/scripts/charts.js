@@ -4,6 +4,9 @@ var average;
 var stdDevV;
 var counter;
 var dataArray = [];
+var hValue = Subjects.length / numTeamGroups;
+var discArray = [];
+var discArrayName = [];
 
 function drawChart(n,tField) {
     $('#poolChart').append("<div class='charts "+(n)+"'><h3>Team"+(n)+"</h3><p><h4> Current manipulation</h4></p> <div id='chartDiv "+(n)+"'></div><p> <h4>Previous manipulation</h4></p> <div id='chartDiv1 "+(n)+"'></div> </div>");
@@ -28,8 +31,9 @@ function drawChart(n,tField) {
     }
     setAverage(sum);
     var chartOptions = {
+        height: 300,
         title: 'Subjects vs '+tField+' comparison',
-        hAxis: {title: 'Subject', minValue: 0, maxValue: 15},
+        hAxis: {title: 'Subject', minValue: 0, maxValue: hValue},
         vAxis: {title: tField, minValue: 0, maxValue: 100},
         legend: 'none'
     };
@@ -37,10 +41,122 @@ function drawChart(n,tField) {
     chart.draw(data, chartOptions);
     stdDevV = stdDev();
     var chartDiv = document.getElementById('chartDiv '+n);
-    chartDiv.innerHTML = chartDiv.innerHTML + 'Average = '+ average + '<br>';
-    chartDiv.innerHTML = chartDiv.innerHTML + 'Standard Deviation = '+ stdDevV;
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Average = '+ average.toFixed(2) + '<br>';
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Standard Deviation = '+ stdDevV.toFixed(2);
 
 
+}
+
+function drawDiscrete(n,tField) {
+$('#poolChart').append("<div class='charts "+(n)+"'><h3>Team"+(n)+"</h3><p><h4> Current manipulation</h4></p> <div id='chartDiv "+(n)+"'></div><p> <h4>Previous manipulation</h4></p> <div id='chartDiv1 "+(n)+"'></div> </div>");
+sum = 0;
+average = 0;
+counter = 0;
+dataArray = [];
+discArrayName = [];
+discArray = [];
+for (var r = 0; r < subjects.length;r++){
+    if(!discArrayName[0]){
+        if(subjects[r].group == n)
+        {
+            var subje = subjects[r];
+            var tempValue = subje[tField];
+            discArrayName[0] = tempValue;
+            discArray[0] = 1;
+        }
+    }
+    else if (subjects[r].group == n)
+    {
+        var subje = subjects[r];
+        var tempValue = subje[tField];
+        var flag = false;
+        var place = 0;
+        for(var h = 0;h < discArrayName.length;h++) {
+            if (discArrayName[h] == tempValue) {
+                discArray[h] = discArray[h] + 1;
+                flag = true;
+            }
+            place = h;
+        }
+        if (!flag){
+            discArrayName.push(tempValue);
+            discArray[place+1] = 1;
+        }
+    }
+}
+
+var dataDisc = new google.visualization.DataTable();
+    dataDisc.addColumn('string', 'Subject');
+    dataDisc.addColumn('number', tField);
+for(var q = 0;q < discArrayName.length;q++) {
+    var fst = discArrayName[q];
+    var scn = discArray[q];
+    dataDisc.addRow([fst, scn]);
+}
+var chartOptions = {
+    title: 'Subjects vs '+tField+' comparison',
+    height: 400,
+    bar: {groupWidth: "95%"},
+    legend: { position: "none" },
+};
+var chart = new google.visualization.ColumnChart(document.getElementById('chartDiv '+n));
+chart.draw(dataDisc, chartOptions);
+}
+
+function updateDiscrete(n,tField) {
+    copyDiv(n);
+    sum = 0;
+    average = 0;
+    counter = 0;
+    dataArray = [];
+    discArrayName = [];
+    discArray = [];
+    for (var r = 0; r < subjects.length;r++){
+        if(!discArrayName[0]){
+            if(subjects[r].group == n)
+            {
+                var subje = subjects[r];
+                var tempValue = subje[tField];
+                discArrayName[0] = tempValue;
+                discArray[0] = 1;
+            }
+        }
+        else if (subjects[r].group == n)
+        {
+            var subje = subjects[r];
+            var tempValue = subje[tField];
+            var flag = false;
+            var place = 0;
+            for(var h = 0;h < discArrayName.length;h++) {
+                if (discArrayName[h] == tempValue) {
+                    discArray[h] = discArray[h] + 1;
+                    flag = true;
+                }
+                place = h;
+            }
+            if (!flag){
+                discArrayName.push(tempValue);
+                discArray[place+1] = 1;
+            }
+        }
+    }
+
+    var dataDisc = new google.visualization.DataTable();
+    dataDisc.addColumn('string', 'Subject');
+    dataDisc.addColumn('number', tField);
+    for(var q = 0;q < discArrayName.length;q++) {
+        var fst = discArrayName[q];
+        var scn = discArray[q];
+        dataDisc.addRow([fst, scn]);
+    }
+    var chartOptions = {
+        title: 'Subjects vs '+tField+' comparison',
+        height: 400,
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('chartDiv '+n));
+    chart.draw(dataDisc, chartOptions);
 }
 
 function setSum(sValue){
@@ -128,18 +244,20 @@ function updateChart(n,tField) {
         }
     }
     setAverage(sum);
-    var chartOptions = {
+
+    var UchartOptions = {
+        height: 300,
         title: 'Subjects vs '+tField+' comparison',
-        hAxis: {title: 'Subject', minValue: 0, maxValue: 15},
+        hAxis: {title: 'Subject', minValue: 0, maxValue: hValue},
         vAxis: {title: tField, minValue: 0, maxValue: 100},
         legend: 'none'
     };
     var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv '+n));
-    chart.draw(data, chartOptions);
+    chart.draw(data, UchartOptions);
     stdDevV = stdDev();
     var chartDiv = document.getElementById('chartDiv '+n);
-    chartDiv.innerHTML = chartDiv.innerHTML + 'Average = '+ average + '<br>';
-    chartDiv.innerHTML = chartDiv.innerHTML + 'Standard Deviation = '+ stdDevV;
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Average = '+ average.toFixed(2) + '<br>';
+    chartDiv.innerHTML = chartDiv.innerHTML + 'Standard Deviation = '+ stdDevV.toFixed(2);
 }
 
 function copyDiv(n) {

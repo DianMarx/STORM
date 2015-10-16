@@ -385,6 +385,13 @@ $(document).ready(function(e) {
     });
     $("#randomize").click(function(e){
         randomize(subjects, numTeamGroups-1);
+
+        if(viewFields[0]) {
+            for (var k = 1; k < numTeamGroups; k++) {
+                updateChart(k, viewFields[0]);
+            }
+        }
+
     });
 
 
@@ -714,7 +721,8 @@ function removeField(field)
     $("td#"+ field).remove();
     var elem = document.getElementById("poolChart");
     elem.parentElement.removeChild(elem);
-
+    var globalDiv = document.getElementById('globalChart');
+    globalDiv.innerHTML = '';
     $('#mainChart').append("<div id='poolChart'></div>")
 }
 
@@ -1349,13 +1357,17 @@ function addField(field)
     //Adding Charts for each Team
     for(var k = 1;k < numTeamGroups;k++)
     {
+        if(isDiscrete(field,subjects[0])){
+            drawDiscrete(k,field);
+        }
+        else
         drawChart(k,field);
     }
     var globalDiv = document.getElementById('globalChart');
     var gAve = getGlobalAverage(field);
     var gstdDev = globalstdDev(gAve,field);
-    globalDiv.innerHTML = 'Global Average = ' + gAve;
-    globalDiv.innerHTML = globalDiv.innerHTML + '<br> Global Standard Deviation = ' + gstdDev;
+    globalDiv.innerHTML = 'Global Average = ' + gAve.toFixed(2);
+    globalDiv.innerHTML = globalDiv.innerHTML + '<br> Global Standard Deviation = ' + gstdDev.toFixed(2);
 }
 
 function GroupsChanged()
@@ -1365,6 +1377,10 @@ function GroupsChanged()
 
     if(viewFields[0]) {
         for (var k = 1; k < numTeamGroups; k++) {
+            if(isDiscrete(viewFields[0],subjects[0])){
+                updateDiscrete(k,viewFields[0]);
+            }
+            else
             updateChart(k, viewFields[0]);
         }
     }
