@@ -649,7 +649,7 @@ function exportCSV(subs, fields)
     csvContent += '\r\n';
     for(var p = 0; p < subs.length; p++)
     {
-        alert(subs[p].group);
+
         for(var k = 0; k < newFields.length; k++)
         {   if(newFields[k] != "previousGroups") {
             csvContent += subs[p][newFields[k]];
