@@ -523,7 +523,7 @@ width: 40px;
 .charts{
     resize: both;
     width: 600px;
-    
+    height: auto;
     display: inline-block;
     vertical-align:top;
     background:#EAF2FF;
