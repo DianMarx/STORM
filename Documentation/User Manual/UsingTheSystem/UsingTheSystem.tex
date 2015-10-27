@@ -28,8 +28,11 @@ Logging out of your account can be achieved by simply clicking on the``Logout'' 
 	\caption{Logging out of STORM}
 \end{figure}
 
-\item Team Setup\par
-The first page you will see after logging in, will be the Team Setup page.  Where you can manage all the teams that you have created with the software.\par
+\item Project Setup\par
+The first page you will see after logging in, will be the Project Setup page.  Where you can manage all the projects that you have created with the software. A project is created with subjects in the project, subjects can then be shuffled to create teams. Subjects can be added at any stage by uploading a .csv file. If the subjects are saved to the database, the project will include the new subjects. Projects can be added and removed from the Project Setup page. A STORM project is a container for a combination of subject sets, different team configurations (rounds) and an interface for visualizing team configurations by using graphs.\par
+\begin{itemize}
+	\item[] \textit{Please note: \textbf{You may not have multiple projects with the same name, each project should have a unique name.}}
+\end{itemize}
  \begin{figure}[H] 
 	\centering
 	\includegraphics[width=13cm]{./graphics/TeamSetup.jpg}\par
@@ -52,11 +55,17 @@ This options tab allows users to review their subject data. All the data uploade
 	\includegraphics[width=13cm]{./graphics/SubjectSetup.jpg}\par
 	\caption{Subject Setup dropdown}
 \end{figure}
+\begin{itemize}
+\item When adding subjects, you should keep the values uniform according to the columns. You should not add alphabetical characters to numeric columns. You have to validate your data when adding new subjects manually. You should remember to save or cancel your changes.
+\end{itemize}
 \begin{figure}[H] 
 	\centering
 	\includegraphics[width=13cm]{./graphics/AddManualSubject.jpg}\par
 	\caption{Add Manual Subject}
 \end{figure}
+\begin{itemize}
+\item When editing subjects, you should keep the values uniform according to the columns. You should not add alphabetical characters to numeric columns. You have to validate your data when editing subjects manually. You should remember to save or cancel your changes.
+\end{itemize}
  \begin{figure}[H] 
 	\centering
 	\includegraphics[width=13cm]{./graphics/EditAndDeleteSubject.jpg}\par
@@ -114,12 +123,12 @@ A .csv file can be uploaded into the system after a project has been created to 
  \begin{figure}[H] 
 	\centering
 	\includegraphics[width=7cm]{./graphics/IncorrectInitial.png}\par
-	\caption{Incorrect Initial Upload Example - Rules (b) \& (c) Broken}
+	\caption{Incorrect Initial Upload Example - Rules (e) \& (f) broken}
 \end{figure}
  \begin{figure}[H] 
 	\centering
 	\includegraphics[width=7cm]{./graphics/IncorrectInitial1.png}\par
-	\caption{Incorrect Initial Upload Example - Rule (f) Broken}
+	\caption{Incorrect Initial Upload Example - Rules (c) \& (e) broken}
 \end{figure}
 	\item The following rules apply to uploading additional .csv files
 	\begin{enumerate}
