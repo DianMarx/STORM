@@ -9,35 +9,30 @@ The project module provides services to create and manipulate projects.\par
 \end{figure}
     
 \begin{enumerate}
-\item addProjectDetails\par
-Priority: Critical.\par
-Pre-condition: Client must be logged in.\par
-Post-condition: Client must have a STORM profile.\par
-Post-condition: Project skeleton is created in database.\par
-\item addProjectManagers\par
-Priority: Important.\par
-Pre-condition: Client must have a STORM profile.\par
-Pre-condition: Manager to be added must have a STORM profile.\par
-Pre-condition: Client must have created a STORM project.\par
-Post-condition: Manager has permission to collaborate on the project.\par
-\item inputSubjects\par
-Priority: Critical.\par
-Pre-condition: Client must have a STORM profile.\par
-Pre-condition: Client must have created a STORM project skeleton.\par
-Pre-condition: A .csv file should exist and should be selected.\par
-Pre-condition: The .csv should have subjects in it.\par
-Post-condition: Project database is updated with a list of subjects.\par
+\item createProject\par
+Priority: Critical\par
+Pre-condition: Client must be logged in and must have a Storm profile.\par
+Pre-condition: The name of the project should be unique on a user level.\par
+Post-condition: Project sceleton is created in the database and an initial subject list exists in the database\par
 \item addProjectToDatabase\par
 Priority: Critical.\par
 Pre-condition: Client must have a STORM profile and must be logged in.\par
 Pre-condition: A project should exist and should have subjects that was added by the .csv file.\par
 Pre-condition: The project should have a unique name that is not the same as another project for the user.\par
 Post-condition: Project is added to the database with the subjects and criteria.\par
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=15cm]{./graphics/createProjectState.jpg}
-    \caption{Create project state diagram}
-\end{figure}
+\item inputSubjects\par
+Priority: Critical.\par
+Pre-condition: Client must have a STORM profile.\par
+Pre-condition: Client must have created a STORM project skeleton.\par
+Pre-condition: A .csv file should exist and should be selected.\par
+Pre-condition: The .csv should have subjects in it and adhere to upload specifications.\par
+Post-condition: Project database is updated with a list of subjects.\par
+\item loadProjectsFromDatabase\par
+Priority: Critical.\par
+Pre-condition: Projects must exist in the database.\par
+Pre-condition: The user must be logged in.\par
+Post-condition: My projects page is populated with current user's projects.\par
+
 \item uploadCSVToUpdateSubjects\par
 Priority: Critical.\par
 Pre-condition: Client must have a STORM profile and must be logged in.\par
