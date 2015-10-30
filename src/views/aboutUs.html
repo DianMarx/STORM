@@ -4,13 +4,26 @@
     <meta charset="UTF-8">
     <title>STORM</title>
     <link rel="stylesheet" href="style/css.css">
+    <link rel="stylesheet" href="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.css">
+    <script src="APIs/jquery-ui-1.11.4.custom/external/jquery/jquery.js"></script>
+    <script src="APIs/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="scripts/jquery.csv-0.71.min.js"></script>
 </head>
 <body>
-<div class="header">
-    <h2 class="headerMessages">Welcome to STORM</h2>
-    <img id="logo" src="images/Storm.png" alt="STORM Logo" height="80" />
 
-</div>
+<nav class="navbar navbar-default">
+
+    <div class="container-fluid">
+        <div class="navbar-form navbar-right" id="righty">
+            <span class="text-primary"  id="usernm"></span> : <a id="logOutBtn" href="#"><button class="btn btn-default">Log Out</button> </a>
+        </div>
+        <div class="nav navbar-nav ">
+            <li ><a href="/projectHome">My Projects</a></li>
+            <li class="active"><a href="/about">About</a></li>
+        </div>
+    </div>
+</nav>
 
 <div class="main">
 
@@ -46,20 +59,6 @@
         </div>
     </div>
 </div>
-    <footer class="footer">
-        <div class="footerMenu">
-            <table id="tableMenu">
-                <tr id="tableMenu">
-                    <th id="tableMenu"><input id="homeButton" type="text" value="Home"
-                                              onclick="window.location='/';" /></th>
-                    <th id="tableMenu"><input id="aboutButton" type="text" value="About"
-                                              onclick="window.location='/about';" /></th>
-                    <th id="tableMenu"><input id="contactButton" type="text" value="Contact Us"
-                                              onclick="window.location='/contact';" /></th>
-                </tr>
-            </table>
-        </div>
-    </footer>
 
 
 
